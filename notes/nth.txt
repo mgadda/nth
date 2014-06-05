@@ -1,0 +1,244 @@
+// All code not inside classes is part of "main"
+
+
+// Comments begin with two slashes
+/* Multi-line and inline
+   comments */
+
+
+// -----
+// Types
+// -----
+
+/* 
+Basic Built-in types:
+
+Bool
+Int
+Double
+Float
+String
+
+Composite/Library types with literal syntax:
+
+Array
+Hash
+Function
+Tuple
+
+*/
+
+
+// ---------------
+// Basic Operators
+// ---------------
+
+
+// Math
+1 + 2
+3 - 4
+5 * 6
+7 / 8
+9 % 10
+
+
+// Bitwise
+1 << 2
+2 >> 1
+1 | 2
+2 & 3
+3 ^ 4 // (pow)
+
+
+// Comparison
+1 == 2
+1 != 2
+1 < 2
+1 > 1
+1 <= 2
+1 >= 2
+
+
+// Boolean
+val a = true
+val b = false
+a && b
+a || b
+!a
+
+// --------------------------
+// Literals of built-in types
+// --------------------------
+
+
+// Numbers (type Int)
+32 // Decimal
+0b100000 // Binary
+0x20 // Hex
+040 // Octal
+
+
+// Float/Double
+1.2343
+1.34E5 // 1.34 * 10 ^ 4
+1.34e5
+
+
+// Boolean
+true
+false
+
+
+// Strings (type String)
+"A String"
+
+
+// With string interpolation
+val name = "Matt"
+"Hello, #{name}!"
+
+
+// With newlines/tabs
+"\tSome\ntext"
+
+
+// With escaping
+"Hello \\n \"World!\""
+
+
+// Hash, requires generics???
+val h: Hash[String, Int] = {
+  "key1": 1,
+  "key2": 2
+}
+{} // empty Hash
+
+h["key1"]
+
+
+
+// Arrays
+val a: Int[] = [1,2,3,4]
+a[0]
+
+
+// Range (always Ints?)
+1..10
+1...10
+
+// Tuple
+val t: (Int, String) = (1, "Test")
+t.0
+t.1
+
+// ---------
+// Functions
+// ---------
+
+
+// Function definition
+def add(a: Int, b: Int): Int {
+  a + b // no return keyword
+}
+// Closure definition
+val fun = { (a: Int, b: Int): Int => a * b }
+
+
+// Function invocation
+add(10,20)
+fun(3,4)
+
+
+// Function which accepts functions
+def higherFun(a: ((Int, Int) => Int)) {
+  a(n, m)
+}
+
+
+// note closure can be passed outside parens
+higherFun() { (a: Int, b: Int) => a < b }
+
+
+// normal functions passed to other functions
+def add(a: Int, b: Int) { a+b }
+higherFun(add)
+
+// ---------------
+// Flow Control
+// ---------------
+
+if (boolCond) {
+  10
+} else {
+  20
+}
+
+10 match {
+  case 10: 1
+  case 20: 2
+  case _: -1
+}
+
+// I wonder if 'match' could be written in nth
+(10, 20) match {
+  case (a, 10): a
+  case (a, b): a + b
+}
+
+// ---------------
+// Classes/Objects
+// ---------------
+
+// Class definition with arguments
+class Bar(other: Int) {
+  def someMethod(): Int { 5 }
+  def methodOnBar(): Int { 15 }
+}
+
+
+class Foo(arg1: Double) : Bar(10) {
+  val a: Int = 10
+
+  def recurse(n: Int): Int {
+    if (n > 2) {
+      recurse(n - 1) + recurse(n - 2)
+    } else {
+      1
+    }
+  }
+
+  def returnSelf(): Bar {
+    self
+  }
+
+
+  override def someMethod(): Int {
+    super() + 10
+  }
+}
+
+// Object creation
+val f = Foo(1.2)
+f.recurse(10)
+f.someMethod()
+f.methodOnBar()
+var b: Bar = f.returnSelf().methodOnBar()
+b.methodOnBar()
+b.returnSelf() // error!
+
+
+
+// -----------------
+// Reserved keywords
+// -----------------
+
+class
+def
+if
+else
+override
+match
+case
+
+
+// Namespaces and file layout
