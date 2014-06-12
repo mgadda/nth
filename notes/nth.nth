@@ -40,14 +40,13 @@ Tuple
 5 * 6
 7 / 8
 9 % 10
-
+3 ^ 4 // (pow)
 
 // Bitwise
 1 << 2
 2 >> 1
 1 | 2
 2 & 3
-3 ^ 4 // (pow)
 
 
 // Comparison
@@ -82,7 +81,8 @@ a || b
 1.2343
 1.34E5 // 1.34 * 10 ^ 4
 1.34e5
-
+// Is it a float or a double when exp is present?
+// Determination can't be made during lexing
 
 // Boolean
 true
@@ -239,6 +239,7 @@ else
 override
 match
 case
+val
 
 
 // Namespaces and file layout
