@@ -75,7 +75,7 @@ DIGIT [0-9]
                 yyless(yyleng-1); /* return last quote */
                 yymore(); /* append next string */
               } else {
-                /* process string */
+                yylval.str = strdup(yytext);
                 return STRING;
               }
             }
@@ -93,7 +93,7 @@ DIGIT [0-9]
 <COMMENT><<EOF>>      { yyerror("Line %d: Unterminated comment\n", yylineno); }
 
   /* Identifiers */
-[a-zA-Z][a-zA-Z0-9]*  { return IDENT; }
+[a-zA-Z][a-zA-Z0-9]*  { yylval.str = strdup(yytext); return IDENT; }
 
 
 .     { yyerror("Unknown character '%c'\n", *yytext); }
