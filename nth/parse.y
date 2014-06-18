@@ -27,10 +27,17 @@
 
 %debug
 
+%union {
+  // Literals
+  double f;
+  long l;
+  char *str; // used for strings, identifiers
+}
+
 %token CMP 
 %token AND OR NOT IF ELSE DEF VAL CLASS
 %token TRUE FALSE
-%token NUMBER FLOAT INT HEX_INT BIN_INT OCT_INT
+%token FLOAT INT
 %token STRING
 %token IDENT
 

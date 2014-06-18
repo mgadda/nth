@@ -61,13 +61,13 @@ DIGIT [0-9]
 "false"         { return FALSE; }
 
   /* integers and floats */
-[-+]?{DIGIT}+"."{DIGIT}+{EXP}?  { return NUMBER; }
-[-+]?{DIGIT}+{EXP}?             { return NUMBER; }
-[-+]?{DIGIT}+"."{DIGIT}+        { return FLOAT; }
-[-+]?{DIGIT}+                   { return INT; }
-"0x"[a-fA-F0-9]+                { return HEX_INT; }
-"0b"[01]+                       { return BIN_INT; }
-0[0-7]+                         { return OCT_INT; }
+[-+]?{DIGIT}+"."{DIGIT}+{EXP}?  { yylval.f = strtod(yytext, NULL); return FLOAT; }
+[-+]?{DIGIT}+{EXP}?             { yylval.f = strtod(yytext, NULL); return FLOAT; }
+
+[-+]?{DIGIT}+                   { yylval.l = strtol(yytext, NULL, 10); return INT; }
+"0x"[a-fA-F0-9]+                { yylval.l = strtol(yytext, NULL, 16); return INT; }
+"0b"[01]+                       { yylval.l = strtol(yytext, NULL, 2); return INT; }
+0[0-7]+                         { yylval.l = strtol(yytext, NULL, 8); return INT; }
 
   /* strings */
 \"[^"]*\"   { /* is the character before close quote a \ ? */

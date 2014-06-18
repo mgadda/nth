@@ -25,7 +25,7 @@ Array
 Hash
 Function
 Tuple
-
+Range
 */
 
 
@@ -84,6 +84,18 @@ a || b
 1.34e5
 // Is it a float or a double when exp is present?
 // Determination can't be made during lexing
+// But really it can:
+// check the mantissa and exponent
+// if mantissa / exponent
+
+/*
+whole number and negative exp => float
+whole number and positive exp => integer
+decimal number and negative exp => float
+decimal number and positive exp 
+  where fractional digits 
+
+*/
 
 // Boolean
 true
