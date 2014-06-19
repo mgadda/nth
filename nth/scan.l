@@ -2,6 +2,7 @@
 
 %{
   #include "y.tab.h"
+  extern void yyerror(const char *, ...);
 %}
 
 %x STR
@@ -9,6 +10,7 @@
 
 EXP ([Ee][-+]?[0-9]+)
 DIGIT [0-9]
+LEADING_DIGIT [1-9]
 
 %%
 
@@ -36,6 +38,12 @@ DIGIT [0-9]
 "}" |
 ":"       { return yytext[0]; }
 
+"<<"      { return LSHIFT; }
+">>"      { return RSHIFT; }
+"=>"      { return HASH_ROCKET; }
+"..."     { return TRIPLE_DOT; }
+".."      { return DOUBLE_DOT; }
+
   /* comparison */
 "=="      { return CMP; }
 "!="      { return CMP; }
@@ -62,9 +70,9 @@ DIGIT [0-9]
 
   /* integers and floats */
 [-+]?{DIGIT}+"."{DIGIT}+{EXP}?  { yylval.f = strtod(yytext, NULL); return FLOAT; }
-[-+]?{DIGIT}+{EXP}?             { yylval.f = strtod(yytext, NULL); return FLOAT; }
+[-+]?[1-9]{DIGIT}*{EXP}         { yylval.f = strtod(yytext, NULL); return FLOAT; }
 
-[-+]?{DIGIT}+                   { yylval.l = strtol(yytext, NULL, 10); return INT; }
+[-+]?(0|([1-9]{DIGIT}*))              { yylval.l = strtol(yytext, NULL, 10); return INT; }
 "0x"[a-fA-F0-9]+                { yylval.l = strtol(yytext, NULL, 16); return INT; }
 "0b"[01]+                       { yylval.l = strtol(yytext, NULL, 2); return INT; }
 0[0-7]+                         { yylval.l = strtol(yytext, NULL, 8); return INT; }

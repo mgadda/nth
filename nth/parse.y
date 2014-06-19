@@ -52,9 +52,10 @@
 %token FLOAT INT
 %token STRING
 %token IDENT
+%token HASH_ROCKET
+%token LSHIFT RSHIFT DOUBLE_DOT TRIPLE_DOT
 
 %defines /* forces creation of y.tab.h */
-
 
 %start file
 
@@ -73,6 +74,8 @@ expr: literal
     | val_def 
     | if_else
     | func_call
+    | deref
+    | '(' expr ')'
     ;
 
 literal: INT
@@ -80,6 +83,7 @@ literal: INT
        | STRING 
        | TRUE
        | FALSE
+       | IDENT
        | compound_literal
        ;
 
@@ -99,13 +103,15 @@ exprlist: expr
 
 
   /* Hash */
-hash: '{' key_val_list '}';
+hash: '{' key_val_list '}'
+    | '{' '}'
+    ;
 
 key_val_list: key_value 
             | key_value ',' key_val_list
             ;
 
-key_value: key ":" expr;
+key_value: key ':' expr;
 
 key: STRING
    | IDENT
@@ -113,8 +119,8 @@ key: STRING
 
 
   /* Range */
-range: INT '.' '.' INT
-     | INT '.' '.' '.' INT
+range: INT DOUBLE_DOT INT
+     | INT TRIPLE_DOT INT 
      ;
 
 
@@ -145,7 +151,9 @@ math_op: expr '+' expr
        | expr '%' expr
        ;
 
-bitwise_op: expr '|' expr
+bitwise_op: expr LSHIFT expr
+          | expr RSHIFT expr
+          | expr '|' expr
           | expr '&' expr
           ;
 
@@ -154,18 +162,23 @@ bitwise_op: expr '|' expr
   /* Functions */
 block: '{' expressions '}'
 
-func_def: DEF IDENT '(' arglist ')' ':' IDENT block;
+func_def: DEF IDENT '(' arglist ')' ':' type block
+        | '{' '(' arglist ')' ':' type HASH_ROCKET expr '}'
 
 arglist: arg
        | arg ',' arglist
        ;
 
-arg: IDENT ':' IDENT;
+arg: IDENT ':' type;
 
 func_call: IDENT '(' exprlist ')';
 
   /* Variables */
-val_def: VAL IDENT ':' IDENT '=' expr;
+val_def: VAL IDENT ':' type '=' expr;
+
+deref: IDENT '[' expr ']'
+     | IDENT '.' INT
+     ;
 
   /* Control Flow */
 
@@ -173,4 +186,15 @@ if_else: IF '(' expr ')' block
        | IF '(' expr ')' block ELSE block
        ;
 
+  /* Types */
+
+typelist: type
+        | type ',' typelist
+        ;
+
+type: IDENT
+    | IDENT '[' typelist ']'
+    | '(' typelist ')'
+    | '(' typelist ')' HASH_ROCKET type
+    ;
 %%
