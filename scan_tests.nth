@@ -60,8 +60,8 @@ Range
 
 
 // Boolean
-val a = true
-val b = false
+val a: Boolean = true
+val b: Boolean = false
 a && b
 a || b
 !a
@@ -107,7 +107,7 @@ false
 
 
 // With string interpolation
-val name = "Matt"
+val name: String = "Matt"
 "Hello, #{name}!"
 
 
@@ -126,21 +126,19 @@ val h: Hash[String, Int] = {
 }
 {} // empty Hash
 
+
 h["key1"]
 
-
-
 // Arrays
-val a: Int[] = [1,2,3,4]
+val a: Array[Int] = [1,2,3,4]
 a[0]
-
 
 // Range (always Ints?)
 1..10
 1...10
 
 // Tuple
-val t: (Int, String) = (1, "Test")
+val t: (Int, String) = (2, "Test")
 t.0
 t.1
 
@@ -154,7 +152,7 @@ def add(a: Int, b: Int): Int {
   a + b // no return keyword
 }
 // Closure definition
-val fun = { (a: Int, b: Int): Int => a * b }
+val fun: (Int, Int) => Int = { (a: Int, b: Int): Int => a * b }
 
 
 // Function invocation
@@ -163,17 +161,17 @@ fun(3,4)
 
 
 // Function which accepts functions
-def higherFun(a: ((Int, Int) => Int)) {
+def higherFun(a: ((Int, Int) => Int)): Boolean {
   a(n, m)
 }
 
 
 // note closure can be passed outside parens
-higherFun() { (a: Int, b: Int) => a < b }
+/* higherFun() { (a: Int, b: Int): Bool => a < b } */
 
 
 // normal functions passed to other functions
-def add(a: Int, b: Int) { a+b }
+def add(a: Int, b: Int): Int { a+b }
 higherFun(add)
 
 // ---------------
@@ -192,19 +190,20 @@ if (boolCond) {
   case 20: 2
   case _: -1
 }
-*/
 
 // I wonder if 'match' could be written in nth
 (10, 20) match {
   case (a, 10): a
   case (a, b): a + b
 }
+*/
 
 // ---------------
 // Classes/Objects
 // ---------------
 
 // Class definition with arguments
+/*
 class Bar(other: Int) {
   def someMethod(): Int { 5 }
   def methodOnBar(): Int { 15 }
@@ -240,13 +239,13 @@ f.methodOnBar()
 var b: Bar = f.returnSelf().methodOnBar()
 b.methodOnBar()
 b.returnSelf() // error!
-
+*/
 
 
 // -----------------
 // Reserved keywords
 // -----------------
-
+/*
 class
 def
 if
@@ -255,6 +254,6 @@ override
 match
 case
 val
-
+*/
 
 // Namespaces and file layout
