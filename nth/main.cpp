@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 extern "C" void yyrestart(FILE*);
+extern "C" int yyparse();
 extern "C" int yylex();
 extern int yylineno;
 
@@ -25,11 +26,9 @@ int main(int argc, const char * argv[])
   FILE *f = fopen(argv[1], "r");
   yylineno = 1;
   yyrestart(f);
-  int token;
-  while ((token = yylex())) {
-    // do something with token
-  }
+  int ret = yyparse();
   fclose(f);
-  return token;
+
+  return ret;
 }
 
