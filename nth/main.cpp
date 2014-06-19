@@ -24,6 +24,11 @@ int main(int argc, const char * argv[])
   // optimize -> IR
   // code gen -> ASM
   FILE *f = fopen(argv[1], "r");
+  if (!f) {
+    printf("Cannot open %s\n", argv[1]);
+    return errno;
+  }
+
   yylineno = 1;
   yyrestart(f);
   int ret = yyparse();
