@@ -9,7 +9,7 @@
 
   extern int yylex();
   extern int yylineno;
-  
+
   int exit_status;
 
   void yyerror(const char *s, ...) { 
@@ -37,6 +37,7 @@
 %}
 
 %debug
+%error-verbose
 
 %union {
   // Literals

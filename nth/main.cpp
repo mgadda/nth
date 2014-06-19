@@ -13,6 +13,7 @@ extern "C" void yyrestart(FILE*);
 extern "C" int yyparse();
 extern "C" int yylex();
 extern int yylineno;
+extern int yydebug;
 
 int main(int argc, const char * argv[])
 {
@@ -23,6 +24,8 @@ int main(int argc, const char * argv[])
   // generate IR -> IR
   // optimize -> IR
   // code gen -> ASM
+  yydebug = 1;
+
   FILE *f = fopen(argv[1], "r");
   if (!f) {
     printf("Cannot open %s\n", argv[1]);
