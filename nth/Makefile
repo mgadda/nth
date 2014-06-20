@@ -6,7 +6,7 @@ YACC=bison -y
 YFLAGS=-d
 
 run: $(EXECUTABLE)
-	./$(EXECUTABLE) ../scan_tests.nth
+	./$(EXECUTABLE) ../nth.nth
 
 run_simple: $(EXECUTABLE)
 	./$(EXECUTABLE) ../simple.nth
