@@ -3,7 +3,7 @@ CFLAGS=-c -Wall
 EXECUTABLE=nth
 LEX=flex
 YACC=bison -y
-YFLAGS=-d
+YFLAGS=-d --report=all
 
 run: $(EXECUTABLE)
 	./$(EXECUTABLE) ../nth.nth
