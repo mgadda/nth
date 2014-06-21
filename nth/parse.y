@@ -5,7 +5,6 @@
   
   //#include "ast.h"
 
-  #define YYDEBUG 1
 
   extern int yylex();
   extern int yylineno;

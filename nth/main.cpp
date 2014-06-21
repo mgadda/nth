@@ -24,7 +24,7 @@ int main(int argc, const char * argv[])
   // generate IR -> IR
   // optimize -> IR
   // code gen -> ASM
-  yydebug = 1;
+  yydebug = 0;
 
   FILE *f = fopen(argv[1], "r");
   if (!f) {
