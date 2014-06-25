@@ -12,22 +12,10 @@
 #include "context.h"
 #include "parse.tab.hh"
 
-//#ifdef CRAZY_DEBUG
-
-void yyrestart(FILE *f) {
-  return;
-}
-int yylineno;
-int yydebug;
-
-//#else
-//
-//extern void yyrestart(FILE*);
-////extern "C" int yyparse();
-//extern int yylineno;
+extern void yyrestart(FILE*);
+//extern "C" int yyparse();
+extern int yylineno;
 //extern int yydebug;
-//
-//#endif
 
 using namespace std;
 
@@ -40,7 +28,7 @@ int main(int argc, const char * argv[])
   // generate IR -> IR
   // optimize -> IR
   // code gen -> ASM
-  yydebug = 0;
+  //yydebug = 0;
 
   FILE *f = fopen(argv[1], "r");
   if (!f) {
@@ -65,9 +53,3 @@ namespace yy {
   }
 }
 
-int yylex(
-    yy::parser::semantic_type* yylval,
-    yy::parser::location_type* yylloc,
-    nth::Context &ctx) {
-  return 0;
-}

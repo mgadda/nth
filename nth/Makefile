@@ -19,14 +19,12 @@ YFLAGS=-d --report=all
 #	$(CC) $^ -o $@ -v
 #context.cpp parse.tab.cc scan.c ast.cpp main.cpp 
 
-$(EXECUTABLE): context.o parse.o ast.o main.o
+$(EXECUTABLE): context.o parse.o ast.o main.o scan.o
 	$(CXX) $(CXXFLAGS) $^ -o $@ -v
 
 scan.o: scan.l parse.tab.cc 
 	$(LEX) -t $< > $*.c
 	$(CC) $(CFLAGS) $*.c -c
-
-# -x c++ 
 
 parse.o parse.tab.cc: parse.y
 	$(YACC) $(YFLAGS) $^
@@ -34,7 +32,7 @@ parse.o parse.tab.cc: parse.y
 
 .PHONY: clean
 clean:
-	rm $(EXECUTABLE) *.o \
+	rm -rf $(EXECUTABLE) *.o \
 		location.hh position.hh stack.hh parse.tab.hh \
-		parse.tab.cc parse.output scan.cc scan.c
+		parse.tab.cc parse.output scan.c
 
