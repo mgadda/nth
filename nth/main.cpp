@@ -7,13 +7,29 @@
 //
 
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 
-extern "C" void yyrestart(FILE*);
-extern "C" int yyparse();
-extern "C" int yylex();
-extern int yylineno;
-extern int yydebug;
+#include "context.h"
+#include "parse.tab.hh"
+
+//#ifdef CRAZY_DEBUG
+
+void yyrestart(FILE *f) {
+  return;
+}
+int yylineno;
+int yydebug;
+
+//#else
+//
+//extern void yyrestart(FILE*);
+////extern "C" int yyparse();
+//extern int yylineno;
+//extern int yydebug;
+//
+//#endif
+
+using namespace std;
 
 int main(int argc, const char * argv[])
 {
@@ -29,14 +45,29 @@ int main(int argc, const char * argv[])
   FILE *f = fopen(argv[1], "r");
   if (!f) {
     printf("Cannot open %s\n", argv[1]);
-    return errno;
+    return -1;
   }
 
   yylineno = 1;
   yyrestart(f);
-  int ret = yyparse();
+
+  nth::Context context;
+  yy::parser parser(context);
+  int ret = parser.parse();
   fclose(f);
 
   return ret;
 }
 
+namespace yy {
+  void parser::error(location const &loc, const string& s) {
+    cerr << "error at " << loc << ": " << s << endl;
+  }
+}
+
+int yylex(
+    yy::parser::semantic_type* yylval,
+    yy::parser::location_type* yylloc,
+    nth::Context &ctx) {
+  return 0;
+}

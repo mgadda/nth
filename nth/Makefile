@@ -1,23 +1,40 @@
-CC=gcc
-CFLAGS=-c -Wall
+CC=clang
+CXX=clang++
+CFLAGS=-Wall -v
+CXXFLAGS=-Wall -v
 EXECUTABLE=nth
 LEX=flex
-YACC=bison -y
+YACC=bison
 YFLAGS=-d --report=all
+#LDFLAGS=-Lsomedir
+#LDLIBS=-lfoo
 
-run: $(EXECUTABLE)
-	./$(EXECUTABLE) ../nth.nth
+#run: $(EXECUTABLE)
+#	./$(EXECUTABLE) ../nth.nth
 
-run_simple: $(EXECUTABLE)
-	./$(EXECUTABLE) ../simple.nth
+#run_simple: $(EXECUTABLE)
+#	./$(EXECUTABLE) ../simple.nth
 
-$(EXECUTABLE): parse.o scan.o ast.o main.o
-	$(CC) $^ -o $@
+#$(EXECUTABLE): context.o parse.o scan.o ast.o main.o 
+#	$(CC) $^ -o $@ -v
+#context.cpp parse.tab.cc scan.c ast.cpp main.cpp 
 
-scan.o: scan.l parse.c
-parse.o: parse.y
+$(EXECUTABLE): context.o parse.o ast.o main.o
+	$(CXX) $(CXXFLAGS) $^ -o $@ -v
+
+scan.o: scan.l parse.tab.cc 
+	$(LEX) -t $< > $*.c
+	$(CC) $(CFLAGS) $*.c -c
+
+# -x c++ 
+
+parse.o parse.tab.cc: parse.y
+	$(YACC) $(YFLAGS) $^
+	$(CXX) $(CXXFLAGS) parse.tab.cc -o $@ -c 
 
 .PHONY: clean
 clean:
-	rm -rf $(EXECUTABLE) *.o y.tab.h parse.c
+	rm $(EXECUTABLE) *.o \
+		location.hh position.hh stack.hh parse.tab.hh \
+		parse.tab.cc parse.output scan.cc scan.c
 
