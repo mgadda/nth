@@ -10,7 +10,7 @@
 #include <cstdio>
 
 #include "context.h"
-#include "parse.tab.hh"
+#include "parse.hpp"
 
 extern void yyrestart(FILE*);
 //extern "C" int yyparse();

@@ -27,12 +27,12 @@ scan.o: scan.l parse.tab.cc
 	$(CXX) $(CXXFLAGS) $*.cc -c
 
 parse.o parse.tab.cc: parse.y
-	$(YACC) $(YFLAGS) $^
-	$(CXX) $(CXXFLAGS) parse.tab.cc -o $@ -c 
+	$(YACC) $(YFLAGS) $^ -o $*.cpp
+	$(CXX) $(CXXFLAGS) parse.cpp -o $@ -c 
 
 .PHONY: clean
 clean:
 	rm -rf $(EXECUTABLE) *.o \
-		location.hh position.hh stack.hh parse.tab.hh \
-		parse.tab.cc parse.output scan.c
+		location.hh position.hh stack.hh \
+		parse.cpp parse.hpp parse.output scan.c
 
