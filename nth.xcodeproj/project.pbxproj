@@ -11,8 +11,45 @@
 		7D6E3F571940C2B4008D5BBD /* nth.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D6E3F561940C2B4008D5BBD /* nth.1 */; };
 		7D6E3F601940C5D0008D5BBD /* scan.l in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F5F1940C5D0008D5BBD /* scan.l */; settings = {COMPILER_FLAGS = "-d"; }; };
 		7D6E3F651943D5C1008D5BBD /* ast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cpp */; };
-		7D6E3F6719440F00008D5BBD /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
+		7D8CC7E0195BD4900009B20C /* context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* context.cpp */; };
+		7D8CC7E9195C6EB40009B20C /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		7D8CC7E5195BDD9A0009B20C /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.lex;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/scan.cpp",
+			);
+			script = "flex -o ${DERIVED_FILE_DIR}/scan.cpp ${INPUT_FILE_PATH}\n";
+		};
+		7D8CC7E7195BE2E60009B20C /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.llvm.clang.1_0;
+			filePatterns = parse.cpp;
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
+		7D8CC7E8195C6DB20009B20C /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.yacc;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/parse.cpp",
+				"$(DERIVED_FILE_DIR)/parse.hpp",
+				"$(DERIVED_FILE_DIR)/stack.hh",
+				"$(DERIVED_FILE_DIR)/position.hh",
+				"$(DERIVED_FILE_DIR)/location.hh",
+			);
+			script = "/usr/local/Cellar/bison/3.0.2/bin/bison -v -g -o ${DERIVED_FILE_DIR}/parse.cpp ${INPUT_FILE_PATH}";
+		};
+/* End PBXBuildRule section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		7D6E3F4F1940C2B3008D5BBD /* CopyFiles */ = {
@@ -35,7 +72,8 @@
 		7D6E3F631943D5C1008D5BBD /* ast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ast.cpp; sourceTree = "<group>"; };
 		7D6E3F641943D5C1008D5BBD /* ast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ast.h; sourceTree = "<group>"; };
 		7D6E3F6619440F00008D5BBD /* parse.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; path = parse.y; sourceTree = "<group>"; };
-		7D6E3F6919452039008D5BBD /* nth.nth */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nth.nth; sourceTree = "<group>"; };
+		7D8CC7DE195BD4900009B20C /* context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = context.cpp; sourceTree = "<group>"; };
+		7D8CC7DF195BD4900009B20C /* context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = context.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +107,8 @@
 		7D6E3F531940C2B4008D5BBD /* nth */ = {
 			isa = PBXGroup;
 			children = (
+				7D8CC7DE195BD4900009B20C /* context.cpp */,
+				7D8CC7DF195BD4900009B20C /* context.h */,
 				7D6E3F6619440F00008D5BBD /* parse.y */,
 				7D6E3F541940C2B4008D5BBD /* main.cpp */,
 				7D6E3F561940C2B4008D5BBD /* nth.1 */,
@@ -82,7 +122,6 @@
 		7D6E3F5D1940C4EA008D5BBD /* notes */ = {
 			isa = PBXGroup;
 			children = (
-				7D6E3F6919452039008D5BBD /* nth.nth */,
 			);
 			path = notes;
 			sourceTree = "<group>";
@@ -99,6 +138,9 @@
 				7D6E3F4F1940C2B3008D5BBD /* CopyFiles */,
 			);
 			buildRules = (
+				7D8CC7E8195C6DB20009B20C /* PBXBuildRule */,
+				7D8CC7E7195BE2E60009B20C /* PBXBuildRule */,
+				7D8CC7E5195BDD9A0009B20C /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -138,8 +180,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D8CC7E9195C6EB40009B20C /* parse.y in Sources */,
 				7D6E3F651943D5C1008D5BBD /* ast.cpp in Sources */,
-				7D6E3F6719440F00008D5BBD /* parse.y in Sources */,
+				7D8CC7E0195BD4900009B20C /* context.cpp in Sources */,
 				7D6E3F551940C2B4008D5BBD /* main.cpp in Sources */,
 				7D6E3F601940C5D0008D5BBD /* scan.l in Sources */,
 			);

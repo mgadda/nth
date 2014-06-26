@@ -1,8 +1,8 @@
-%option noyywrap nodefault yylineno
+%option noyywrap yylineno
 
 %{
   #include <cstdlib>
-  #include "parse.tab.hh"
+  #include "parse.hpp"
   #include "context.h"
   
   #define YY_DECL int yylex(yy::parser::semantic_type *yylval, \
