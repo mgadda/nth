@@ -1,6 +1,7 @@
 %option noyywrap nodefault yylineno
 
 %{
+  #include <cstdlib>
   #include "parse.tab.hh"
   #include "context.h"
   

@@ -1,7 +1,7 @@
 CC=clang
 CXX=clang++
-CFLAGS=-Wall -v
-CXXFLAGS=-Wall -v
+CFLAGS=-Wall
+CXXFLAGS=-Wall 
 EXECUTABLE=nth
 LEX=flex
 YACC=bison
@@ -20,11 +20,11 @@ YFLAGS=-d --report=all
 #context.cpp parse.tab.cc scan.c ast.cpp main.cpp 
 
 $(EXECUTABLE): context.o parse.o ast.o main.o scan.o
-	$(CXX) $(CXXFLAGS) $^ -o $@ -v
+	$(CXX) $(CXXFLAGS) $^ -o $@ 
 
 scan.o: scan.l parse.tab.cc 
-	$(LEX) -t $< > $*.c
-	$(CC) $(CFLAGS) $*.c -c
+	$(LEX) -t $< > $*.cc
+	$(CXX) $(CXXFLAGS) $*.cc -c
 
 parse.o parse.tab.cc: parse.y
 	$(YACC) $(YFLAGS) $^
