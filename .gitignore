@@ -1,2 +1,4 @@
 *.swp
 *.un~
+y.output
+build/

@@ -10,5 +10,9 @@
 #define __nth__ast__
 
 #include <iostream>
+#include <vector>
+
+class AstNode {
+};
 
 #endif /* defined(__nth__ast__) */

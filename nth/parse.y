@@ -1,17 +1,26 @@
+%code requires {
+  namespace nth {
+    // Forward declaration because Context 
+    // is used in generated header(s)
+    class Context;
+  }
+}
+
+
 %{
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <stdarg.h>
-  
-  //#include "ast.h"
+  #include <iostream>
 
+  #include "context.h"
+  #include "ast.h"
 
-  extern int yylex();
-  extern int yylineno;
+  using namespace std;
+  using namespace nth;
 
+/*  extern int yylineno;
+  extern int yyloc; */
   int exit_status;
 
-  void yyerror(const char *s, ...) { 
+  /*void yyerror(const char *s, ...) { 
     va_list ap;
     va_start(ap, s);
     
@@ -21,8 +30,9 @@
     
     exit_status = 1;
     //printf(">>>> ERROR: line %d, %s\n", yylineno, s); 
-  }
+  } */
   
+/*
   typedef enum {
     EqualTo,
     NotEqualTo,
@@ -31,12 +41,19 @@
     LessThanOrEqualTo,
     GreaterThanOrEqualTo
   } ComparisonOperators;
-
+*/
 
 %}
 
+%language "C++"
+%defines /* forces creation of y.tab.h */
+
 %debug
 %error-verbose
+%locations
+
+%parse-param { nth::Context &ctx }
+%lex-param { nth::Context &ctx }
 
 %union {
   // Literals
@@ -54,8 +71,13 @@
 %token HASH_ROCKET
 %token LSHIFT RSHIFT DOUBLE_DOT TRIPLE_DOT
 
-%defines /* forces creation of y.tab.h */
+%{
+  extern int yylex(
+    yy::parser::semantic_type* yylval,
+    yy::parser::location_type* yylloc,
+    nth::Context &ctx);
 
+%}
 %start file
 
 %%

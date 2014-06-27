@@ -1,23 +1,26 @@
-CC=gcc
-CFLAGS=-c -Wall
+CC=clang
+CXX=clang++
+CFLAGS=-Wall
+CXXFLAGS=-Wall
 EXECUTABLE=nth
 LEX=flex
-YACC=bison -y
+YACC=bison
 YFLAGS=-d --report=all
 
-run: $(EXECUTABLE)
-	./$(EXECUTABLE) ../nth.nth
+$(EXECUTABLE): context.o parse.o ast.o main.o scan.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
-run_simple: $(EXECUTABLE)
-	./$(EXECUTABLE) ../simple.nth
+scan.o: scan.l parse.tab.cc 
+	$(LEX) -t $< > $*.cc
+	$(CXX) $(CXXFLAGS) $*.cc -c
 
-$(EXECUTABLE): parse.o scan.o ast.o main.o
-	$(CC) $^ -o $@
-
-scan.o: scan.l parse.c
-parse.o: parse.y
+parse.o parse.tab.cc: parse.y
+	$(YACC) $(YFLAGS) $^ -o $*.cpp
+	$(CXX) $(CXXFLAGS) parse.cpp -o $@ -c
 
 .PHONY: clean
 clean:
-	rm -rf $(EXECUTABLE) *.o y.tab.h parse.c
+	rm -rf $(EXECUTABLE) *.o \
+		location.hh position.hh stack.hh \
+		parse.cpp parse.hpp parse.tab.* parse.output scan.c
 
