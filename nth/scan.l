@@ -115,7 +115,8 @@ LEADING_DIGIT [1-9]
 
   /* Multiline Comments */
 "/*"                  { BEGIN(COMMENT); }
-<COMMENT>([^\*]|\n)+|.
+<COMMENT>\n           { yylloc->lines(1); }
+<COMMENT>[^\*\n]+|.
 <COMMENT>"*/"         { BEGIN(INITIAL); }
 <COMMENT><<EOF>>      { printf("Line %d: Unterminated comment\n", yylineno); }
 
