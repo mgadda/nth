@@ -2,7 +2,7 @@
 
 %{
   #include <cstdlib>
-  #include "parse.hpp"
+  #include "parse.hh"
   #include "driver.h"
   
   #define YY_DECL int yylex(yy::parser::semantic_type *yylval, \

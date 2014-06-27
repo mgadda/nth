@@ -1,21 +1,40 @@
 //
-//  context.h
+//  driver.h
 //  nth
 //
 //  Created by Matt Gadda on 6/21/14.
 //  Copyright (c) 2014 Matt Gadda. All rights reserved.
 //
 
-#ifndef __nth__context__
-#define __nth__context__
+#ifndef __nth__driver__
+#define __nth__driver__
 
 #include <iostream>
+#include "parse.hh"
+
+
 namespace nth {
+  
+class Driver {
 
-class Context {
  public:
-  Context();  
+  Driver();
+  virtual ~Driver();
+  
+  int result;
+  void scanBegin();
+  void scanEnd();
+  bool trace_scanning;
+  
+  int parse(const std::string& f);
+  
+  std::string file;
+  
+  bool trace_parsing;
+  
+  void error(const yy::location& l, const std::string& msg);
+  void error(const std::string& msg);
 };
-
+  
 }
-#endif /* defined(__nth__context__) */
+#endif /* defined(__nth__driver__) */

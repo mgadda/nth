@@ -13,9 +13,6 @@
   #include "driver.h"
   #include "ast.h"
 
-  using namespace std;
-  using namespace nth;
-
 /*  extern int yylineno;
   extern int yyloc; */
   int exit_status;

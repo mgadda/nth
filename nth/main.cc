@@ -10,14 +10,12 @@
 #include <cstdio>
 
 #include "driver.h"
-#include "parse.hpp"
+#include "parse.hh"
 
 extern void yyrestart(FILE*);
 //extern "C" int yyparse();
 extern int yylineno;
 //extern int yydebug;
-
-using namespace std;
 
 int main(int argc, const char * argv[])
 {
@@ -48,8 +46,8 @@ int main(int argc, const char * argv[])
 }
 
 namespace yy {
-  void parser::error(location const &loc, const string& s) {
-    cerr << "error at " << loc << ": " << s << endl;
+  void parser::error(location const &loc, const std::string& s) {
+    std::cerr << "error at " << loc << ": " << s << '\n';
   }
 }
 

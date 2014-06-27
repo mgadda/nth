@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7D6E3F551940C2B4008D5BBD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F541940C2B4008D5BBD /* main.cpp */; };
+		7D6E3F551940C2B4008D5BBD /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F541940C2B4008D5BBD /* main.cc */; };
 		7D6E3F571940C2B4008D5BBD /* nth.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D6E3F561940C2B4008D5BBD /* nth.1 */; };
 		7D6E3F601940C5D0008D5BBD /* scan.l in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F5F1940C5D0008D5BBD /* scan.l */; settings = {COMPILER_FLAGS = "-d"; }; };
-		7D6E3F651943D5C1008D5BBD /* ast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cpp */; };
-		7D8CC7E0195BD4900009B20C /* driver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cpp */; };
+		7D6E3F651943D5C1008D5BBD /* ast.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cc */; };
+		7D8CC7E0195BD4900009B20C /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
 		7D8CC7E9195C6EB40009B20C /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
 /* End PBXBuildFile section */
 
@@ -22,9 +22,9 @@
 			fileType = sourcecode.lex;
 			isEditable = 1;
 			outputFiles = (
-				"$(DERIVED_FILE_DIR)/scan.cpp",
+				"$(DERIVED_FILE_DIR)/scan.cc",
 			);
-			script = "flex -o ${DERIVED_FILE_DIR}/scan.cpp ${INPUT_FILE_PATH}\n";
+			script = "flex -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}\n";
 		};
 		7D8CC7E7195BE2E60009B20C /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -41,13 +41,13 @@
 			fileType = sourcecode.yacc;
 			isEditable = 1;
 			outputFiles = (
-				"$(DERIVED_FILE_DIR)/parse.cpp",
-				"$(DERIVED_FILE_DIR)/parse.hpp",
+				"$(DERIVED_FILE_DIR)/parse.cc",
+				"$(DERIVED_FILE_DIR)/parse.hh",
 				"$(DERIVED_FILE_DIR)/stack.hh",
 				"$(DERIVED_FILE_DIR)/position.hh",
 				"$(DERIVED_FILE_DIR)/location.hh",
 			);
-			script = "/usr/local/Cellar/bison/3.0.2/bin/bison -v -g -o ${DERIVED_FILE_DIR}/parse.cpp ${INPUT_FILE_PATH}";
+			script = "/usr/local/Cellar/bison/3.0.2/bin/bison -v -g -o ${DERIVED_FILE_DIR}/parse.cc ${INPUT_FILE_PATH}";
 		};
 /* End PBXBuildRule section */
 
@@ -66,13 +66,13 @@
 
 /* Begin PBXFileReference section */
 		7D6E3F511940C2B4008D5BBD /* nth */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = nth; sourceTree = BUILT_PRODUCTS_DIR; };
-		7D6E3F541940C2B4008D5BBD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		7D6E3F541940C2B4008D5BBD /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cc; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7D6E3F561940C2B4008D5BBD /* nth.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = nth.1; sourceTree = "<group>"; };
 		7D6E3F5F1940C5D0008D5BBD /* scan.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; lineEnding = 0; path = scan.l; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
-		7D6E3F631943D5C1008D5BBD /* ast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ast.cpp; sourceTree = "<group>"; };
+		7D6E3F631943D5C1008D5BBD /* ast.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ast.cc; sourceTree = "<group>"; };
 		7D6E3F641943D5C1008D5BBD /* ast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ast.h; sourceTree = "<group>"; };
 		7D6E3F6619440F00008D5BBD /* parse.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; lineEnding = 0; path = parse.y; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
-		7D8CC7DE195BD4900009B20C /* driver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver.cpp; sourceTree = "<group>"; };
+		7D8CC7DE195BD4900009B20C /* driver.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver.cc; sourceTree = "<group>"; };
 		7D8CC7DF195BD4900009B20C /* driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = driver.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,13 +107,13 @@
 		7D6E3F531940C2B4008D5BBD /* nth */ = {
 			isa = PBXGroup;
 			children = (
-				7D8CC7DE195BD4900009B20C /* driver.cpp */,
+				7D8CC7DE195BD4900009B20C /* driver.cc */,
 				7D8CC7DF195BD4900009B20C /* driver.h */,
 				7D6E3F6619440F00008D5BBD /* parse.y */,
-				7D6E3F541940C2B4008D5BBD /* main.cpp */,
+				7D6E3F541940C2B4008D5BBD /* main.cc */,
 				7D6E3F561940C2B4008D5BBD /* nth.1 */,
 				7D6E3F5F1940C5D0008D5BBD /* scan.l */,
-				7D6E3F631943D5C1008D5BBD /* ast.cpp */,
+				7D6E3F631943D5C1008D5BBD /* ast.cc */,
 				7D6E3F641943D5C1008D5BBD /* ast.h */,
 			);
 			path = nth;
@@ -181,9 +181,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D8CC7E9195C6EB40009B20C /* parse.y in Sources */,
-				7D6E3F651943D5C1008D5BBD /* ast.cpp in Sources */,
-				7D8CC7E0195BD4900009B20C /* driver.cpp in Sources */,
-				7D6E3F551940C2B4008D5BBD /* main.cpp in Sources */,
+				7D6E3F651943D5C1008D5BBD /* ast.cc in Sources */,
+				7D8CC7E0195BD4900009B20C /* driver.cc in Sources */,
+				7D6E3F551940C2B4008D5BBD /* main.cc in Sources */,
 				7D6E3F601940C5D0008D5BBD /* scan.l in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
