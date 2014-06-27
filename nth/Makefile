@@ -22,5 +22,5 @@ parse.o parse.tab.cc: parse.y
 clean:
 	rm -rf $(EXECUTABLE) *.o \
 		location.hh position.hh stack.hh \
-		parse.cpp parse.hpp parse.output scan.c
+		parse.cpp parse.hpp parse.tab.* parse.output scan.c
 
