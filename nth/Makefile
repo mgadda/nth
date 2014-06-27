@@ -7,7 +7,7 @@ LEX=flex
 YACC=bison
 YFLAGS=-d --report=all
 
-$(EXECUTABLE): context.o parse.o ast.o main.o scan.o
+$(EXECUTABLE): parse.o driver.o ast.o main.o scan.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 scan.o: scan.l parse.tab.cc 

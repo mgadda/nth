@@ -9,7 +9,7 @@
 #include <iostream>
 #include <cstdio>
 
-#include "context.h"
+#include "driver.h"
 #include "parse.hpp"
 
 extern void yyrestart(FILE*);
@@ -39,8 +39,8 @@ int main(int argc, const char * argv[])
   yylineno = 1;
   yyrestart(f);
 
-  nth::Context context;
-  yy::parser parser(context);
+  nth::Driver driver;
+  yy::parser parser(driver);
   int ret = parser.parse();
   fclose(f);
 

@@ -1,8 +1,8 @@
 %code requires {
   namespace nth {
-    // Forward declaration because Context 
+    // Forward declaration because Driver 
     // is used in generated header(s)
-    class Context;
+    class Driver;
   }
 }
 
@@ -10,7 +10,7 @@
 %{
   #include <iostream>
 
-  #include "context.h"
+  #include "driver.h"
   #include "ast.h"
 
   using namespace std;
@@ -52,8 +52,8 @@
 %error-verbose
 %locations
 
-%parse-param { nth::Context &ctx }
-%lex-param { nth::Context &ctx }
+%parse-param { nth::Driver &ctx }
+%lex-param { nth::Driver &ctx }
 
 %union {
   // Literals
@@ -75,7 +75,7 @@
   extern int yylex(
     yy::parser::semantic_type* yylval,
     yy::parser::location_type* yylloc,
-    nth::Context &ctx);
+    nth::Driver &ctx);
 
 %}
 %start file

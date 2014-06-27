@@ -3,11 +3,11 @@
 %{
   #include <cstdlib>
   #include "parse.hpp"
-  #include "context.h"
+  #include "driver.h"
   
   #define YY_DECL int yylex(yy::parser::semantic_type *yylval, \
                             yy::parser::location_type *yylloc, \
-                            nth::Context &ctx)
+                            nth::Driver &ctx)
   #define YY_USER_ACTION yylloc->columns (yyleng);
 
   typedef yy::parser::token token;
