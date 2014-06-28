@@ -13,6 +13,14 @@
 		7D6E3F651943D5C1008D5BBD /* ast.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cc */; };
 		7D8CC7E0195BD4900009B20C /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
 		7D8CC7E9195C6EB40009B20C /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
+		7DCF4AA4195E84D20056E5D1 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DCF4AA3195E84D20056E5D1 /* XCTest.framework */; };
+		7DCF4AAA195E84D20056E5D1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DCF4AA8195E84D20056E5D1 /* InfoPlist.strings */; };
+		7DCF4AAC195E84D20056E5D1 /* nth_Tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7DCF4AAB195E84D20056E5D1 /* nth_Tests.mm */; };
+		7DCF4AB4195F0A750056E5D1 /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
+		7DCF4AB5195F0A780056E5D1 /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F541940C2B4008D5BBD /* main.cc */; };
+		7DCF4AB6195F0A7B0056E5D1 /* ast.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cc */; };
+		7DCF4AB7195F0A870056E5D1 /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
+		7DCF4AB8195F0A8A0056E5D1 /* scan.l in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F5F1940C5D0008D5BBD /* scan.l */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -49,7 +57,41 @@
 			);
 			script = "/usr/local/Cellar/bison/3.0.2/bin/bison -v -g -o ${DERIVED_FILE_DIR}/parse.cc ${INPUT_FILE_PATH}";
 		};
+		7DCF4AB9195F0AB10056E5D1 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.yacc;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/parse.cc",
+				"$(DERIVED_FILE_DIR)/parse.hh",
+				"$(DERIVED_FILE_DIR)/stack.hh",
+				"$(DERIVED_FILE_DIR)/location.hh",
+				"$(DERIVED_FILE_DIR)/position.hh",
+			);
+			script = "# $(YACC)\n/usr/local/Cellar/bison/3.0.2/bin/bison -v -g -o \"${DERIVED_FILE_DIR}/parse.cc\" \"${INPUT_FILE_PATH}\"";
+		};
+		7DCF4ABA195F0AEC0056E5D1 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.lex;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/scan.cc",
+			);
+			script = "# $(LEX)\nflex -o \"${DERIVED_FILE_DIR}/scan.cc\" \"${INPUT_FILE_PATH}\"";
+		};
 /* End PBXBuildRule section */
+
+/* Begin PBXContainerItemProxy section */
+		7DCF4AAE195E84D20056E5D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7D6E3F491940C2B3008D5BBD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7D6E3F501940C2B3008D5BBD;
+			remoteInfo = nth;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		7D6E3F4F1940C2B3008D5BBD /* CopyFiles */ = {
@@ -74,6 +116,12 @@
 		7D6E3F6619440F00008D5BBD /* parse.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; lineEnding = 0; path = parse.y; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		7D8CC7DE195BD4900009B20C /* driver.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver.cc; sourceTree = "<group>"; };
 		7D8CC7DF195BD4900009B20C /* driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = driver.h; sourceTree = "<group>"; };
+		7DCF4AA1195E84D20056E5D1 /* nth Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "nth Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DCF4AA3195E84D20056E5D1 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		7DCF4AA7195E84D20056E5D1 /* nth Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nth Tests-Info.plist"; sourceTree = "<group>"; };
+		7DCF4AA9195E84D20056E5D1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7DCF4AAB195E84D20056E5D1 /* nth_Tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = nth_Tests.mm; sourceTree = "<group>"; };
+		7DCF4AAD195E84D20056E5D1 /* nth Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nth Tests-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +129,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DCF4A9E195E84D20056E5D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DCF4AA4195E84D20056E5D1 /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +148,8 @@
 			children = (
 				7D6E3F5D1940C4EA008D5BBD /* notes */,
 				7D6E3F531940C2B4008D5BBD /* nth */,
+				7DCF4AA5195E84D20056E5D1 /* nth Tests */,
+				7DCF4AA2195E84D20056E5D1 /* Frameworks */,
 				7D6E3F521940C2B4008D5BBD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -100,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				7D6E3F511940C2B4008D5BBD /* nth */,
+				7DCF4AA1195E84D20056E5D1 /* nth Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -126,6 +185,33 @@
 			path = notes;
 			sourceTree = "<group>";
 		};
+		7DCF4AA2195E84D20056E5D1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7DCF4AA3195E84D20056E5D1 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7DCF4AA5195E84D20056E5D1 /* nth Tests */ = {
+			isa = PBXGroup;
+			children = (
+				7DCF4AAB195E84D20056E5D1 /* nth_Tests.mm */,
+				7DCF4AA6195E84D20056E5D1 /* Supporting Files */,
+			);
+			path = "nth Tests";
+			sourceTree = "<group>";
+		};
+		7DCF4AA6195E84D20056E5D1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7DCF4AA7195E84D20056E5D1 /* nth Tests-Info.plist */,
+				7DCF4AA8195E84D20056E5D1 /* InfoPlist.strings */,
+				7DCF4AAD195E84D20056E5D1 /* nth Tests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -149,6 +235,26 @@
 			productReference = 7D6E3F511940C2B4008D5BBD /* nth */;
 			productType = "com.apple.product-type.tool";
 		};
+		7DCF4AA0195E84D20056E5D1 /* nth Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DCF4AB2195E84D20056E5D1 /* Build configuration list for PBXNativeTarget "nth Tests" */;
+			buildPhases = (
+				7DCF4A9D195E84D20056E5D1 /* Sources */,
+				7DCF4A9E195E84D20056E5D1 /* Frameworks */,
+				7DCF4A9F195E84D20056E5D1 /* Resources */,
+			);
+			buildRules = (
+				7DCF4ABA195F0AEC0056E5D1 /* PBXBuildRule */,
+				7DCF4AB9195F0AB10056E5D1 /* PBXBuildRule */,
+			);
+			dependencies = (
+				7DCF4AAF195E84D20056E5D1 /* PBXTargetDependency */,
+			);
+			name = "nth Tests";
+			productName = "nth Tests";
+			productReference = 7DCF4AA1195E84D20056E5D1 /* nth Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -157,6 +263,11 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Matt Gadda";
+				TargetAttributes = {
+					7DCF4AA0195E84D20056E5D1 = {
+						TestTargetID = 7D6E3F501940C2B3008D5BBD;
+					};
+				};
 			};
 			buildConfigurationList = 7D6E3F4C1940C2B3008D5BBD /* Build configuration list for PBXProject "nth" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -171,9 +282,21 @@
 			projectRoot = "";
 			targets = (
 				7D6E3F501940C2B3008D5BBD /* nth */,
+				7DCF4AA0195E84D20056E5D1 /* nth Tests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7DCF4A9F195E84D20056E5D1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DCF4AAA195E84D20056E5D1 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7D6E3F4D1940C2B3008D5BBD /* Sources */ = {
@@ -188,7 +311,39 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7DCF4A9D195E84D20056E5D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DCF4AB7195F0A870056E5D1 /* parse.y in Sources */,
+				7DCF4AB5195F0A780056E5D1 /* main.cc in Sources */,
+				7DCF4AAC195E84D20056E5D1 /* nth_Tests.mm in Sources */,
+				7DCF4AB6195F0A7B0056E5D1 /* ast.cc in Sources */,
+				7DCF4AB4195F0A750056E5D1 /* driver.cc in Sources */,
+				7DCF4AB8195F0A8A0056E5D1 /* scan.l in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7DCF4AAF195E84D20056E5D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7D6E3F501940C2B3008D5BBD /* nth */;
+			targetProxy = 7DCF4AAE195E84D20056E5D1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		7DCF4AA8195E84D20056E5D1 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7DCF4AA9195E84D20056E5D1 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		7D6E3F581940C2B4008D5BBD /* Debug */ = {
@@ -275,6 +430,50 @@
 			};
 			name = Release;
 		};
+		7DCF4AB0195E84D20056E5D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "nth Tests/nth Tests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				INFOPLIST_FILE = "nth Tests/nth Tests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		7DCF4AB1195E84D20056E5D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "nth Tests/nth Tests-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				INFOPLIST_FILE = "nth Tests/nth Tests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -295,6 +494,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		7DCF4AB2195E84D20056E5D1 /* Build configuration list for PBXNativeTarget "nth Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DCF4AB0195E84D20056E5D1 /* Debug */,
+				7DCF4AB1195E84D20056E5D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
