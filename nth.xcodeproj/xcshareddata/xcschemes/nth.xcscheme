@@ -37,6 +37,11 @@
                BlueprintName = "nth Tests"
                ReferencedContainer = "container:nth.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "nth_Tests/testParse">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
