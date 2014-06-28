@@ -316,11 +316,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DCF4AB7195F0A870056E5D1 /* parse.y in Sources */,
+				7DCF4AB8195F0A8A0056E5D1 /* scan.l in Sources */,
 				7DCF4AB5195F0A780056E5D1 /* main.cc in Sources */,
-				7DCF4AAC195E84D20056E5D1 /* nth_Tests.mm in Sources */,
 				7DCF4AB6195F0A7B0056E5D1 /* ast.cc in Sources */,
 				7DCF4AB4195F0A750056E5D1 /* driver.cc in Sources */,
-				7DCF4AB8195F0A8A0056E5D1 /* scan.l in Sources */,
+				7DCF4AAC195E84D20056E5D1 /* nth_Tests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,6 +502,7 @@
 				7DCF4AB1195E84D20056E5D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
