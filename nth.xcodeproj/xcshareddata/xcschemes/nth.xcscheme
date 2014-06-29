@@ -29,11 +29,11 @@
       buildConfiguration = "Debug">
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7DCF4AA0195E84D20056E5D1"
-               BuildableName = "nth Tests.xctest"
+               BuildableName = "tests.xctest"
                BlueprintName = "tests"
                ReferencedContainer = "container:nth.xcodeproj">
             </BuildableReference>
@@ -47,13 +47,23 @@
                referenceType = "1">
             </LocationScenarioReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7DC473B9195F934E007423F6"
+               BuildableName = "nth-test.xctest"
+               BlueprintName = "nth-test"
+               ReferencedContainer = "container:nth.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7DCF4AA0195E84D20056E5D1"
-            BuildableName = "nth Tests.xctest"
-            BlueprintName = "tests"
+            BlueprintIdentifier = "7D6E3F501940C2B3008D5BBD"
+            BuildableName = "nth"
+            BlueprintName = "nth"
             ReferencedContainer = "container:nth.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
