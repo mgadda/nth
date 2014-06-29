@@ -1,18 +1,19 @@
 //
-//  nth_tests.m
-//  nth-tests
+//  DriverTest.m
+//  nth
 //
 //  Created by Matt Gadda on 6/28/14.
 //  Copyright (c) 2014 Matt Gadda. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
+#import "driver.h"
 
-@interface nth_tests : XCTestCase
+@interface DriverTest : XCTestCase
 
 @end
 
-@implementation nth_tests
+@implementation DriverTest
 
 - (void)setUp
 {
@@ -26,9 +27,10 @@
     [super tearDown];
 }
 
-- (void)testExample
+- (void)testParse
 {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+  nth::Driver *d = new nth::Driver();
+  
 }
 
 @end

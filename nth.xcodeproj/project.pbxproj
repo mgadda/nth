@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D660D5B195FBD24008E0D21 /* driver_test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7D660D5A195FBD24008E0D21 /* driver_test.mm */; };
+		7D660D5C195FBDE0008E0D21 /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
+		7D660D5F195FBF79008E0D21 /* scan.l in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F5F1940C5D0008D5BBD /* scan.l */; };
+		7D660D60195FBF9D008E0D21 /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
+		7D660D61195FBFA8008E0D21 /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F541940C2B4008D5BBD /* main.cc */; };
 		7D6E3F551940C2B4008D5BBD /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F541940C2B4008D5BBD /* main.cc */; };
 		7D6E3F571940C2B4008D5BBD /* nth.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D6E3F561940C2B4008D5BBD /* nth.1 */; };
 		7D6E3F601940C5D0008D5BBD /* scan.l in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F5F1940C5D0008D5BBD /* scan.l */; settings = {COMPILER_FLAGS = "-d"; }; };
@@ -15,10 +20,33 @@
 		7D8CC7E9195C6EB40009B20C /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
 		7DF889A1195F9ECD00B7208A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF889A0195F9ECD00B7208A /* XCTest.framework */; };
 		7DF889A7195F9ECD00B7208A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DF889A5195F9ECD00B7208A /* InfoPlist.strings */; };
-		7DF889A9195F9ECD00B7208A /* nth_tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF889A8195F9ECD00B7208A /* nth_tests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
+		7D660D5D195FBE21008E0D21 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.yacc;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/parse.cc",
+				"$(DERIVED_FILE_DIR)/parse.hh",
+				"$(DERIVED_FILE_DIR)/stack.hh",
+				"$(DERIVED_FILE_DIR)/position.hh",
+				"$(DERIVED_FILE_DIR)/location.hh",
+			);
+			script = "/usr/local/Cellar/bison/3.0.2/bin/bison -v -g -o ${DERIVED_FILE_DIR}/parse.cc ${INPUT_FILE_PATH}";
+		};
+		7D660D5E195FBEB4008E0D21 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.lex;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/scan.cc",
+			);
+			script = "# $(LEX)\nflex -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}\n";
+		};
 		7D8CC7E5195BDD9A0009B20C /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
@@ -78,6 +106,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7D660D5A195FBD24008E0D21 /* driver_test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = driver_test.mm; sourceTree = "<group>"; };
 		7D6E3F511940C2B4008D5BBD /* nth */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = nth; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D6E3F541940C2B4008D5BBD /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cc; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7D6E3F561940C2B4008D5BBD /* nth.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = nth.1; sourceTree = "<group>"; };
@@ -91,7 +120,6 @@
 		7DF889A0195F9ECD00B7208A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		7DF889A4195F9ECD00B7208A /* nth-tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nth-tests-Info.plist"; sourceTree = "<group>"; };
 		7DF889A6195F9ECD00B7208A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7DF889A8195F9ECD00B7208A /* nth_tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = nth_tests.m; sourceTree = "<group>"; };
 		7DF889AA195F9ECD00B7208A /* nth-tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nth-tests-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -167,7 +195,7 @@
 		7DF889A2195F9ECD00B7208A /* nth-tests */ = {
 			isa = PBXGroup;
 			children = (
-				7DF889A8195F9ECD00B7208A /* nth_tests.m */,
+				7D660D5A195FBD24008E0D21 /* driver_test.mm */,
 				7DF889A3195F9ECD00B7208A /* Supporting Files */,
 			);
 			path = "nth-tests";
@@ -215,6 +243,8 @@
 				7DF8899C195F9ECD00B7208A /* Resources */,
 			);
 			buildRules = (
+				7D660D5E195FBEB4008E0D21 /* PBXBuildRule */,
+				7D660D5D195FBE21008E0D21 /* PBXBuildRule */,
 			);
 			dependencies = (
 				7DF889AC195F9ECD00B7208A /* PBXTargetDependency */,
@@ -284,7 +314,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DF889A9195F9ECD00B7208A /* nth_tests.m in Sources */,
+				7D660D61195FBFA8008E0D21 /* main.cc in Sources */,
+				7D660D60195FBF9D008E0D21 /* driver.cc in Sources */,
+				7D660D5C195FBDE0008E0D21 /* parse.y in Sources */,
+				7D660D5F195FBF79008E0D21 /* scan.l in Sources */,
+				7D660D5B195FBD24008E0D21 /* driver_test.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,6 +490,7 @@
 				7DF889AE195F9ECD00B7208A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
