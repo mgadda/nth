@@ -81,8 +81,8 @@ LEADING_DIGIT [1-9]
 "class"   { return token::CLASS; }
 
   /* literals */
-"true"    { return token::TRUE; }
-"false"   { return token::FALSE; }
+"true"    { return token::T_TRUE; }
+"false"   { return token::T_FALSE; }
 
   /* integers and floats */
 [-+]?{DIGIT}+"."{DIGIT}+{EXP}?  { yylval->f = strtod(yytext, NULL); return token::FLOAT; }

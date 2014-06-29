@@ -61,7 +61,7 @@
 
 %token CMP 
 %token AND OR NOT IF ELSE DEF VAL CLASS
-%token TRUE FALSE
+%token T_TRUE T_FALSE
 %token FLOAT INT
 %token STRING
 %token IDENT
@@ -99,8 +99,8 @@ expr: literal
 literal: INT
        | FLOAT
        | STRING 
-       | TRUE
-       | FALSE
+       | T_TRUE
+       | T_FALSE
        | IDENT
        | compound_literal
        ;
