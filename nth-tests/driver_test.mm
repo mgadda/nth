@@ -27,10 +27,16 @@
     [super tearDown];
 }
 
+- (void)testMainParse {
+  std::string nth_filename = std::string("nth.nth");
+  
+  XCTAssertEqual(0, nth::parse(nth_filename), @"Parsing nth.nth did not return 0.");
+}
+
 - (void)testParse
 {
   nth::Driver *d = new nth::Driver();
-  
+  XCTAssertEqual(0, d->parse("nth.nth"), @"Parsing nth.nth did not return 0 exit status.");
 }
 
 @end

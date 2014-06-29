@@ -14,6 +14,9 @@
 
 
 namespace nth {
+
+// TODO: move this into Driver
+int parse(std::string& filename);
   
 class Driver {
 

@@ -12,11 +12,6 @@
 #include "driver.h"
 #include "parse.hh"
 
-extern void yyrestart(FILE*);
-//extern "C" int yyparse();
-extern int yylineno;
-//extern int yydebug;
-
 int main(int argc, const char * argv[])
 {
   // Load files specified by filename in argv
@@ -28,21 +23,13 @@ int main(int argc, const char * argv[])
   // code gen -> ASM
   //yydebug = 0;
 
-  FILE *f = fopen(argv[1], "r");
-  if (!f) {
-    printf("Cannot open %s\n", argv[1]);
+  if (argc < 2) {
+    std::cout << "No input file specified.\n";
     return -1;
   }
-
-  yylineno = 1;
-  yyrestart(f);
-
-  nth::Driver driver;
-  yy::parser parser(driver);
-  int ret = parser.parse();
-  fclose(f);
-
-  return ret;
+  
+  std::string filename = std::string(argv[1]);
+  return nth::parse(filename);
 }
 
 namespace yy {
@@ -50,4 +37,3 @@ namespace yy {
     std::cerr << "error at " << loc << ": " << s << '\n';
   }
 }
-

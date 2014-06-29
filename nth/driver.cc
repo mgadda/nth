@@ -8,8 +8,31 @@
 
 #include "driver.h"
 
+extern void yyrestart(FILE*);
+//extern "C" int yyparse();
+extern int yylineno;
+//extern int yydebug;
+
 namespace nth {
+
+int parse(std::string& filename) {
+  FILE *f = fopen(filename.c_str(), "r");
+  if (!f) {
+    std::cout << "Cannot open " << filename << '\n';
+    return -1;
+  }
   
+  yylineno = 1;
+  yyrestart(f);
+  
+  Driver driver;
+  yy::parser parser(driver);
+  int ret = parser.parse();
+  fclose(f);
+  
+  return ret;
+}
+
 Driver::Driver() {
 
 }
