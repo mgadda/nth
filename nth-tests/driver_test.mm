@@ -28,7 +28,11 @@
 }
 
 - (void)testMainParse {
-  std::string nth_filename = std::string("nth.nth");
+  std::string resource_path = std::string(
+    [[[NSBundle bundleForClass:[self class]] resourcePath] UTF8String]);
+  
+  
+  std::string nth_filename = resource_path + "/nth.nth";
   
   XCTAssertEqual(0, nth::parse(nth_filename), @"Parsing nth.nth did not return 0.");
 }
