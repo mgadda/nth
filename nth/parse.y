@@ -44,6 +44,7 @@
 
 %language "C++"
 %defines /* forces creation of y.tab.h */
+%define variant
 
 %debug
 %error-verbose
@@ -52,19 +53,13 @@
 %parse-param { nth::Driver &ctx }
 %lex-param { nth::Driver &ctx }
 
-%union {
-  // Literals
-  double f;
-  long l;
-  char *str; // used for strings, identifiers
-}
-
 %token CMP 
 %token AND OR NOT IF ELSE DEF VAL CLASS
 %token T_TRUE T_FALSE
-%token FLOAT INT
-%token STRING
-%token IDENT
+%token <float> FLOAT
+%token <int> INT
+%token <std::string> STRING
+%token <std::string> IDENT
 %token HASH_ROCKET
 %token LSHIFT RSHIFT DOUBLE_DOT TRIPLE_DOT
 

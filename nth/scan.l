@@ -85,13 +85,13 @@ LEADING_DIGIT [1-9]
 "false"   { return token::T_FALSE; }
 
   /* integers and floats */
-[-+]?{DIGIT}+"."{DIGIT}+{EXP}?  { yylval->f = strtod(yytext, NULL); return token::FLOAT; }
-[-+]?[1-9]{DIGIT}*{EXP}         { yylval->f = strtod(yytext, NULL); return token::FLOAT; }
+[-+]?{DIGIT}+"."{DIGIT}+{EXP}?  { yylval->build<float>() = strtod(yytext, NULL); return token::FLOAT; }
+[-+]?[1-9]{DIGIT}*{EXP}         { yylval->build<float>() = strtod(yytext, NULL); return token::FLOAT; }
 
-[-+]?(0|([1-9]{DIGIT}*))        { yylval->l = strtol(yytext, NULL, 10); return token::INT; }
-"0x"[a-fA-F0-9]+                { yylval->l = strtol(yytext, NULL, 16); return token::INT; }
-"0b"[01]+                       { yylval->l = strtol(yytext, NULL, 2); return token::INT; }
-0[0-7]+                         { yylval->l = strtol(yytext, NULL, 8); return token::INT; }
+[-+]?(0|([1-9]{DIGIT}*))        { yylval->build<long>() = strtol(yytext, NULL, 10); return token::INT; }
+"0x"[a-fA-F0-9]+                { yylval->build<long>() = strtol(yytext, NULL, 16); return token::INT; }
+"0b"[01]+                       { yylval->build<long>() = strtol(yytext, NULL, 2); return token::INT; }
+0[0-7]+                         { yylval->build<long>() = strtol(yytext, NULL, 8); return token::INT; }
 
   /* strings */
 \"[^"]*\"   { /* is the character before close quote a \ ? */
@@ -99,7 +99,7 @@ LEADING_DIGIT [1-9]
                 yyless(yyleng-1); /* return token::last quote */
                 yymore(); /* append next string */
               } else {
-                yylval->str = strdup(yytext);
+                yylval->build<std::string>() = std::string(yytext);
                 return token::STRING;
               }
             }
@@ -121,7 +121,7 @@ LEADING_DIGIT [1-9]
 <COMMENT><<EOF>>      { printf("Line %d: Unterminated comment\n", yylineno); }
 
   /* Identifiers */
-[a-zA-Z][a-zA-Z0-9]*  { yylval->str = strdup(yytext); return token::IDENT; }
+[a-zA-Z][a-zA-Z0-9]*  { yylval->build<std::string>() = std::string(yytext); return token::IDENT; }
 
 
 .     { printf("Unknown character '%c'\n", *yytext); }
