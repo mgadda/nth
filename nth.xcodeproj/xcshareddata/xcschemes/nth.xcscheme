@@ -73,10 +73,6 @@
             argument = "nth.nth"
             isEnabled = "YES">
          </CommandLineArgument>
-         <CommandLineArgument
-            argument = "simple.nth"
-            isEnabled = "YES">
-         </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
