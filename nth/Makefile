@@ -10,7 +10,10 @@ YFLAGS=-d --report=all
 $(EXECUTABLE): parse.o driver.o ast.o main.o scan.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-scan.o: scan.l parse.cc 
+test: $(EXECUTABLE)
+	./$(EXECUTABLE) ../nth.nth # --debug-scan --debug-parse ../nth.nth
+
+scan.o: scan.l parse.cc
 	$(LEX) -t $< > $*.cc
 	$(CXX) $(CXXFLAGS) $*.cc -c
 
