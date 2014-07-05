@@ -21,15 +21,26 @@ int main(int argc, const char * argv[])
   // generate IR -> IR
   // optimize -> IR
   // code gen -> ASM
-  //yydebug = 0;
 
   if (argc < 2) {
     std::cout << "No input file specified.\n";
     return -1;
   }
-  
-  std::string filename = std::string(argv[1]);
-  return nth::parse(filename);
+
+  nth::Driver driver;
+  for (int i=1; i<argc; ++i) {
+    std::cout << argv[i] << '\n';
+    if (argv[i] == std::string("--debug-parse")) {
+      driver.should_trace_parsing = true;
+    } else if (argv[i] == std::string("--debug-scan")) {
+      driver.should_trace_scanning = true;
+    } else {
+      int ret = driver.parse(argv[i]);
+      std::cout << driver.result << '\n';
+      return ret;
+    }
+  }
+  return -1;
 }
 
 namespace yy {

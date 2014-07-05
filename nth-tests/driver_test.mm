@@ -27,20 +27,12 @@
     [super tearDown];
 }
 
-- (void)testMainParse {
+- (void)testParse {
+  nth::Driver d;
   std::string resource_path = std::string(
     [[[NSBundle bundleForClass:[self class]] resourcePath] UTF8String]);
   
-  
-  std::string nth_filename = resource_path + "/nth.nth";
-  
-  XCTAssertEqual(0, nth::parse(nth_filename), @"Parsing nth.nth did not return 0.");
-}
-
-- (void)testParse
-{
-  nth::Driver *d = new nth::Driver();
-  XCTAssertEqual(0, d->parse("nth.nth"), @"Parsing nth.nth did not return 0 exit status.");
+  XCTAssertEqual(0, d.parse(resource_path + "/nth.nth"), @"Parsing nth.nth did not return 0 exit status.");
 }
 
 @end

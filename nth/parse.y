@@ -1,11 +1,10 @@
 %code requires {
   namespace nth {
-    // Forward declaration because Driver 
+    // Forward declaration because Driver
     // is used in generated header(s)
     class Driver;
   }
 }
-
 
 %{
   #include <iostream>
@@ -13,89 +12,85 @@
   #include "driver.h"
   #include "ast.h"
 
-/*  extern int yylineno;
-  extern int yyloc; */
-  int exit_status;
-
-  /*void yyerror(const char *s, ...) { 
-    va_list ap;
-    va_start(ap, s);
-    
-    fprintf(stderr, "\n\n%d: error: ", yylineno);
-    vfprintf(stderr, s, ap);
-    fprintf(stderr, "\n\n");
-    
-    exit_status = 1;
-    //printf(">>>> ERROR: line %d, %s\n", yylineno, s); 
-  } */
-  
-/*
-  typedef enum {
-    EqualTo,
-    NotEqualTo,
-    LessThan,
-    GreaterThan,
-    LessThanOrEqualTo,
-    GreaterThanOrEqualTo
-  } ComparisonOperators;
-*/
+ int exit_status;
 
 %}
 
 %language "C++"
 %defines /* forces creation of y.tab.h */
-%define variant
-
+%define api.token.constructor
+%define api.value.type variant
+%define parse.assert
+%define parse.trace
+%define parse.error verbose
 %debug
-%error-verbose
 %locations
+%initial-action {
+  @$.begin.filename = @$.end.filename = &driver.file;
+}
+%define api.token.prefix {T_}
 
-%parse-param { nth::Driver &ctx }
-%lex-param { nth::Driver &ctx }
+%param { nth::Driver &driver }
 
-%token CMP 
-%token AND OR NOT IF ELSE DEF VAL CLASS
-%token T_TRUE T_FALSE
-%token <float> FLOAT
-%token <int> INT
+%token
+  END 0   "end of file"
+  PLUS    "+"
+  MINUS   "-"
+  TIMES   "*"
+  DIVIDE  "/"
+  ASSIGN  "="
+  POW     "^"
+  MODULO  "%"
+  BIT_OR  "|"
+  BIT_AND "&"
+  PERIOD  "."
+  COMMA   ","
+  LPAREN  "("
+  RPAREN  ")"
+  LBRACKET "["
+  RBRACKET "]"
+  LCURLY  "{"
+  RCURLY  "}"
+  COLON   ":"
+  ;
+
+%token CMP
+%token AND "&&" OR "||" NOT "!" IF ELSE DEF VAL CLASS
+%token TRUE FALSE
+%token <double> FLOAT
+%token <long> INT
 %token <std::string> STRING
 %token <std::string> IDENT
-%token HASH_ROCKET
-%token LSHIFT RSHIFT DOUBLE_DOT TRIPLE_DOT
+%token HASH_ROCKET "=>"
+%token LSHIFT "<<" RSHIFT ">>" DOUBLE_DOT ".." TRIPLE_DOT "..."
 
-%{
-  extern int yylex(
-    yy::parser::semantic_type* yylval,
-    yy::parser::location_type* yylloc,
-    nth::Driver &ctx);
-
-%}
 %start file
 
+%printer { yyoutput << $$; } <*>;
 %%
 
 
 file: expressions;
 
-expressions: expr 
+expressions: expr
           | expr expressions
           ;
 
 expr: literal
     | binary_operation
     | func_def
-    | val_def 
+    | val_def
     | if_else
     | func_call
     | deref
-    | '(' expr ')'
+    | "(" expr ")"
     ;
 
 literal: INT
        | FLOAT
-       | STRING 
-       | T_TRUE
-       | T_FALSE
+       | STRING
+       | TRUE
+       | FALSE
        | IDENT
        | compound_literal
        ;
@@ -108,23 +103,23 @@ compound_literal: array
 
 
   /* Array */
-array: '[' exprlist ']'
+array: "[" exprlist "]"
 
-exprlist: expr 
-        | expr ',' exprlist
+exprlist: expr
+        | expr "," exprlist
         ;
 
 
   /* Hash */
-hash: '{' key_val_list '}'
-    | '{' '}'
+hash: "{" key_val_list "}"
+    | "{" "}"
     ;
 
-key_val_list: key_value 
-            | key_value ',' key_val_list
+key_val_list: key_value
+            | key_value "," key_val_list
             ;
 
-key_value: key ':' expr;
+key_value: key ":" expr;
 
 key: STRING
    | IDENT
@@ -132,13 +127,13 @@ key: STRING
 
 
   /* Range */
-range: INT DOUBLE_DOT INT
-     | INT TRIPLE_DOT INT 
+range: INT ".." INT
+     | INT "..." INT
      ;
 
 
   /* Tuple */
-tuple: '(' exprlist ')';
+tuple: "(" exprlist ")";
 
   /* end literals */
 
@@ -149,65 +144,65 @@ binary_operation: boolean_op
                 | bitwise_op
                 ;
 
-boolean_op: expr AND expr
-          | expr OR expr
-          | NOT expr
+boolean_op: expr "&&" expr
+          | expr "||" expr
+          | "!" expr
           ;
 
 comparison_op: expr CMP expr;
 
-math_op: expr '+' expr
-       | expr '-' expr
-       | expr '*' expr
-       | expr '/' expr
-       | expr '^' expr
-       | expr '%' expr
+math_op: expr "+" expr
+       | expr "-" expr
+       | expr "*" expr
+       | expr "/" expr
+       | expr "^" expr
+       | expr "%" expr
        ;
 
-bitwise_op: expr LSHIFT expr
-          | expr RSHIFT expr
-          | expr '|' expr
-          | expr '&' expr
+bitwise_op: expr "<<" expr
+          | expr ">>" expr
+          | expr "|" expr
+          | expr "&" expr
           ;
 
   /* end binary ops */
 
   /* Functions */
-block: '{' expressions '}'
+block: "{" expressions "}"
 
-func_def: DEF IDENT '(' arglist ')' ':' type block
-        | '{' '(' arglist ')' ':' type HASH_ROCKET expr '}'
+func_def: DEF IDENT "(" arglist ")" ":" type block
+        | "{" "(" arglist ")" ":" type "=>" expr "}"
 
 arglist: arg
-       | arg ',' arglist
+       | arg "," arglist
        ;
 
-arg: IDENT ':' type;
+arg: IDENT ":" type;
 
-func_call: IDENT '(' exprlist ')';
+func_call: IDENT "(" exprlist ")";
 
   /* Variables */
-val_def: VAL IDENT ':' type '=' expr;
+val_def: VAL IDENT ":" type "=" expr;
 
-deref: IDENT '[' expr ']'
-     | IDENT '.' INT
+deref: IDENT "[" expr "]"
+     | IDENT "." INT
      ;
 
   /* Control Flow */
 
-if_else: IF '(' expr ')' block
-       | IF '(' expr ')' block ELSE block
+if_else: IF "(" expr ")" block
+       | IF "(" expr ")" block ELSE block
        ;
 
   /* Types */
 
 typelist: type
-        | type ',' typelist
+        | type "," typelist
         ;
 
 type: IDENT
-    | IDENT '[' typelist ']'
-    | '(' typelist ')'
-    | '(' typelist ')' HASH_ROCKET type
+    | IDENT "[" typelist "]"
+    | "(" typelist ")"
+    | "(" typelist ")" "=>" type
     ;
 %%

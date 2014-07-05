@@ -1,18 +1,13 @@
-%option noyywrap yylineno
+%option noyywrap yylineno debug
 
 %{
+  #include <cerrno>
   #include <cstdlib>
+  #include <string>
   #include "parse.hh"
   #include "driver.h"
-  
-  #define YY_DECL int yylex(yy::parser::semantic_type *yylval, \
-                            yy::parser::location_type *yylloc, \
-                            nth::Driver &ctx)
-  #define YY_USER_ACTION yylloc->columns (yyleng);
 
-  typedef yy::parser::token token;
-
-  extern void yyerror(const char *, ...);
+  static yy::location loc;
 %}
 
 %x STR
@@ -22,108 +17,113 @@ EXP ([Ee][-+]?[0-9]+)
 DIGIT [0-9]
 LEADING_DIGIT [1-9]
 
+%{
+  // Runs for every match
+  #define YY_USER_ACTION loc.columns(yyleng);
+%}
+
 %%
 
 %{
-  // start where previous token ended
-  yylloc->step();
+  // Run each time yylex() is called
+  loc.step();
 %}
 
 
   /* basic math */
-"+" |
-"-" |
-"*" |
-"/" |
-"=" |
-"^" |
-"%" |
+"+"       return yy::parser::make_PLUS(loc);
+"-"       { return yy::parser::make_MINUS(loc); }
+"*"       { return yy::parser::make_TIMES(loc); }
+"/"       { return yy::parser::make_DIVIDE(loc); }
+"="       { return yy::parser::make_ASSIGN(loc); }
+"^"       { return yy::parser::make_POW(loc); }
+"%"       { return yy::parser::make_MODULO(loc); }
 
    /* bitwise */
-"|" |
-"&" |
+"|"       { return yy::parser::make_BIT_OR(loc); }
+"&"       { return yy::parser::make_BIT_AND(loc); }
 
  /* misc */
-"." | 
-"," |
-"(" |
-")" |
-"[" |
-"]" |
-"{" |
-"}" |
-":"       { return yytext[0]; }
+"."       { return yy::parser::make_PERIOD(loc);  }
+","       { return yy::parser::make_COMMA(loc); }
+"("       { return yy::parser::make_LPAREN(loc); }
+")"       { return yy::parser::make_RPAREN(loc); }
+"["       { return yy::parser::make_LBRACKET(loc); }
+"]"       { return yy::parser::make_RBRACKET(loc); }
+"{"       { return yy::parser::make_LCURLY(loc); }
+"}"       { return yy::parser::make_RCURLY(loc); }
+":"       { return yy::parser::make_COLON(loc); }
 
-"<<"      { return token::LSHIFT; }
-">>"      { return token::RSHIFT; }
-"=>"      { return token::HASH_ROCKET; }
-"..."     { return token::TRIPLE_DOT; }
-".."      { return token::DOUBLE_DOT; }
+"<<"      { return yy::parser::make_LSHIFT(loc); }
+">>"      { return yy::parser::make_RSHIFT(loc); }
+"=>"      { return yy::parser::make_HASH_ROCKET(loc); }
+"..."     { return yy::parser::make_TRIPLE_DOT(loc); }
+".."      { return yy::parser::make_DOUBLE_DOT(loc); }
 
   /* comparison */
-"=="      { return token::CMP; }
-"!="      { return token::CMP; }
-"<"       { return token::CMP; }
-">"       { return token::CMP; }
-"<="      { return token::CMP; }
-">="      { return token::CMP; }
+"=="      { return yy::parser::make_CMP(loc); }
+"!="      { return yy::parser::make_CMP(loc); }
+"<"       { return yy::parser::make_CMP(loc); }
+">"       { return yy::parser::make_CMP(loc); }
+"<="      { return yy::parser::make_CMP(loc); }
+">="      { return yy::parser::make_CMP(loc); }
 
   /* boolean */
-"&&"      { return token::AND; }
-"||"      { return token::OR; }
-"!"       { return token::NOT; }
+"&&"      { return yy::parser::make_AND(loc); }
+"||"      { return yy::parser::make_OR(loc); }
+"!"       { return yy::parser::make_NOT(loc); }
 
   /* keywords */
-"if"      { return token::IF; }
-"else"    { return token::ELSE; }
-"def"     { return token::DEF; }
-"val"     { return token::VAL; }
-"class"   { return token::CLASS; }
+"if"      { return yy::parser::make_IF(loc); }
+"else"    { return yy::parser::make_ELSE(loc); }
+"def"     { return yy::parser::make_DEF(loc); }
+"val"     { return yy::parser::make_VAL(loc); }
+"class"   { return yy::parser::make_CLASS(loc); }
 
   /* literals */
-"true"    { return token::T_TRUE; }
-"false"   { return token::T_FALSE; }
+"true"    { return yy::parser::make_TRUE(loc); }
+"false"   { return yy::parser::make_FALSE(loc); }
 
   /* integers and floats */
-[-+]?{DIGIT}+"."{DIGIT}+{EXP}?  { yylval->build<float>() = strtod(yytext, NULL); return token::FLOAT; }
-[-+]?[1-9]{DIGIT}*{EXP}         { yylval->build<float>() = strtod(yytext, NULL); return token::FLOAT; }
+[-+]?{DIGIT}+"."{DIGIT}+{EXP}?  { return yy::parser::make_FLOAT(strtod(yytext, NULL), loc); }
+[-+]?[1-9]{DIGIT}*{EXP}         { return yy::parser::make_FLOAT(strtod(yytext, NULL), loc); }
 
-[-+]?(0|([1-9]{DIGIT}*))        { yylval->build<long>() = strtol(yytext, NULL, 10); return token::INT; }
-"0x"[a-fA-F0-9]+                { yylval->build<long>() = strtol(yytext, NULL, 16); return token::INT; }
-"0b"[01]+                       { yylval->build<long>() = strtol(yytext, NULL, 2); return token::INT; }
-0[0-7]+                         { yylval->build<long>() = strtol(yytext, NULL, 8); return token::INT; }
+[-+]?(0|([1-9]{DIGIT}*))        { return yy::parser::make_INT(strtol(yytext, NULL, 10), loc); }
+"0x"[a-fA-F0-9]+                { return yy::parser::make_INT(strtol(yytext, NULL, 16), loc); }
+"0b"[01]+                       { return yy::parser::make_INT(strtol(yytext, NULL, 2), loc); }
+0[0-7]+                         { return yy::parser::make_INT(strtol(yytext, NULL, 8), loc); }
 
   /* strings */
 \"[^"]*\"   { /* is the character before close quote a \ ? */
               if (yytext[yyleng-2] == '\\') {
-                yyless(yyleng-1); /* return token::last quote */
+                yyless(yyleng-1); /* return yy::parser::make_last quote */
                 yymore(); /* append next string */
               } else {
-                yylval->build<std::string>() = std::string(yytext);
-                return token::STRING;
+                return yy::parser::make_STRING(yytext, loc);
               }
             }
 
   /* Whitespace */
 
-[ \s\t]     { yylloc->step(); }
-\n          { yylloc->lines(1); }
+[ \s\t]     { loc.step(); }
+\n          { loc.lines(1); }
 
   /* Comments */
 
-"//".*      { yylloc->step(); }
+"//".*      { loc.step(); }
 
   /* Multiline Comments */
 "/*"                  { BEGIN(COMMENT); }
-<COMMENT>\n           { yylloc->lines(1); }
+<COMMENT>\n           { loc.lines(1); }
 <COMMENT>[^\*\n]+|.
 <COMMENT>"*/"         { BEGIN(INITIAL); }
 <COMMENT><<EOF>>      { printf("Line %d: Unterminated comment\n", yylineno); }
 
   /* Identifiers */
-[a-zA-Z][a-zA-Z0-9]*  { yylval->build<std::string>() = std::string(yytext); return token::IDENT; }
+  /* yylval->build<std::string>() = std::string(yytext); */
+[a-zA-Z][a-zA-Z0-9]*  { return yy::parser::make_IDENT(yytext, loc); }
 
 
-.     { printf("Unknown character '%c'\n", *yytext); }
-
+.         { driver.error(loc, "invalid character"); }
+<<EOF>>   { return yy::parser::make_END(loc); }
 %%

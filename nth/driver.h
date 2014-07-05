@@ -12,32 +12,33 @@
 #include <iostream>
 #include "parse.hh"
 
+#define YY_DECL \
+  yy::parser::symbol_type yylex(nth::Driver& driver)
+     // ... and declare it for the parser's sake.
+YY_DECL;
 
 namespace nth {
 
-// TODO: move this into Driver
-int parse(std::string& filename);
-  
 class Driver {
 
  public:
   Driver();
   virtual ~Driver();
-  
+
   int result;
   void scanBegin();
   void scanEnd();
-  bool trace_scanning;
-  
+  bool should_trace_scanning;
+
   int parse(const std::string& f);
-  
+
   std::string file;
-  
-  bool trace_parsing;
-  
+
+  bool should_trace_parsing;
+
   void error(const yy::location& l, const std::string& msg);
   void error(const std::string& msg);
 };
-  
+
 }
 #endif /* defined(__nth__driver__) */
