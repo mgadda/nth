@@ -42,9 +42,3 @@ int main(int argc, const char * argv[])
   }
   return -1;
 }
-
-namespace yy {
-  void parser::error(location const &loc, const std::string& s) {
-    std::cerr << "error at " << loc << ": " << s << '\n';
-  }
-}

@@ -206,3 +206,7 @@ type: IDENT
     | "(" typelist ")" "=>" type
     ;
 %%
+
+void yy::parser::error(const location_type& l, const std::string& m) {
+  driver.error(l, m);
+}
