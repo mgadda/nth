@@ -19,13 +19,9 @@ extern FILE* yyin;
 namespace nth {
 
 Driver::Driver()
-  : should_trace_scanning(false), should_trace_parsing(false) {
+  : should_trace_scanning(false), should_trace_parsing(false) {}
 
-}
-
-Driver::~Driver() {
-
-}
+Driver::~Driver() {}
 
 void Driver::scanBegin() {
   yy_flex_debug = should_trace_scanning;
