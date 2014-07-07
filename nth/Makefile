@@ -1,7 +1,7 @@
 CC=clang
-CXX=clang++
+CXX=c++
 CFLAGS=-Wall
-CXXFLAGS=-Wall
+CXXFLAGS=-Wall -std=c++11
 EXECUTABLE=nth
 LEX=flex
 YACC=bison
