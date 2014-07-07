@@ -77,7 +77,8 @@ expressions: expr
           ;
 
 expr: literal
-    | binary_operation
+    | binary_op
+    | unary_op
     | func_def
     | val_def
     | if_else
@@ -138,15 +139,14 @@ tuple: "(" exprlist ")";
   /* end literals */
 
 
-binary_operation: boolean_op
-                | comparison_op
-                | math_op
-                | bitwise_op
-                ;
+binary_op: boolean_op
+         | comparison_op
+         | math_op
+         | bitwise_op
+         ;
 
 boolean_op: expr "&&" expr
           | expr "||" expr
-          | "!" expr
           ;
 
 comparison_op: expr CMP expr;
@@ -164,6 +164,8 @@ bitwise_op: expr "<<" expr
           | expr "|" expr
           | expr "&" expr
           ;
+
+unary_op: "!" expr
 
   /* end binary ops */
 
