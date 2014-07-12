@@ -11,8 +11,101 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 
-class AstNode {
+namespace nth {
+
+enum Type {
+  IntegerType,
+  StringType,
+  AddType,
+  SubtractType,
+  MultiplyType,
+  DivideType,
+  BooleanNegationType
 };
 
+class Expression {
+  // Expression& operator=(Expression &&other) {
+  //   return *this;
+  // }
+};
+
+using ExpressionPtr = std::unique_ptr<Expression>;
+
+class File {
+ public:
+  File(std::vector<std::unique_ptr<Expression> > &expressions) : expressions(expressions) {}
+ protected:
+  std::vector<std::unique_ptr<Expression> > &expressions;
+};
+
+class Integer : public Expression {
+ public:
+  Integer(long value): value(value) {}
+  Integer(Integer &&other) : value(other.value) {}
+ protected:
+  long value;
+};
+
+class String : public Expression {
+ public:
+  String(std::string value): value(value) {}
+  String(String &&other) : value(std::move(other.value)) {}
+ protected:
+  std::string value;
+};
+
+class UnaryOperation : public Expression {
+ public:
+  UnaryOperation(std::unique_ptr<Expression> value) : value(std::move(value)) {}
+ protected:
+  std::unique_ptr<Expression> value;
+};
+
+class BooleanNegation : public UnaryOperation {
+ public:
+  BooleanNegation(std::unique_ptr<Expression> value): UnaryOperation(std::move(value)) {}
+};
+
+class BinaryOperation : public Expression {
+ public:
+  BinaryOperation(std::unique_ptr<Expression> left,
+                  std::unique_ptr<Expression> right)
+    : left(std::move(left)), right(std::move(right)) {}
+
+ protected:
+  std::unique_ptr<Expression> left;
+  std::unique_ptr<Expression> right;
+};
+
+class Add : public BinaryOperation {
+ public:
+  Add(std::unique_ptr<Expression> left,
+      std::unique_ptr<Expression> right)
+    : BinaryOperation(std::move(left), std::move(right)) {}
+};
+
+class Subtract : public BinaryOperation {
+public:
+  Subtract(std::unique_ptr<Expression> left,
+           std::unique_ptr<Expression> right)
+    : BinaryOperation(std::move(left), std::move(right)) {}
+};
+
+class Multiply : public BinaryOperation {
+public:
+  Multiply(std::unique_ptr<Expression> left,
+           std::unique_ptr<Expression> right)
+    : BinaryOperation(std::move(left), std::move(right)) {}
+};
+
+class Divide : public BinaryOperation {
+public:
+  Divide(std::unique_ptr<Expression> left,
+         std::unique_ptr<Expression> right)
+    : BinaryOperation(std::move(left), std::move(right)) {}
+};
+
+}
 #endif /* defined(__nth__ast__) */

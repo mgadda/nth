@@ -1,4 +1,6 @@
 %code requires {
+  #include "ast.h"
+
   namespace nth {
     // Forward declaration because Driver
     // is used in generated header(s)
@@ -8,9 +10,8 @@
 
 %{
   #include <iostream>
-
+  #include <utility> // provides std::swap as of C++11
   #include "driver.h"
-  #include "ast.h"
 
  int exit_status;
 
@@ -64,19 +65,29 @@
 %token HASH_ROCKET "=>"
 %token LSHIFT "<<" RSHIFT ">>" DOUBLE_DOT ".." TRIPLE_DOT "..."
 
+%type <nth::File*> file;
+%type <std::vector<nth::ExpressionPtr>> expressions;
+%type <nth::ExpressionPtr> expr literal;
+ // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
+
 %start file
 
-%printer { yyoutput << $$; } <*>;
+// %printer { yyoutput << $$; } <*>;
 %%
 
 
-file: expressions;
+file: expressions  { $$ = nullptr; /* new nth::File($1); */ }
+    ;
 
 expressions: expr
-          | expr expressions
-          ;
+           | expr expressions
+;
 
-expr: literal
+//expressions: expr             { $$.emplace_back($1); }
+//          | expr expressions  { std::swap($$, $2); $$.emplace_back($1); }
+//          ;
+
+expr: literal        { std::swap($$, $1); }
     | binary_op
     | unary_op
     | func_def
@@ -87,7 +98,7 @@ expr: literal
     | "(" expr ")"
     ;
 
-literal: INT
+literal: INT    /* { $$.reset(new nth::Integer($1)); } */
        | FLOAT
        | STRING
        | TRUE
