@@ -38,6 +38,8 @@ void Driver::scanBegin() {
     error("cannot open " + file + ": " + strerror(errno));
     exit(EXIT_FAILURE);
   }
+  
+  yyrestart(yyin);
 }
 
 void Driver::scanEnd() {
@@ -52,6 +54,16 @@ int Driver::parse(const std::string& f) {
   parser.set_debug_level(should_trace_parsing);
   int ret = parser.parse();
   scanEnd();
+
+  return ret;
+}
+
+int Driver::parseString(const std::string &s) {
+  YY_BUFFER_STATE bs = yy_scan_string(s.c_str());
+
+  yy::parser parse(*this);
+  int ret = parse.parse();
+  yy_delete_buffer(bs);
 
   return ret;
 }
