@@ -65,27 +65,23 @@
 %token HASH_ROCKET "=>"
 %token LSHIFT "<<" RSHIFT ">>" DOUBLE_DOT ".." TRIPLE_DOT "..."
 
-%type <nth::File*> file;
-%type <std::vector<nth::ExpressionPtr>> expressions;
-%type <nth::ExpressionPtr> expr literal;
+%type <nth::Block*> file;
+%type <std::vector<nth::Expression*>> expressions;
+%type <nth::Expression*> expr literal;
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
 %start file
 
-// %printer { yyoutput << $$; } <*>;
+  // %printer { yyoutput << $$; } <*>;
 %%
 
 
-file: expressions  { $$ = nullptr; /* new nth::File($1); */ }
+file: expressions  { driver.result = new nth::Block($1); }
     ;
 
-expressions: expr
-           | expr expressions
-;
-
-//expressions: expr             { $$.emplace_back($1); }
-//          | expr expressions  { std::swap($$, $2); $$.emplace_back($1); }
-//          ;
+expressions: expr              { $$.push_back($1); }
+           | expr expressions  { std::swap($$, $2); $$.push_back($1); }
+           ;
 
 expr: literal        { std::swap($$, $1); }
     | binary_op
@@ -98,7 +94,7 @@ expr: literal        { std::swap($$, $1); }
     | "(" expr ")"
     ;
 
-literal: INT    /* { $$.reset(new nth::Integer($1)); } */
+literal: INT     { $$ = new nth::Integer($1); }
        | FLOAT
        | STRING
        | TRUE

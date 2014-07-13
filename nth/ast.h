@@ -26,18 +26,14 @@ enum Type {
 };
 
 class Expression {
-  // Expression& operator=(Expression &&other) {
-  //   return *this;
-  // }
 };
 
-using ExpressionPtr = std::unique_ptr<Expression>;
-
-class File {
+class Block : Expression {
  public:
-  File(std::vector<std::unique_ptr<Expression> > &expressions) : expressions(expressions) {}
+  Block(std::vector<Expression*> &expressions) : expressions(expressions) {}
+  std::vector<Expression*> &getExpressions() { return expressions; }
  protected:
-  std::vector<std::unique_ptr<Expression> > &expressions;
+  std::vector<Expression*> &expressions;
 };
 
 class Integer : public Expression {
