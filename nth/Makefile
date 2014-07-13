@@ -7,14 +7,14 @@ LEX=flex
 YACC=bison
 YFLAGS=-d --report=all
 
-$(EXECUTABLE): parse.o driver.o ast.o main.o scan.o
+$(EXECUTABLE): scan.o parse.o driver.o ast.o main.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 test: $(EXECUTABLE)
 	./$(EXECUTABLE) ../nth.nth # --debug-scan --debug-parse ../nth.nth
 
-scan.o: scan.l parse.cc
-	$(LEX) -t $< > $*.cc
+scan.o: scan.l parse.o
+	$(LEX) --header-file=$*.h -o $*.cc $<
 	$(CXX) $(CXXFLAGS) $*.cc -c
 
 parse.o parse.tab.cc: parse.y
@@ -25,5 +25,6 @@ parse.o parse.tab.cc: parse.y
 clean:
 	rm -rf $(EXECUTABLE) *.o \
 		location.hh position.hh stack.hh \
-		parse.cc parse.hh parse.tab.* parse.output scan.cc
+		parse.cc parse.hh parse.tab.* parse.output \
+		scan.cc scan.h
 

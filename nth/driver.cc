@@ -8,13 +8,19 @@
 
 #include <cerrno>
 #include "driver.h"
+// scan.h must be included /after/ driver.h so that YY_DECL has already been defined
+#include "scan.h"
 
+/*
 extern void yyrestart(FILE*);
 //extern "C" int yyparse();
 extern int yylineno;
 //extern int yydebug;
-extern int yy_flex_debug;
 extern FILE* yyin;
+extern YY_BUFFER_STATE yy_scan_string(const char *str);
+*/
+
+extern int yy_flex_debug;
 
 namespace nth {
 

@@ -44,9 +44,10 @@
 			fileType = sourcecode.lex;
 			isEditable = 1;
 			outputFiles = (
+				"$(DERIVED_FILE_DIR)/scan.h",
 				"$(DERIVED_FILE_DIR)/scan.cc",
 			);
-			script = "# $(LEX)\nflex -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}\n";
+			script = "# $(LEX)\nflex --header-file=${DERIVED_FILE_DIR}/scan.h -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}\n";
 		};
 		7D8CC7E5195BDD9A0009B20C /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -54,9 +55,10 @@
 			fileType = sourcecode.lex;
 			isEditable = 1;
 			outputFiles = (
+				"$(DERIVED_FILE_DIR)/scan.h",
 				"$(DERIVED_FILE_DIR)/scan.cc",
 			);
-			script = "flex -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}\n";
+			script = "flex --header-file=${DERIVED_FILE_DIR}/scan.h -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}\n";
 		};
 		7D8CC7E7195BE2E60009B20C /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
