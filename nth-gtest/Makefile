@@ -18,6 +18,6 @@ $(EXECUTABLE): driver_test.o main.o objc_helper.o ../nth/libnth.a
 
 .DEFAULT_GOAL := test
 
+.PHONY: clean
 clean:
 	rm -rf *.o $(EXECUTABLE)
-	$(MAKE) -C ../nth clean
