@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Matt Gadda. All rights reserved.
 //
 
-#include "objc_helper.h"
+#include "test_helper.h"
 
 #ifdef IS_XCODE
 #include <CoreFoundation/CoreFoundation.h>

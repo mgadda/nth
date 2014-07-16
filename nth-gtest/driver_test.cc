@@ -7,7 +7,7 @@
 //
 
 #include <gtest/gtest.h>
-#include "objc_helper.h"
+#include "test_helper.h"
 #include "driver.h"
 
 TEST(DriverTest, ParseNth) {
