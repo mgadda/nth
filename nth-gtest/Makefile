@@ -10,8 +10,10 @@ LDLIBS=-lgtest -lnth
 test: $(EXECUTABLE)
 	./$(EXECUTABLE)
 
-$(EXECUTABLE): driver_test.o main.o objc_helper.o ../nth/libnth.a
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(LDLIBS) *.o -o $(EXECUTABLE)
+cc_files := $(wildcard *.cc)
+
+$(EXECUTABLE): $(cc_files) ../nth/libnth.a
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(LDLIBS) $(cc_files) -o $(EXECUTABLE)
 
 ../nth/libnth.a:
 	$(MAKE) -C ../nth libnth.a
