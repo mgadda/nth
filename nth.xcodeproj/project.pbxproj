@@ -142,7 +142,7 @@
 		7D33BE78197328A4006F3769 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "@executable_name";
+			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
 				7D33BE79197328A8006F3769 /* nth.nth in CopyFiles */,
