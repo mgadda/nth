@@ -29,3 +29,9 @@ TEST_F(DriverTest, ParseSomeInts) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(4, d.result->getExpressions().size());
 }
+
+TEST_F(DriverTest, ParseNothing) {
+  nth::Driver d;
+  int status = d.parseString("");
+  EXPECT_EQ(1, status);
+}
