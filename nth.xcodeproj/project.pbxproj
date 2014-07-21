@@ -58,7 +58,7 @@
 				"$(DERIVED_FILE_DIR)/stack.hh",
 				"$(DERIVED_FILE_DIR)/position.hh",
 			);
-			script = "/usr/local/Cellar/bison/3.0.2/bin/bison -v -g -o ${DERIVED_FILE_DIR}/parse.cc ${INPUT_FILE_PATH}";
+			script = "/usr/local/Cellar/bison/3.0.2/bin/bison -l -v -g -o ${DERIVED_FILE_DIR}/parse.cc ${INPUT_FILE_PATH}";
 		};
 		7D660D5D195FBE21008E0D21 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
