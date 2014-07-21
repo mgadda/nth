@@ -65,6 +65,9 @@
 %token HASH_ROCKET "=>"
 %token LSHIFT "<<" RSHIFT ">>" DOUBLE_DOT ".." TRIPLE_DOT "..."
 
+%left "+" "-"
+%left "*" "/"
+
 %type <nth::Block*> file;
 %type <std::vector<nth::Expression*>> expressions;
 %type <nth::Expression*> expr literal;
