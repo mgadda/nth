@@ -5,7 +5,7 @@ CXXFLAGS=-Wall -std=c++11
 EXECUTABLE=nth
 LEX=flex
 YACC=bison
-YFLAGS=-d --report=all
+YFLAGS=-fcaret -d --report=all
 
 $(EXECUTABLE): libnth.a main.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
