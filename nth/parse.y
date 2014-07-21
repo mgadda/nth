@@ -69,7 +69,7 @@
 %left "*" "/"
 
 %type <nth::Block*> file;
-%type <std::vector<nth::Expression*>> expressions;
+%type <nth::Block*> expressions;
 %type <nth::Expression*> expr literal;
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
@@ -79,14 +79,14 @@
 %%
 
 
-file: expressions  { driver.result = new nth::Block($1); }
+file: expressions  { driver.result = $1; }
     ;
 
-expressions: expr              { $$.push_back($1); }
-           | expr expressions  { std::swap($$, $2); $$.push_back($1); }
+expressions: expr              { $$ = new nth::Block($1); }
+           | expressions expr  { std::swap($$, $1); $$->insertAfter($2); }
            ;
 
-expr: literal        { std::swap($$, $1); }
+expr: literal        
     | binary_op
     | unary_op
     | func_def

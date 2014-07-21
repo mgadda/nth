@@ -28,12 +28,16 @@ enum Type {
 class Expression {
 };
 
+typedef std::vector<Expression*> ExpressionList;
+  
 class Block : Expression {
  public:
-  Block(std::vector<Expression*> &expressions) : expressions(expressions) {}
-  std::vector<Expression*> &getExpressions() { return expressions; }
+  Block();
+  Block(Expression *expr);
+  void insertAfter(Expression *expr);
+  ExpressionList &getExpressions();
  protected:
-  std::vector<Expression*> &expressions;
+  ExpressionList expressions;
 };
 
 class Integer : public Expression {
