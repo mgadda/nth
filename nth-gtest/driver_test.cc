@@ -21,13 +21,12 @@ class DriverTest : public ::testing::Test {
 TEST_F(DriverTest, ParseNth) {
   int status = d.parse(getResourcePath() + "/nth.nth");
   EXPECT_EQ(0, status);
-  EXPECT_NE(nullptr, d.result);
 }
 
 TEST_F(DriverTest, ParseSomeInts) {
   int status = d.parseString("10\n20\n30\n40\n");
   EXPECT_EQ(0, status);
-  EXPECT_EQ(4, d.result->getExpressions().size());
+  EXPECT_EQ(4, d.result.getExpressions().size());
 }
 
 TEST_F(DriverTest, ParseNothing) {

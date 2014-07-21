@@ -39,7 +39,7 @@ int main(int argc, const char * argv[])
       driver.should_trace_scanning = true;
     } else {
       int ret = driver.parse(argv[i]);
-      std::cout << driver.result << '\n';
+      std::cout << driver.result.getExpressions().size() << ' top level expressions\n';
       return ret;
     }
   }

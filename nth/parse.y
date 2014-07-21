@@ -68,9 +68,9 @@
 %left "+" "-"
 %left "*" "/"
 
-%type <nth::Block*> file;
-%type <nth::Block*> expressions;
-%type <nth::Expression*> expr literal;
+%type <nth::Block> file;
+%type <nth::Block> expressions;
+%type <nth::Expression> expr literal;
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
 %start file
@@ -82,8 +82,8 @@
 file: expressions  { driver.result = $1; }
     ;
 
-expressions: expr              { $$ = new nth::Block($1); }
-           | expressions expr  { std::swap($$, $1); $$->insertAfter($2); }
+expressions: expr              { $$ = nth::Block($1); }
+           | expressions expr  { std::swap($$, $1); $$.insertAfter($2); }
            ;
 
 expr: literal        
@@ -97,7 +97,7 @@ expr: literal
     | "(" expr ")"
     ;
 
-literal: INT     { $$ = new nth::Integer($1); }
+literal: INT     { $$ = nth::Integer($1); }
        | FLOAT
        | STRING
        | TRUE

@@ -12,11 +12,11 @@ using namespace nth;
 
 Block::Block() {}
 
-Block::Block(Expression *expr) {
+Block::Block(Expression expr) {
   expressions.push_back(expr);
 }
 
-void Block::insertAfter(Expression *expr) {
+void Block::insertAfter(Expression expr) {
   expressions.push_back(expr);
 }
 

@@ -25,7 +25,7 @@ class Driver {
   Driver();
   virtual ~Driver();
 
-  Block *result;
+  Block result;
   void scanBegin();
   void scanEnd();
   bool should_trace_scanning;
