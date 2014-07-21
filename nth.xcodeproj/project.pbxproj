@@ -13,7 +13,7 @@
 		7D33BE661973209E006F3769 /* scan.l in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F5F1940C5D0008D5BBD /* scan.l */; };
 		7D33BE671973209E006F3769 /* ast.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cc */; };
 		7D33BE6A19732162006F3769 /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D33BE6819732162006F3769 /* main.cc */; };
-		7D33BE711973237B006F3769 /* objc_helper.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D33BE701973237B006F3769 /* objc_helper.cc */; };
+		7D33BE711973237B006F3769 /* test_helper.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D33BE701973237B006F3769 /* test_helper.cc */; };
 		7D33BE751973276B006F3769 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D33BE741973276B006F3769 /* CoreFoundation.framework */; };
 		7D33BE79197328A8006F3769 /* nth.nth in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DC44E7B1960D71500DEB624 /* nth.nth */; };
 		7D33BEBB19756C98006F3769 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D33BEBA19756C98006F3769 /* libgtest.a */; };
@@ -174,8 +174,8 @@
 /* Begin PBXFileReference section */
 		7D33BE5D19731F5C006F3769 /* driver_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver_test.cc; sourceTree = "<group>"; };
 		7D33BE6819732162006F3769 /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
-		7D33BE6F1973237B006F3769 /* objc_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objc_helper.h; sourceTree = "<group>"; };
-		7D33BE701973237B006F3769 /* objc_helper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objc_helper.cc; sourceTree = "<group>"; };
+		7D33BE6F1973237B006F3769 /* test_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test_helper.h; sourceTree = "<group>"; };
+		7D33BE701973237B006F3769 /* test_helper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_helper.cc; sourceTree = "<group>"; };
 		7D33BE741973276B006F3769 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		7D33BEBA19756C98006F3769 /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = lib/libgtest.a; sourceTree = "<group>"; };
 		7D660D5A195FBD24008E0D21 /* driver_test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = driver_test.mm; sourceTree = "<group>"; };
@@ -277,8 +277,8 @@
 				7D33BE5D19731F5C006F3769 /* driver_test.cc */,
 				7DA4984119730C1D0056BB77 /* nth_gtest.1 */,
 				7D33BE6819732162006F3769 /* main.cc */,
-				7D33BE6F1973237B006F3769 /* objc_helper.h */,
-				7D33BE701973237B006F3769 /* objc_helper.cc */,
+				7D33BE6F1973237B006F3769 /* test_helper.h */,
+				7D33BE701973237B006F3769 /* test_helper.cc */,
 			);
 			path = "nth-gtest";
 			sourceTree = "<group>";
@@ -449,7 +449,7 @@
 				7D33BE6A19732162006F3769 /* main.cc in Sources */,
 				7D33BE641973209E006F3769 /* driver.cc in Sources */,
 				7D33BE651973209E006F3769 /* parse.y in Sources */,
-				7D33BE711973237B006F3769 /* objc_helper.cc in Sources */,
+				7D33BE711973237B006F3769 /* test_helper.cc in Sources */,
 				7D33BE661973209E006F3769 /* scan.l in Sources */,
 				7D33BE671973209E006F3769 /* ast.cc in Sources */,
 				7D33BE5F19731F5C006F3769 /* driver_test.cc in Sources */,
