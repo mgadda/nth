@@ -65,8 +65,14 @@
 %token HASH_ROCKET "=>"
 %token LSHIFT "<<" RSHIFT ">>" DOUBLE_DOT ".." TRIPLE_DOT "..."
 
+%right VAL
 %left "+" "-"
 %left "*" "/"
+%left "%" "|" "^" "&"
+%left "<<" ">>"
+%left CMP
+%left NOT
+%left "&&" "||"
 
 %type <nth::Block*> file;
 %type <nth::Block*> expressions;
@@ -117,7 +123,7 @@ compound_literal: array
 array: "[" exprlist "]"
 
 exprlist: expr
-        | expr "," exprlist
+        | exprlist "," expr
         ;
 
 
@@ -127,7 +133,7 @@ hash: "{" key_val_list "}"
     ;
 
 key_val_list: key_value
-            | key_value "," key_val_list
+            | key_val_list "," key_value
             ;
 
 key_value: key ":" expr;
@@ -175,7 +181,7 @@ bitwise_op: expr "<<" expr
           | expr "&" expr
           ;
 
-unary_op: "!" expr
+unary_op: "!" expr %prec NOT
 
   /* end binary ops */
 
