@@ -55,6 +55,19 @@ class Integer : public Expression {
   long value;
 };
 
+class Float : public Expression {
+ public:
+  Float(double value): value(value) {}
+  Float(Float &&other) : value(other.value) {}
+  virtual ~Float() {}
+
+  bool operator==(const float &i) const { return value == i; }
+  bool operator==(const double &i) const { return value == i; }
+  operator double() const { return value; }
+protected:
+  double value;
+};
+
 class String : public Expression {
  public:
   String(std::string value): value(value) {}

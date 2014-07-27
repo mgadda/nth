@@ -59,6 +59,18 @@ TEST_F(DriverTest, ParseSomeInts) {
   EXPECT_EQ(40, *i);
 }
 
+
+TEST_F(DriverTest, ParseSomeFloats) {
+  int status = d.parseString("10.2340982\n2.234e-3");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(2, d.result->getExpressions().size());
+
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::Float *i = dynamic_cast<nth::Float*>(expr);
+  ASSERT_NE(nullptr, i);
+  EXPECT_EQ(10.2340982, *i);
+}
+
 TEST_F(DriverTest, ParseNothing) {
   nth::Driver d;
   int status = d.parseString("");

@@ -105,7 +105,7 @@ expr: literal { std::swap($$, $1); }
     ;
 
 literal: INT     { $$ = new nth::Integer($1); }
-       | FLOAT
+       | FLOAT   { $$ = new nth::Float($1); }
        | STRING
        | TRUE
        | FALSE
