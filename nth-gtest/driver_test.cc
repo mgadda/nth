@@ -10,6 +10,19 @@
 #include "test_helper.h"
 #include "driver.h"
 
+// Used by EXPECT_EXPR_EQ below
+template<typename T, typename U>
+bool compare(U expected, const T &actual) {
+  return actual == expected;
+}
+
+// TODO: fix this
+#define EXPECT_EXPR_EQ(derived_type, expected, expr) \
+nth::derived_type *casted = static_cast<nth::derived_type*>(expr); \
+nth::derived_type &actual = *casted; \
+EXPECT_PRED2(compare, expected, actual);
+
+
 class DriverTest : public ::testing::Test {
  protected:
   nth::Driver d;
@@ -28,6 +41,22 @@ TEST_F(DriverTest, ParseSomeInts) {
   int status = d.parseString("10\n20\n30\n40\n");
   EXPECT_EQ(0, status);
   EXPECT_EQ(4, d.result->getExpressions().size());
+  
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::Integer *i = static_cast<nth::Integer*>(expr);
+  EXPECT_EQ(10, *i);
+  
+  expr = d.result->getExpressions()[1];
+  i = static_cast<nth::Integer*>(expr);
+  EXPECT_EQ(20, *i);
+  
+  expr = d.result->getExpressions()[2];
+  i = static_cast<nth::Integer*>(expr);
+  EXPECT_EQ(30, *i);
+  
+  expr = d.result->getExpressions()[3];
+  i = static_cast<nth::Integer*>(expr);
+  EXPECT_EQ(40, *i);
 }
 
 TEST_F(DriverTest, ParseNothing) {

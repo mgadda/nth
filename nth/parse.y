@@ -86,7 +86,7 @@ expressions: expr              { $$ = new nth::Block($1); }
            | expressions expr  { std::swap($$, $1); $$->insertAfter($2); }
            ;
 
-expr: literal        
+expr: literal { std::swap($$, $1); }
     | binary_op
     | unary_op
     | func_def

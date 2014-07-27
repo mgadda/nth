@@ -44,6 +44,9 @@ class Integer : public Expression {
  public:
   Integer(long value): value(value) {}
   Integer(Integer &&other) : value(other.value) {}
+  bool operator==(const int &i) const { return value == i; }
+  bool operator==(const long &i) const { return value == i; }
+  operator long() const { return value; }
  protected:
   long value;
 };
