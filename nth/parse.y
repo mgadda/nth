@@ -65,6 +65,7 @@
 %token HASH_ROCKET "=>"
 %token LSHIFT "<<" RSHIFT ">>" DOUBLE_DOT ".." TRIPLE_DOT "..."
 
+%left "="
 %right VAL
 %left "+" "-"
 %left "*" "/"
