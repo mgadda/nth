@@ -43,7 +43,7 @@ TEST_F(DriverTest, ParseSomeInts) {
   EXPECT_EQ(4, d.result->getExpressions().size());
   
   nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Integer *i = static_cast<nth::Integer*>(expr);
+  nth::Integer *i = dynamic_cast<nth::Integer*>(expr);
   EXPECT_EQ(10, *i);
   
   expr = d.result->getExpressions()[1];

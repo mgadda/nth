@@ -26,10 +26,12 @@ enum Type {
 };
 
 class Expression {
+ public:
+  virtual ~Expression() {}
 };
 
 typedef std::vector<Expression*> ExpressionList;
-  
+
 class Block : Expression {
  public:
   Block();
@@ -44,6 +46,8 @@ class Integer : public Expression {
  public:
   Integer(long value): value(value) {}
   Integer(Integer &&other) : value(other.value) {}
+  virtual ~Integer() {}
+
   bool operator==(const int &i) const { return value == i; }
   bool operator==(const long &i) const { return value == i; }
   operator long() const { return value; }
