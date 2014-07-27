@@ -72,7 +72,6 @@ TEST_F(DriverTest, ParseSomeFloats) {
 }
 
 TEST_F(DriverTest, ParseNothing) {
-  nth::Driver d;
   int status = d.parseString("");
   EXPECT_EQ(1, status);
 }
