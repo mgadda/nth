@@ -81,6 +81,27 @@ class String : public Expression {
   std::string value;
 };
 
+class Boolean : public Expression {
+ public:
+  Boolean(bool value): value(value) {}
+  Boolean(Boolean &&other) : value(other.value) {}
+  bool operator==(const bool &i) const { return value == i; }
+  operator const bool() const { return value; }
+  
+ protected:
+  bool value;
+};
+
+class True : public Boolean {
+ public:
+  True() : Boolean(true) {}
+};
+
+class False : public Boolean {
+ public:
+  False() : Boolean(false) {}
+};
+
 class UnaryOperation : public Expression {
  public:
   UnaryOperation(std::unique_ptr<Expression> value) : value(std::move(value)) {}

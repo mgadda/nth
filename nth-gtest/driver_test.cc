@@ -91,6 +91,23 @@ TEST_F(DriverTest, ParseSomeStrings) {
   ASSERT_NE(nullptr, s);
   EXPECT_STREQ("World: Hello!", *s);
 }
+
+TEST_F(DriverTest, ParseSomeBools) {
+  int status = d.parseString("true\nfalse");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(2, d.result->getExpressions().size());
+
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::Boolean *b = dynamic_cast<nth::Boolean*>(expr);
+  ASSERT_NE(nullptr, b);
+  EXPECT_EQ(true, *b);
+
+  expr = d.result->getExpressions()[1];
+  b = dynamic_cast<nth::Boolean*>(expr);
+  ASSERT_NE(nullptr, b);
+  EXPECT_EQ(false, *b);
+}
+
 TEST_F(DriverTest, ParseNothing) {
   int status = d.parseString("");
   EXPECT_EQ(1, status);
