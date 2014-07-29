@@ -106,9 +106,9 @@ expr: literal { std::swap($$, $1); }
 
 literal: INT     { $$ = new nth::Integer($1); }
        | FLOAT   { $$ = new nth::Float($1); }
-       | STRING
        | TRUE
        | FALSE
+       | STRING  { $$ = new nth::String($1.substr(1, $1.size()-2)); }
        | IDENT
        | compound_literal
        ;

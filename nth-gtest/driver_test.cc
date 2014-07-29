@@ -76,6 +76,21 @@ TEST_F(DriverTest, ParseSomeFloats) {
   EXPECT_EQ(0.002234, *f);
 }
 
+TEST_F(DriverTest, ParseSomeStrings) {
+  int status = d.parseString("\"Hello, World!\n\"\n\"World: Hello!\"");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(2, d.result->getExpressions().size());
+
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::String *s = dynamic_cast<nth::String*>(expr);
+  ASSERT_NE(nullptr, s);
+  EXPECT_STREQ("Hello, World!\n", *s);
+
+  expr = d.result->getExpressions()[1];
+  s = dynamic_cast<nth::String*>(expr);
+  ASSERT_NE(nullptr, s);
+  EXPECT_STREQ("World: Hello!", *s);
+}
 TEST_F(DriverTest, ParseNothing) {
   int status = d.parseString("");
   EXPECT_EQ(1, status);

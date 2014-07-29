@@ -72,6 +72,11 @@ class String : public Expression {
  public:
   String(std::string value): value(value) {}
   String(String &&other) : value(std::move(other.value)) {}
+  bool operator==(const std::string &i) const { return value == i; }
+  bool operator==(const char *i) const { return value == i; }
+  operator const std::string() const { return value; }
+  operator const char*() const { return value.c_str(); }
+  
  protected:
   std::string value;
 };
