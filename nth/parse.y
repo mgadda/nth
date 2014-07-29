@@ -53,6 +53,7 @@
   LCURLY  "{"
   RCURLY  "}"
   COLON   ":"
+  SEMICOLON ";"
   ;
 
 %token CMP
