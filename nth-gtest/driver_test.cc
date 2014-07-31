@@ -108,6 +108,17 @@ TEST_F(DriverTest, ParseSomeBools) {
   EXPECT_EQ(false, *b);
 }
 
+TEST_F(DriverTest, ParseIdentifier) {
+  int status = d.parseString("a");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(1, d.result->getExpressions().size());
+
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::Identifier *i = dynamic_cast<nth::Identifier*>(expr);
+  ASSERT_NE(nullptr, i);
+  EXPECT_STREQ("a", *i);
+};
+
 TEST_F(DriverTest, ParseNothing) {
   int status = d.parseString("");
   EXPECT_EQ(1, status);

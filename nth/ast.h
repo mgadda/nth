@@ -102,6 +102,18 @@ class False : public Boolean {
   False() : Boolean(false) {}
 };
 
+class Identifier : public Expression {
+ public:
+  Identifier(std::string value) : value(value) {}
+  Identifier(Identifier &&other) : value(other.value) {}
+  bool operator==(const std::string s) const { return value == s; }
+  bool operator==(const Identifier &i) const { return value == i.value; }
+  bool operator==(const char *c) const { return value == c; }
+  operator const char*() const { return value.c_str(); }
+ protected:
+  std::string value;
+};
+
 class UnaryOperation : public Expression {
  public:
   UnaryOperation(std::unique_ptr<Expression> value) : value(std::move(value)) {}

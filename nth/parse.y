@@ -110,7 +110,7 @@ literal: INT     { $$ = new nth::Integer($1); }
        | STRING  { $$ = new nth::String($1.substr(1, $1.size()-2)); }
        | TRUE    { $$ = new nth::True; } 
        | FALSE   { $$ = new nth::False; }
-       | IDENT
+       | IDENT   { $$ = new nth::Identifier($1); }
        | compound_literal
        ;
 
