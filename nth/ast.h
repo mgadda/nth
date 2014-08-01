@@ -114,6 +114,16 @@ class Identifier : public Expression {
   std::string value;
 };
 
+class Array : public Expression {
+ public:
+  Array(ExpressionList &exprlist) : values(exprlist) {}
+  Array(Array &&other) : values(other.values) {}
+  bool operator==(const Array &i) const { return values == i.values; }
+  const ExpressionList &getValues() { return values; }
+ protected:
+  ExpressionList values;
+};
+  
 class UnaryOperation : public Expression {
  public:
   UnaryOperation(std::unique_ptr<Expression> value) : value(std::move(value)) {}

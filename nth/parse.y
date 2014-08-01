@@ -78,7 +78,10 @@
 
 %type <nth::Block*> file;
 %type <nth::Block*> expressions;
-%type <nth::Expression*> expr literal;
+%type <nth::Expression*> expr literal compound_literal;
+%type <nth::ExpressionList*> exprlist;
+%type <nth::Array*> array;
+
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
 %start file
@@ -111,10 +114,12 @@ literal: INT     { $$ = new nth::Integer($1); }
        | TRUE    { $$ = new nth::True; } 
        | FALSE   { $$ = new nth::False; }
        | IDENT   { $$ = new nth::Identifier($1); }
-       | compound_literal
+       | compound_literal { std::swap($$, $1); }
        ;
 
-compound_literal: array
+compound_literal: array {
+  nth::Expression *e = dynamic_cast<nth::Expression*>(yystack_[0].value.as< nth::Array* > ());
+  std::swap($$, e); }
                 | hash
                 | range
                 | tuple
@@ -122,10 +127,11 @@ compound_literal: array
 
 
   /* Array */
-array: "[" exprlist "]"
+array: "[" exprlist "]" { $$ = new nth::Array(*$2); }
+     ;
 
-exprlist: expr
-        | exprlist "," expr
+exprlist: expr               { $$ = new nth::ExpressionList(1, $1); }
+        | exprlist "," expr  { std::swap($$, $1); $$->push_back($3); }
         ;
 
 

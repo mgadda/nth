@@ -37,6 +37,11 @@ TEST_F(DriverTest, ParseNth) {
   EXPECT_NE(nullptr, d.result);
 }
 
+TEST_F(DriverTest, ParseNothing) {
+  int status = d.parseString("");
+  EXPECT_EQ(1, status);
+}
+
 TEST_F(DriverTest, ParseSomeInts) {
   int status = d.parseString("10\n20\n30\n40\n");
   EXPECT_EQ(0, status);
@@ -119,7 +124,18 @@ TEST_F(DriverTest, ParseIdentifier) {
   EXPECT_STREQ("a", *i);
 };
 
-TEST_F(DriverTest, ParseNothing) {
-  int status = d.parseString("");
-  EXPECT_EQ(1, status);
+TEST_F(DriverTest, ParseArray) {
+  int status = d.parseString("[1,2,3]");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(1, d.result->getExpressions().size());
+
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::Array *a = dynamic_cast<nth::Array*>(expr);
+  EXPECT_EQ(3, a->getValues().size());
+
+  EXPECT_EQ(1, *dynamic_cast<nth::Integer*>(a->getValues()[0]));
+  EXPECT_EQ(2, *dynamic_cast<nth::Integer*>(a->getValues()[1]));
+  EXPECT_EQ(3, *dynamic_cast<nth::Integer*>(a->getValues()[2]));
 }
+
+
