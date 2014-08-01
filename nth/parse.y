@@ -118,7 +118,7 @@ literal: INT     { $$ = new nth::Integer($1); }
        ;
 
 compound_literal: array {
-  nth::Expression *e = dynamic_cast<nth::Expression*>(yystack_[0].value.as< nth::Array* > ());
+  nth::Expression *e = $1;
   std::swap($$, e); }
                 | hash
                 | range
