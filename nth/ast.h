@@ -76,11 +76,12 @@ class String : public Expression {
  public:
   String(std::string value): value(value) {}
   String(String &&other) : value(std::move(other.value)) {}
+
   bool operator==(const std::string &i) const { return value == i; }
   bool operator==(const char *i) const { return value == i; }
   operator const std::string() const { return value; }
   operator const char*() const { return value.c_str(); }
-  
+ 
  protected:
   std::string value;
 };
@@ -89,6 +90,7 @@ class Boolean : public Expression {
  public:
   Boolean(bool value): value(value) {}
   Boolean(Boolean &&other) : value(other.value) {}
+
   bool operator==(const bool &i) const { return value == i; }
   operator const bool() const { return value; }
   
@@ -110,6 +112,7 @@ class Identifier : public Expression {
  public:
   Identifier(std::string value) : value(value) {}
   Identifier(Identifier &&other) : value(other.value) {}
+
   bool operator==(const std::string s) const { return value == s; }
   bool operator==(const Identifier &i) const { return value == i.value; }
   bool operator==(const char *c) const { return value == c; }
