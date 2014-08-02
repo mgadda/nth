@@ -120,9 +120,7 @@ literal: INT     { $$ = new nth::Integer($1); }
        | compound_literal { std::swap($$, $1); }
        ;
 
-compound_literal: array {
-  nth::Expression *e = $1;
-  std::swap($$, e); }
+compound_literal: array { nth::Expression *e = $1; std::swap($$, e); }
                 | map  { nth::Expression *e = $1; std::swap($$, e); }
                 | range
                 | tuple
@@ -131,6 +129,7 @@ compound_literal: array {
 
   /* Array */
 array: "[" exprlist "]" { $$ = new nth::Array(*$2); }
+     | "[" "]"          { $$ = new nth::Array(); }
      ;
 
 exprlist: expr               { $$ = new nth::ExpressionList(1, $1); }

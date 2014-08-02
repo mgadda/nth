@@ -120,8 +120,10 @@ class Identifier : public Expression {
 
 class Array : public Expression {
  public:
+  Array() {}
   Array(ExpressionList &exprlist) : values(exprlist) {}
   Array(Array &&other) : values(other.values) {}
+
   bool operator==(const Array &i) const { return values == i.values; }
   const ExpressionList &getValues() { return values; }
  protected:
