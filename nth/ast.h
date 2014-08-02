@@ -30,7 +30,11 @@ class Expression {
   virtual ~Expression() {}
 };
 
+class String;
+
 typedef std::vector<Expression*> ExpressionList;
+typedef std::pair<nth::String*, Expression*> KeyValuePair;
+typedef std::vector<KeyValuePair> ExpressionMap;
 
 class Block : Expression {
  public:
@@ -123,7 +127,19 @@ class Array : public Expression {
  protected:
   ExpressionList values;
 };
-  
+ 
+class Map : public Expression {
+ public:
+  Map() {}
+  Map(ExpressionMap &exprmap) : values(exprmap) {}
+  Map(Map &&other) : values(other.values) {}
+  bool operator==(const Map &m) const { return values == m.values; }
+  const ExpressionMap &getValues() { return values; }
+  //const Expression *getValue(ComparableExpr &key);
+ protected:
+  ExpressionMap values;
+};
+
 class UnaryOperation : public Expression {
  public:
   UnaryOperation(std::unique_ptr<Expression> value) : value(std::move(value)) {}

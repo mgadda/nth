@@ -138,4 +138,19 @@ TEST_F(DriverTest, ParseArray) {
   EXPECT_EQ(3, *dynamic_cast<nth::Integer*>(a->getValues()[2]));
 }
 
+TEST_F(DriverTest, ParseMap) {
+  int status = d.parseString("{\"foo\": 10.342,\n\"bar\": 12.34}");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(1, d.result->getExpressions().size());
+
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::Map *a = dynamic_cast<nth::Map*>(expr);
+  EXPECT_EQ(2, a->getValues().size());
+
+  EXPECT_STREQ("foo", *a->getValues()[0].first);
+  EXPECT_EQ(10.342, *dynamic_cast<nth::Float*>(a->getValues()[0].second));
+
+  EXPECT_STREQ("bar", *a->getValues()[1].first);
+  EXPECT_EQ(12.34, *dynamic_cast<nth::Float*>(a->getValues()[1].second));
+}
 

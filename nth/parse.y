@@ -81,7 +81,10 @@
 %type <nth::Expression*> expr literal compound_literal;
 %type <nth::ExpressionList*> exprlist;
 %type <nth::Array*> array;
-
+%type <nth::Map*> map;
+%type <nth::ExpressionMap*> key_val_list;
+%type <std::pair<nth::String*, nth::Expression*>> key_value;
+%type <nth::String*> key;
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
 %start file
@@ -120,7 +123,7 @@ literal: INT     { $$ = new nth::Integer($1); }
 compound_literal: array {
   nth::Expression *e = $1;
   std::swap($$, e); }
-                | hash
+                | map  { nth::Expression *e = $1; std::swap($$, e); }
                 | range
                 | tuple
                 ;
@@ -135,19 +138,19 @@ exprlist: expr               { $$ = new nth::ExpressionList(1, $1); }
         ;
 
 
-  /* Hash */
-hash: "{" key_val_list "}"
-    | "{" "}"
+  /* Map */
+map: "{" key_val_list "}" { $$ = new nth::Map(*$2); }
+    | "{" "}"              { $$ = new nth::Map(); }
     ;
 
-key_val_list: key_value
-            | key_val_list "," key_value
+key_val_list: key_value                   { $$ = new nth::ExpressionMap(); $$->push_back($1); }
+            | key_val_list "," key_value  { std::swap($$, $1); $$->push_back($3); }
             ;
 
-key_value: key ":" expr;
+key_value: key ":" expr { $$ = std::make_pair($1, $3); }
+         ;
 
-key: STRING
-   | IDENT
+key: STRING { $$ = new nth::String($1.substr(1, $1.size()-2)); }
    ;
 
 
