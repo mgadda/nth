@@ -196,5 +196,19 @@ public:
     : BinaryOperation(std::move(left), std::move(right)) {}
 };
 
+class Exponentiate : public BinaryOperation {
+public:
+  Exponentiate(std::unique_ptr<Expression> left,
+         std::unique_ptr<Expression> right)
+    : BinaryOperation(std::move(left), std::move(right)) {}
+};
+
+class Modulo : public BinaryOperation {
+public:
+  Modulo(std::unique_ptr<Expression> left,
+         std::unique_ptr<Expression> right)
+    : BinaryOperation(std::move(left), std::move(right)) {}
+};
+
 }
 #endif /* defined(__nth__ast__) */

@@ -266,4 +266,60 @@ TEST_F(DriverTest, ParseDivide) {
   EXPECT_EQ(3, *i3);
 }
 
+TEST_F(DriverTest, ParseExponentiate) {
+  // 1 + 2 + 3 => Exponentiate(Exponentiate(1,2), 3)
+  int status = d.parseString("1 ^ 2 ^ 3");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(1, d.result->getExpressions().size());
+
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::Exponentiate *a1 = dynamic_cast<nth::Exponentiate*>(expr);
+  
+  ASSERT_NE(nullptr, a1);
+
+  nth::Expression &e1 = *(a1->left);
+  nth::Expression &e2 = *(a1->right);
+  
+  nth::Exponentiate* a2 = dynamic_cast<nth::Exponentiate*>(&e1);
+  ASSERT_NE(nullptr, a2);
+  
+  nth::Expression &e3 = *(a2->left);
+  nth::Expression &e4 = *(a2->right);
+
+  nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
+  nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
+  nth::Integer* i3 = dynamic_cast<nth::Integer*>(&e2);
+  EXPECT_EQ(1, *i1);
+  EXPECT_EQ(2, *i2);
+  EXPECT_EQ(3, *i3);
+}
+
+TEST_F(DriverTest, ParseModulo) {
+  // 1 + 2 + 3 => Modulo(Modulo(1,2), 3)
+  int status = d.parseString("1 % 2 % 3");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(1, d.result->getExpressions().size());
+
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::Modulo *a1 = dynamic_cast<nth::Modulo*>(expr);
+  
+  ASSERT_NE(nullptr, a1);
+
+  nth::Expression &e1 = *(a1->left);
+  nth::Expression &e2 = *(a1->right);
+  
+  nth::Modulo* a2 = dynamic_cast<nth::Modulo*>(&e1);
+  ASSERT_NE(nullptr, a2);
+  
+  nth::Expression &e3 = *(a2->left);
+  nth::Expression &e4 = *(a2->right);
+
+  nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
+  nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
+  nth::Integer* i3 = dynamic_cast<nth::Integer*>(&e2);
+  EXPECT_EQ(1, *i1);
+  EXPECT_EQ(2, *i2);
+  EXPECT_EQ(3, *i3);
+}
+
 
