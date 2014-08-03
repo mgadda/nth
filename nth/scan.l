@@ -53,6 +53,7 @@ LEADING_DIGIT [1-9]
 "{"       { return yy::parser::make_LCURLY(loc); }
 "}"       { return yy::parser::make_RCURLY(loc); }
 ":"       { return yy::parser::make_COLON(loc); }
+";"       { return yy::parser::make_SEMICOLON(loc); }
 
 "<<"      { return yy::parser::make_LSHIFT(loc); }
 ">>"      { return yy::parser::make_RSHIFT(loc); }

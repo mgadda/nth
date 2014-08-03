@@ -8,9 +8,12 @@
 
 #include <iostream>
 #include <cstdio>
+#include <memory>
 
 #include "driver.h"
 #include "parse.hh"
+
+#include "ast.h"
 
 int main(int argc, const char * argv[])
 {
@@ -26,7 +29,7 @@ int main(int argc, const char * argv[])
     std::cout << "No input file specified.\n";
     return -1;
   }
-
+  
   nth::Driver driver;
   for (int i=1; i<argc; ++i) {
     std::cout << argv[i] << '\n';

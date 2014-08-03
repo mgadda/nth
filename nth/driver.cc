@@ -8,13 +8,19 @@
 
 #include <cerrno>
 #include "driver.h"
+// scan.h must be included /after/ driver.h so that YY_DECL has already been defined
+#include "scan.h"
 
+/*
 extern void yyrestart(FILE*);
 //extern "C" int yyparse();
 extern int yylineno;
 //extern int yydebug;
-extern int yy_flex_debug;
 extern FILE* yyin;
+extern YY_BUFFER_STATE yy_scan_string(const char *str);
+*/
+
+extern int yy_flex_debug;
 
 namespace nth {
 
@@ -32,6 +38,8 @@ void Driver::scanBegin() {
     error("cannot open " + file + ": " + strerror(errno));
     exit(EXIT_FAILURE);
   }
+  
+  yyrestart(yyin);
 }
 
 void Driver::scanEnd() {
@@ -46,6 +54,16 @@ int Driver::parse(const std::string& f) {
   parser.set_debug_level(should_trace_parsing);
   int ret = parser.parse();
   scanEnd();
+
+  return ret;
+}
+
+int Driver::parseString(const std::string &s) {
+  YY_BUFFER_STATE bs = yy_scan_string(s.c_str());
+
+  yy::parser parse(*this);
+  int ret = parse.parse();
+  yy_delete_buffer(bs);
 
   return ret;
 }

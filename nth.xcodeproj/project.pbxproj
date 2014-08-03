@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D33BE5F19731F5C006F3769 /* driver_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D33BE5D19731F5C006F3769 /* driver_test.cc */; };
+		7D33BE641973209E006F3769 /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
+		7D33BE651973209E006F3769 /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
+		7D33BE661973209E006F3769 /* scan.l in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F5F1940C5D0008D5BBD /* scan.l */; };
+		7D33BE671973209E006F3769 /* ast.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cc */; };
+		7D33BE6A19732162006F3769 /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D33BE6819732162006F3769 /* main.cc */; };
+		7D33BE711973237B006F3769 /* test_helper.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D33BE701973237B006F3769 /* test_helper.cc */; };
+		7D33BE751973276B006F3769 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D33BE741973276B006F3769 /* CoreFoundation.framework */; };
+		7D33BE79197328A8006F3769 /* nth.nth in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DC44E7B1960D71500DEB624 /* nth.nth */; };
+		7D33BEBB19756C98006F3769 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D33BEBA19756C98006F3769 /* libgtest.a */; };
 		7D660D5B195FBD24008E0D21 /* driver_test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7D660D5A195FBD24008E0D21 /* driver_test.mm */; };
 		7D660D5C195FBDE0008E0D21 /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
 		7D660D5F195FBF79008E0D21 /* scan.l in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F5F1940C5D0008D5BBD /* scan.l */; };
@@ -18,12 +28,38 @@
 		7D6E3F651943D5C1008D5BBD /* ast.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cc */; };
 		7D8CC7E0195BD4900009B20C /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
 		7D8CC7E9195C6EB40009B20C /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
+		7DA4984219730C1D0056BB77 /* nth_gtest.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DA4984119730C1D0056BB77 /* nth_gtest.1 */; };
 		7DC44E7C1960D71500DEB624 /* nth.nth in Resources */ = {isa = PBXBuildFile; fileRef = 7DC44E7B1960D71500DEB624 /* nth.nth */; };
 		7DF889A1195F9ECD00B7208A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF889A0195F9ECD00B7208A /* XCTest.framework */; };
 		7DF889A7195F9ECD00B7208A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DF889A5195F9ECD00B7208A /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
+		7D33BE6019731FCE006F3769 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.lex;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/scan.cc",
+				"$(DERIVED_FILE_DIR)/scan.h",
+			);
+			script = "# $(LEX)\nflex --header-file=${DERIVED_FILE_DIR}/scan.h -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}";
+		};
+		7D33BE6119731FE4006F3769 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.yacc;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/location.hh",
+				"$(DERIVED_FILE_DIR)/parse.hh",
+				"$(DERIVED_FILE_DIR)/parse.cc",
+				"$(DERIVED_FILE_DIR)/stack.hh",
+				"$(DERIVED_FILE_DIR)/position.hh",
+			);
+			script = "/usr/local/Cellar/bison/3.0.2/bin/bison -l -v -g -o ${DERIVED_FILE_DIR}/parse.cc ${INPUT_FILE_PATH}";
+		};
 		7D660D5D195FBE21008E0D21 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
@@ -44,9 +80,10 @@
 			fileType = sourcecode.lex;
 			isEditable = 1;
 			outputFiles = (
+				"$(DERIVED_FILE_DIR)/scan.h",
 				"$(DERIVED_FILE_DIR)/scan.cc",
 			);
-			script = "# $(LEX)\nflex -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}\n";
+			script = "# $(LEX)\nflex --header-file=${DERIVED_FILE_DIR}/scan.h -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}\n";
 		};
 		7D8CC7E5195BDD9A0009B20C /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -54,9 +91,10 @@
 			fileType = sourcecode.lex;
 			isEditable = 1;
 			outputFiles = (
+				"$(DERIVED_FILE_DIR)/scan.h",
 				"$(DERIVED_FILE_DIR)/scan.cc",
 			);
-			script = "flex -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}\n";
+			script = "flex --header-file=${DERIVED_FILE_DIR}/scan.h -o ${DERIVED_FILE_DIR}/scan.cc ${INPUT_FILE_PATH}\n";
 		};
 		7D8CC7E7195BE2E60009B20C /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -84,6 +122,13 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
+		7D33BE6219732084006F3769 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7D6E3F491940C2B3008D5BBD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7D6E3F501940C2B3008D5BBD;
+			remoteInfo = nth;
+		};
 		7DF889AB195F9ECD00B7208A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7D6E3F491940C2B3008D5BBD /* Project object */;
@@ -94,6 +139,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		7D33BE78197328A4006F3769 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				7D33BE79197328A8006F3769 /* nth.nth in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7D6E3F4F1940C2B3008D5BBD /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -104,9 +159,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		7DA4983B19730C1D0056BB77 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				7DA4984219730C1D0056BB77 /* nth_gtest.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7D33BE5D19731F5C006F3769 /* driver_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver_test.cc; sourceTree = "<group>"; };
+		7D33BE6819732162006F3769 /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
+		7D33BE6F1973237B006F3769 /* test_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test_helper.h; sourceTree = "<group>"; };
+		7D33BE701973237B006F3769 /* test_helper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_helper.cc; sourceTree = "<group>"; };
+		7D33BE741973276B006F3769 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		7D33BEBA19756C98006F3769 /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = lib/libgtest.a; sourceTree = "<group>"; };
 		7D660D5A195FBD24008E0D21 /* driver_test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = driver_test.mm; sourceTree = "<group>"; };
 		7D6E3F511940C2B4008D5BBD /* nth */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = nth; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D6E3F541940C2B4008D5BBD /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cc; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -117,6 +188,8 @@
 		7D6E3F6619440F00008D5BBD /* parse.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; lineEnding = 0; path = parse.y; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		7D8CC7DE195BD4900009B20C /* driver.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver.cc; sourceTree = "<group>"; };
 		7D8CC7DF195BD4900009B20C /* driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = driver.h; sourceTree = "<group>"; };
+		7DA4983D19730C1D0056BB77 /* nth-gtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "nth-gtest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DA4984119730C1D0056BB77 /* nth_gtest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = nth_gtest.1; sourceTree = "<group>"; };
 		7DC44E7B1960D71500DEB624 /* nth.nth */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nth.nth; sourceTree = "<group>"; };
 		7DF8899E195F9ECD00B7208A /* nth-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "nth-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DF889A0195F9ECD00B7208A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -130,6 +203,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DA4983A19730C1D0056BB77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D33BEBB19756C98006F3769 /* libgtest.a in Frameworks */,
+				7D33BE751973276B006F3769 /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +233,7 @@
 				7D6E3F5D1940C4EA008D5BBD /* notes */,
 				7D6E3F531940C2B4008D5BBD /* nth */,
 				7DF889A2195F9ECD00B7208A /* nth-tests */,
+				7DA4983E19730C1D0056BB77 /* nth-gtest */,
 				7DF8899F195F9ECD00B7208A /* Frameworks */,
 				7D6E3F521940C2B4008D5BBD /* Products */,
 			);
@@ -161,6 +244,7 @@
 			children = (
 				7D6E3F511940C2B4008D5BBD /* nth */,
 				7DF8899E195F9ECD00B7208A /* nth-tests.xctest */,
+				7DA4983D19730C1D0056BB77 /* nth-gtest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -187,6 +271,18 @@
 			path = notes;
 			sourceTree = "<group>";
 		};
+		7DA4983E19730C1D0056BB77 /* nth-gtest */ = {
+			isa = PBXGroup;
+			children = (
+				7D33BE5D19731F5C006F3769 /* driver_test.cc */,
+				7DA4984119730C1D0056BB77 /* nth_gtest.1 */,
+				7D33BE6819732162006F3769 /* main.cc */,
+				7D33BE6F1973237B006F3769 /* test_helper.h */,
+				7D33BE701973237B006F3769 /* test_helper.cc */,
+			);
+			path = "nth-gtest";
+			sourceTree = "<group>";
+		};
 		7DC44E7A1960D70300DEB624 /* fixtures */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,6 +294,8 @@
 		7DF8899F195F9ECD00B7208A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7D33BEBA19756C98006F3769 /* libgtest.a */,
+				7D33BE741973276B006F3769 /* CoreFoundation.framework */,
 				7DF889A0195F9ECD00B7208A /* XCTest.framework */,
 			);
 			name = Frameworks;
@@ -243,6 +341,27 @@
 			name = nth;
 			productName = nth;
 			productReference = 7D6E3F511940C2B4008D5BBD /* nth */;
+			productType = "com.apple.product-type.tool";
+		};
+		7DA4983C19730C1D0056BB77 /* nth-gtest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DA4984319730C1D0056BB77 /* Build configuration list for PBXNativeTarget "nth-gtest" */;
+			buildPhases = (
+				7DA4983919730C1D0056BB77 /* Sources */,
+				7DA4983A19730C1D0056BB77 /* Frameworks */,
+				7DA4983B19730C1D0056BB77 /* CopyFiles */,
+				7D33BE78197328A4006F3769 /* CopyFiles */,
+			);
+			buildRules = (
+				7D33BE6119731FE4006F3769 /* PBXBuildRule */,
+				7D33BE6019731FCE006F3769 /* PBXBuildRule */,
+			);
+			dependencies = (
+				7D33BE6319732084006F3769 /* PBXTargetDependency */,
+			);
+			name = "nth-gtest";
+			productName = "nth-gtest";
+			productReference = 7DA4983D19730C1D0056BB77 /* nth-gtest */;
 			productType = "com.apple.product-type.tool";
 		};
 		7DF8899D195F9ECD00B7208A /* nth-tests */ = {
@@ -293,6 +412,7 @@
 			targets = (
 				7D6E3F501940C2B3008D5BBD /* nth */,
 				7DF8899D195F9ECD00B7208A /* nth-tests */,
+				7DA4983C19730C1D0056BB77 /* nth-gtest */,
 			);
 		};
 /* End PBXProject section */
@@ -322,6 +442,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7DA4983919730C1D0056BB77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D33BE6A19732162006F3769 /* main.cc in Sources */,
+				7D33BE641973209E006F3769 /* driver.cc in Sources */,
+				7D33BE651973209E006F3769 /* parse.y in Sources */,
+				7D33BE711973237B006F3769 /* test_helper.cc in Sources */,
+				7D33BE661973209E006F3769 /* scan.l in Sources */,
+				7D33BE671973209E006F3769 /* ast.cc in Sources */,
+				7D33BE5F19731F5C006F3769 /* driver_test.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7DF8899A195F9ECD00B7208A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -337,6 +471,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		7D33BE6319732084006F3769 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7D6E3F501940C2B3008D5BBD /* nth */;
+			targetProxy = 7D33BE6219732084006F3769 /* PBXContainerItemProxy */;
+		};
 		7DF889AC195F9ECD00B7208A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7D6E3F501940C2B3008D5BBD /* nth */;
@@ -388,9 +527,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -421,8 +565,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};
@@ -436,6 +585,50 @@
 		7D6E3F5C1940C2B4008D5BBD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		7DA4984419730C1D0056BB77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"IS_XCODE=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/include",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lib",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7DA4984519730C1D0056BB77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/include",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -491,6 +684,15 @@
 			buildConfigurations = (
 				7D6E3F5B1940C2B4008D5BBD /* Debug */,
 				7D6E3F5C1940C2B4008D5BBD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DA4984319730C1D0056BB77 /* Build configuration list for PBXNativeTarget "nth-gtest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DA4984419730C1D0056BB77 /* Debug */,
+				7DA4984519730C1D0056BB77 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

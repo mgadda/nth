@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>nth-gtest.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>nth.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -18,6 +23,16 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>7D6E3F501940C2B3008D5BBD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7DA4983519730B320056BB77</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7DA4983C19730C1D0056BB77</key>
 		<dict>
 			<key>primary</key>
 			<true/>

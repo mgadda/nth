@@ -1,4 +1,6 @@
 %code requires {
+  #include "ast.h"
+
   namespace nth {
     // Forward declaration because Driver
     // is used in generated header(s)
@@ -8,9 +10,8 @@
 
 %{
   #include <iostream>
-
+  #include <utility> // provides std::swap as of C++11
   #include "driver.h"
-  #include "ast.h"
 
  int exit_status;
 
@@ -52,6 +53,7 @@
   LCURLY  "{"
   RCURLY  "}"
   COLON   ":"
+  SEMICOLON ";"
   ;
 
 %token CMP
@@ -64,20 +66,44 @@
 %token HASH_ROCKET "=>"
 %token LSHIFT "<<" RSHIFT ">>" DOUBLE_DOT ".." TRIPLE_DOT "..."
 
+%left "="
+%right VAL
+%left "+" "-"
+%left "*" "/"
+%left "%" "|" "^" "&"
+%left "<<" ">>"
+%left CMP
+%left NOT
+%left "&&" "||"
+
+%type <nth::Block*> file;
+%type <nth::Block*> expressions;
+%type <nth::Expression*> expr literal compound_literal binary_op;
+%type <nth::ExpressionList*> exprlist;
+%type <nth::Array*> array;
+%type <nth::Map*> map;
+%type <nth::ExpressionMap*> key_val_list;
+%type <std::pair<nth::String*, nth::Expression*>> key_value;
+%type <nth::String*> key;
+%type <nth::BinaryOperation*> math_op;
+
+ // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
+
 %start file
 
-%printer { yyoutput << $$; } <*>;
+  // %printer { yyoutput << $$; } <*>;
 %%
 
 
-file: expressions;
+file: expressions  { driver.result = $1; }
+    ;
 
-expressions: expr
-          | expr expressions
-          ;
+expressions: expr              { $$ = new nth::Block($1); }
+           | expressions expr  { std::swap($$, $1); $$->insertAfter($2); }
+           ;
 
-expr: literal
-    | binary_op
+expr: literal { std::swap($$, $1); }
+    | binary_op { std::swap($$, $1); }
     | unary_op
     | func_def
     | val_def
@@ -87,43 +113,45 @@ expr: literal
     | "(" expr ")"
     ;
 
-literal: INT
-       | FLOAT
-       | STRING
-       | TRUE
-       | FALSE
-       | IDENT
-       | compound_literal
+literal: INT     { $$ = new nth::Integer($1); }
+       | FLOAT   { $$ = new nth::Float($1); }
+       | STRING  { $$ = new nth::String($1.substr(1, $1.size()-2)); }
+       | TRUE    { $$ = new nth::True; } 
+       | FALSE   { $$ = new nth::False; }
+       | IDENT   { $$ = new nth::Identifier($1); }
+       | compound_literal { std::swap($$, $1); }
        ;
 
-compound_literal: array
-                | hash
+compound_literal: array { nth::Expression *e = $1; std::swap($$, e); }
+                | map  { nth::Expression *e = $1; std::swap($$, e); }
                 | range
                 | tuple
                 ;
 
 
   /* Array */
-array: "[" exprlist "]"
+array: "[" exprlist "]" { $$ = new nth::Array(*$2); }
+     | "[" "]"          { $$ = new nth::Array(); }
+     ;
 
-exprlist: expr
-        | expr "," exprlist
+exprlist: expr               { $$ = new nth::ExpressionList(1, $1); }
+        | exprlist "," expr  { std::swap($$, $1); $$->push_back($3); }
         ;
 
 
-  /* Hash */
-hash: "{" key_val_list "}"
-    | "{" "}"
+  /* Map */
+map: "{" key_val_list "}" { $$ = new nth::Map(*$2); }
+    | "{" "}"              { $$ = new nth::Map(); }
     ;
 
-key_val_list: key_value
-            | key_value "," key_val_list
+key_val_list: key_value                   { $$ = new nth::ExpressionMap(); $$->push_back($1); }
+            | key_val_list "," key_value  { std::swap($$, $1); $$->push_back($3); }
             ;
 
-key_value: key ":" expr;
+key_value: key ":" expr { $$ = std::make_pair($1, $3); }
+         ;
 
-key: STRING
-   | IDENT
+key: STRING { $$ = new nth::String($1.substr(1, $1.size()-2)); }
    ;
 
 
@@ -141,7 +169,7 @@ tuple: "(" exprlist ")";
 
 binary_op: boolean_op
          | comparison_op
-         | math_op
+         | math_op        { nth::Expression *e = $1; std::swap($$, e); }
          | bitwise_op
          ;
 
@@ -151,7 +179,7 @@ boolean_op: expr "&&" expr
 
 comparison_op: expr CMP expr;
 
-math_op: expr "+" expr
+math_op: expr "+" expr  { $$ = new nth::Add(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
        | expr "-" expr
        | expr "*" expr
        | expr "/" expr
@@ -165,7 +193,7 @@ bitwise_op: expr "<<" expr
           | expr "&" expr
           ;
 
-unary_op: "!" expr
+unary_op: "!" expr %prec NOT
 
   /* end binary ops */
 

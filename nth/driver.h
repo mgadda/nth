@@ -25,13 +25,14 @@ class Driver {
   Driver();
   virtual ~Driver();
 
-  int result;
+  Block *result;
   void scanBegin();
   void scanEnd();
   bool should_trace_scanning;
 
   int parse(const std::string& f);
-
+  int parseString(const std::string &s);
+  
   std::string file;
 
   bool should_trace_parsing;
