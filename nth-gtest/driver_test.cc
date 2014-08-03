@@ -154,3 +154,30 @@ TEST_F(DriverTest, ParseMap) {
   EXPECT_EQ(12.34, *dynamic_cast<nth::Float*>(a->getValues()[1].second));
 }
 
+TEST_F(DriverTest, ParseAdd) {
+  // 1 + 2 + 3 => add(add(1,2), 3)
+  int status = d.parseString("1 + 2 + 3");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(1, d.result->getExpressions().size());
+
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::Add *a1 = dynamic_cast<nth::Add*>(expr);
+  
+  ASSERT_NE(nullptr, a1);
+
+  nth::Expression &e1 = *(a1->left);
+  nth::Expression &e2 = *(a1->right);
+  
+  nth::Add* a2 = dynamic_cast<nth::Add*>(&e1);
+  ASSERT_NE(nullptr, a2);
+  
+  nth::Expression &e3 = *(a2->left);
+  nth::Expression &e4 = *(a2->right);
+
+  nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
+  nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
+  nth::Integer* i3 = dynamic_cast<nth::Integer*>(&e2);
+  EXPECT_EQ(1, *i1);
+  EXPECT_EQ(2, *i2);
+  EXPECT_EQ(3, *i3);
+}

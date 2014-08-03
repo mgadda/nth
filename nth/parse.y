@@ -78,13 +78,15 @@
 
 %type <nth::Block*> file;
 %type <nth::Block*> expressions;
-%type <nth::Expression*> expr literal compound_literal;
+%type <nth::Expression*> expr literal compound_literal binary_op;
 %type <nth::ExpressionList*> exprlist;
 %type <nth::Array*> array;
 %type <nth::Map*> map;
 %type <nth::ExpressionMap*> key_val_list;
 %type <std::pair<nth::String*, nth::Expression*>> key_value;
 %type <nth::String*> key;
+%type <nth::BinaryOperation*> math_op;
+
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
 %start file
@@ -101,7 +103,7 @@ expressions: expr              { $$ = new nth::Block($1); }
            ;
 
 expr: literal { std::swap($$, $1); }
-    | binary_op
+    | binary_op { std::swap($$, $1); }
     | unary_op
     | func_def
     | val_def
@@ -167,7 +169,7 @@ tuple: "(" exprlist ")";
 
 binary_op: boolean_op
          | comparison_op
-         | math_op
+         | math_op        { nth::Expression *e = $1; std::swap($$, e); }
          | bitwise_op
          ;
 
@@ -177,7 +179,7 @@ boolean_op: expr "&&" expr
 
 comparison_op: expr CMP expr;
 
-math_op: expr "+" expr
+math_op: expr "+" expr  { $$ = new nth::Add(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
        | expr "-" expr
        | expr "*" expr
        | expr "/" expr
