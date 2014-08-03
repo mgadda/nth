@@ -183,7 +183,7 @@ TEST_F(DriverTest, ParseAdd) {
 }
 
 TEST_F(DriverTest, ParseSubtract) {
-  // 1 + 2 + 3 => Subtract(Subtract(1,2), 3)
+  // 1 - 2 - 3 => Subtract(Subtract(1,2), 3)
   int status = d.parseString("1 - 2 - 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
@@ -211,7 +211,7 @@ TEST_F(DriverTest, ParseSubtract) {
 }
 
 TEST_F(DriverTest, ParseMultiply) {
-  // 1 + 2 + 3 => Multiply(Multiply(1,2), 3)
+  // 1 * 2 * 3 => Multiply(Multiply(1,2), 3)
   int status = d.parseString("1 * 2 * 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
@@ -239,7 +239,7 @@ TEST_F(DriverTest, ParseMultiply) {
 }
 
 TEST_F(DriverTest, ParseDivide) {
-  // 1 + 2 + 3 => Divide(Divide(1,2), 3)
+  // 1 / 2 / 3 => Divide(Divide(1,2), 3)
   int status = d.parseString("1 / 2 / 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
@@ -267,7 +267,7 @@ TEST_F(DriverTest, ParseDivide) {
 }
 
 TEST_F(DriverTest, ParseExponentiate) {
-  // 1 + 2 + 3 => Exponentiate(Exponentiate(1,2), 3)
+  // 1 ^ 2 ^ 3 => Exponentiate(Exponentiate(1,2), 3)
   int status = d.parseString("1 ^ 2 ^ 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
@@ -295,7 +295,7 @@ TEST_F(DriverTest, ParseExponentiate) {
 }
 
 TEST_F(DriverTest, ParseModulo) {
-  // 1 + 2 + 3 => Modulo(Modulo(1,2), 3)
+  // 1 % 2 % 3 => Modulo(Modulo(1,2), 3)
   int status = d.parseString("1 % 2 % 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
