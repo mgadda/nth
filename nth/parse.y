@@ -181,7 +181,7 @@ comparison_op: expr CMP expr;
 
 math_op: expr "+" expr  { $$ = new nth::Add(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
        | expr "-" expr
-       | expr "*" expr
+       | expr "*" expr  { $$ = new nth::Multiply(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
        | expr "/" expr  { $$ = new nth::Divide(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
        | expr "^" expr
        | expr "%" expr
