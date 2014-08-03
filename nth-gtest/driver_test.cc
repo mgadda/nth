@@ -182,6 +182,34 @@ TEST_F(DriverTest, ParseAdd) {
   EXPECT_EQ(3, *i3);
 }
 
+TEST_F(DriverTest, ParseSubtract) {
+  // 1 + 2 + 3 => Subtract(Subtract(1,2), 3)
+  int status = d.parseString("1 - 2 - 3");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(1, d.result->getExpressions().size());
+
+  nth::Expression *expr = d.result->getExpressions()[0];
+  nth::Subtract *a1 = dynamic_cast<nth::Subtract*>(expr);
+  
+  ASSERT_NE(nullptr, a1);
+
+  nth::Expression &e1 = *(a1->left);
+  nth::Expression &e2 = *(a1->right);
+  
+  nth::Subtract* a2 = dynamic_cast<nth::Subtract*>(&e1);
+  ASSERT_NE(nullptr, a2);
+  
+  nth::Expression &e3 = *(a2->left);
+  nth::Expression &e4 = *(a2->right);
+
+  nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
+  nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
+  nth::Integer* i3 = dynamic_cast<nth::Integer*>(&e2);
+  EXPECT_EQ(1, *i1);
+  EXPECT_EQ(2, *i2);
+  EXPECT_EQ(3, *i3);
+}
+
 TEST_F(DriverTest, ParseMultiply) {
   // 1 + 2 + 3 => Multiply(Multiply(1,2), 3)
   int status = d.parseString("1 * 2 * 3");
