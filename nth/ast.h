@@ -13,24 +13,14 @@
 #include <vector>
 #include <memory>
 
+#include "ast_visitor.h"
+
 namespace nth {
 
-enum Type {
-  IntegerType,
-  StringType,
-  AddType,
-  SubtractType,
-  MultiplyType,
-  DivideType,
-  BooleanNegationType
-};
-
-class Expression {
+class Expression : public Visitable {
  public:
   virtual ~Expression() {}
 };
-
-class String;
 
 typedef std::vector<Expression*> ExpressionList;
 typedef std::pair<nth::String*, Expression*> KeyValuePair;
@@ -42,6 +32,10 @@ class Block : Expression {
   Block(Expression *expr);
   void insertAfter(Expression *expr);
   ExpressionList &getExpressions();
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+  
  protected:
   ExpressionList expressions;
 };
@@ -51,10 +45,15 @@ class Integer : public Expression {
   Integer(long value): value(value) {}
   Integer(Integer &&other) : value(other.value) {}
   virtual ~Integer() {}
-
+  
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+  
   bool operator==(const int &i) const { return value == i; }
   bool operator==(const long &i) const { return value == i; }
   operator long() const { return value; }
+  
+  long getValue() { return value; }
  protected:
   long value;
 };
@@ -65,9 +64,14 @@ class Float : public Expression {
   Float(Float &&other) : value(other.value) {}
   virtual ~Float() {}
 
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+
   bool operator==(const float &i) const { return value == i; }
   bool operator==(const double &i) const { return value == i; }
   operator double() const { return value; }
+  
+  double getValue() { return value; }
 protected:
   double value;
 };
@@ -76,6 +80,9 @@ class String : public Expression {
  public:
   String(std::string value): value(value) {}
   String(String &&other) : value(std::move(other.value)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
 
   bool operator==(const std::string &i) const { return value == i; }
   bool operator==(const char *i) const { return value == i; }
@@ -101,17 +108,26 @@ class Boolean : public Expression {
 class True : public Boolean {
  public:
   True() : Boolean(true) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
 };
 
 class False : public Boolean {
  public:
   False() : Boolean(false) {}
+  
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
 };
 
 class Identifier : public Expression {
  public:
   Identifier(std::string value) : value(value) {}
   Identifier(Identifier &&other) : value(other.value) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
 
   bool operator==(const std::string s) const { return value == s; }
   bool operator==(const Identifier &i) const { return value == i.value; }
@@ -127,6 +143,9 @@ class Array : public Expression {
   Array(ExpressionList &exprlist) : values(exprlist) {}
   Array(Array &&other) : values(other.values) {}
 
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+
   bool operator==(const Array &i) const { return values == i.values; }
   const ExpressionList &getValues() { return values; }
  protected:
@@ -138,6 +157,10 @@ class Map : public Expression {
   Map() {}
   Map(ExpressionMap &exprmap) : values(exprmap) {}
   Map(Map &&other) : values(other.values) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+
   bool operator==(const Map &m) const { return values == m.values; }
   const ExpressionMap &getValues() { return values; }
   //const Expression *getValue(ComparableExpr &key);
@@ -163,7 +186,9 @@ class BinaryOperation : public Expression {
                   std::unique_ptr<Expression> right)
     : left(std::move(left)), right(std::move(right)) {}
 
-// protected:
+  std::unique_ptr<Expression> &getLeftValue() { return left; }
+  std::unique_ptr<Expression> &getRightValue() { return right; }
+ protected:
   std::unique_ptr<Expression> left;
   std::unique_ptr<Expression> right;
 };
@@ -173,6 +198,9 @@ class Add : public BinaryOperation {
   Add(std::unique_ptr<Expression> left,
       std::unique_ptr<Expression> right)
     : BinaryOperation(std::move(left), std::move(right)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
 };
 
 class Subtract : public BinaryOperation {
@@ -180,6 +208,9 @@ public:
   Subtract(std::unique_ptr<Expression> left,
            std::unique_ptr<Expression> right)
     : BinaryOperation(std::move(left), std::move(right)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
 };
 
 class Multiply : public BinaryOperation {
@@ -187,6 +218,9 @@ public:
   Multiply(std::unique_ptr<Expression> left,
            std::unique_ptr<Expression> right)
     : BinaryOperation(std::move(left), std::move(right)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
 };
 
 class Divide : public BinaryOperation {
@@ -194,6 +228,9 @@ public:
   Divide(std::unique_ptr<Expression> left,
          std::unique_ptr<Expression> right)
     : BinaryOperation(std::move(left), std::move(right)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
 };
 
 class Exponentiate : public BinaryOperation {
@@ -201,6 +238,9 @@ public:
   Exponentiate(std::unique_ptr<Expression> left,
          std::unique_ptr<Expression> right)
     : BinaryOperation(std::move(left), std::move(right)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
 };
 
 class Modulo : public BinaryOperation {
@@ -208,6 +248,9 @@ public:
   Modulo(std::unique_ptr<Expression> left,
          std::unique_ptr<Expression> right)
     : BinaryOperation(std::move(left), std::move(right)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
 };
 
 }

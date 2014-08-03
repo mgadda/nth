@@ -196,6 +196,7 @@
 		7DF889A4195F9ECD00B7208A /* nth-tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nth-tests-Info.plist"; sourceTree = "<group>"; };
 		7DF889A6195F9ECD00B7208A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7DF889AA195F9ECD00B7208A /* nth-tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nth-tests-Prefix.pch"; sourceTree = "<group>"; };
+		7DF8F216198EA164002F06B4 /* ast_visitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ast_visitor.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,6 +261,7 @@
 				7D6E3F5F1940C5D0008D5BBD /* scan.l */,
 				7D6E3F631943D5C1008D5BBD /* ast.cc */,
 				7D6E3F641943D5C1008D5BBD /* ast.h */,
+				7DF8F216198EA164002F06B4 /* ast_visitor.h */,
 			);
 			path = nth;
 			sourceTree = "<group>";

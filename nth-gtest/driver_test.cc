@@ -165,14 +165,14 @@ TEST_F(DriverTest, ParseAdd) {
   
   ASSERT_NE(nullptr, a1);
 
-  nth::Expression &e1 = *(a1->left);
-  nth::Expression &e2 = *(a1->right);
+  nth::Expression &e1 = *(a1->getLeftValue());
+  nth::Expression &e2 = *(a1->getRightValue());
   
   nth::Add* a2 = dynamic_cast<nth::Add*>(&e1);
   ASSERT_NE(nullptr, a2);
   
-  nth::Expression &e3 = *(a2->left);
-  nth::Expression &e4 = *(a2->right);
+  nth::Expression &e3 = *(a2->getLeftValue());
+  nth::Expression &e4 = *(a2->getRightValue());
 
   nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
   nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
@@ -193,14 +193,14 @@ TEST_F(DriverTest, ParseSubtract) {
   
   ASSERT_NE(nullptr, a1);
 
-  nth::Expression &e1 = *(a1->left);
-  nth::Expression &e2 = *(a1->right);
+  nth::Expression &e1 = *(a1->getLeftValue());
+  nth::Expression &e2 = *(a1->getRightValue());
   
   nth::Subtract* a2 = dynamic_cast<nth::Subtract*>(&e1);
   ASSERT_NE(nullptr, a2);
   
-  nth::Expression &e3 = *(a2->left);
-  nth::Expression &e4 = *(a2->right);
+  nth::Expression &e3 = *(a2->getLeftValue());
+  nth::Expression &e4 = *(a2->getRightValue());
 
   nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
   nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
@@ -221,14 +221,14 @@ TEST_F(DriverTest, ParseMultiply) {
   
   ASSERT_NE(nullptr, a1);
 
-  nth::Expression &e1 = *(a1->left);
-  nth::Expression &e2 = *(a1->right);
+  nth::Expression &e1 = *(a1->getLeftValue());
+  nth::Expression &e2 = *(a1->getRightValue());
   
   nth::Multiply* a2 = dynamic_cast<nth::Multiply*>(&e1);
   ASSERT_NE(nullptr, a2);
   
-  nth::Expression &e3 = *(a2->left);
-  nth::Expression &e4 = *(a2->right);
+  nth::Expression &e3 = *(a2->getLeftValue());
+  nth::Expression &e4 = *(a2->getRightValue());
 
   nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
   nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
@@ -249,14 +249,14 @@ TEST_F(DriverTest, ParseDivide) {
   
   ASSERT_NE(nullptr, a1);
 
-  nth::Expression &e1 = *(a1->left);
-  nth::Expression &e2 = *(a1->right);
+  nth::Expression &e1 = *(a1->getLeftValue());
+  nth::Expression &e2 = *(a1->getRightValue());
   
   nth::Divide* a2 = dynamic_cast<nth::Divide*>(&e1);
   ASSERT_NE(nullptr, a2);
   
-  nth::Expression &e3 = *(a2->left);
-  nth::Expression &e4 = *(a2->right);
+  nth::Expression &e3 = *(a2->getLeftValue());
+  nth::Expression &e4 = *(a2->getRightValue());
 
   nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
   nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
@@ -277,14 +277,14 @@ TEST_F(DriverTest, ParseExponentiate) {
   
   ASSERT_NE(nullptr, a1);
 
-  nth::Expression &e1 = *(a1->left);
-  nth::Expression &e2 = *(a1->right);
+  nth::Expression &e1 = *(a1->getLeftValue());
+  nth::Expression &e2 = *(a1->getRightValue());
   
   nth::Exponentiate* a2 = dynamic_cast<nth::Exponentiate*>(&e1);
   ASSERT_NE(nullptr, a2);
   
-  nth::Expression &e3 = *(a2->left);
-  nth::Expression &e4 = *(a2->right);
+  nth::Expression &e3 = *(a2->getLeftValue());
+  nth::Expression &e4 = *(a2->getRightValue());
 
   nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
   nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
@@ -305,14 +305,14 @@ TEST_F(DriverTest, ParseModulo) {
   
   ASSERT_NE(nullptr, a1);
 
-  nth::Expression &e1 = *(a1->left);
-  nth::Expression &e2 = *(a1->right);
+  nth::Expression &e1 = *(a1->getLeftValue());
+  nth::Expression &e2 = *(a1->getRightValue());
   
   nth::Modulo* a2 = dynamic_cast<nth::Modulo*>(&e1);
   ASSERT_NE(nullptr, a2);
   
-  nth::Expression &e3 = *(a2->left);
-  nth::Expression &e4 = *(a2->right);
+  nth::Expression &e3 = *(a2->getLeftValue());
+  nth::Expression &e4 = *(a2->getRightValue());
 
   nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
   nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
@@ -320,6 +320,13 @@ TEST_F(DriverTest, ParseModulo) {
   EXPECT_EQ(1, *i1);
   EXPECT_EQ(2, *i2);
   EXPECT_EQ(3, *i3);
+}
+
+TEST_F(DriverTest, AstPrinter) {
+  d.parseString("1 + 2 + 3");
+  AstPrinter printer;
+  d.result->getExpressions()[0]->accept(printer);
+  EXPECT_STREQ("add(add(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
 }
 
 
