@@ -28,6 +28,10 @@ class Multiply;
 class Divide;
 class Exponentiate;
 class Modulo;
+class BitShiftLeft;
+class BitShiftRight;
+class BitwiseOr;
+class BitwiseAnd;
 
 class Visitor {
 public:
@@ -46,6 +50,10 @@ public:
   virtual void visit(Divide *divide)=0;
   virtual void visit(Exponentiate *exp)=0;
   virtual void visit(Modulo *modulo)=0;
+  virtual void visit(BitShiftLeft *shift_left)=0;
+  virtual void visit(BitShiftRight *shift_right)=0;
+  virtual void visit(BitwiseOr *bitwise_or)=0;
+  virtual void visit(BitwiseAnd *bitwise_and)=0;
 };
 
 class Visitable {

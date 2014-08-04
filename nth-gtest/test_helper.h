@@ -16,6 +16,8 @@ std::string getResourcePath();
 
 class AstPrinter : public nth::Visitor {
  public:
+  AstPrinter(bool pretty_print=false) : pretty_print(pretty_print) {}
+
   void visit(nth::Block *block);
   void visit(nth::String *string);
   void visit(nth::Integer *integer);
@@ -31,8 +33,13 @@ class AstPrinter : public nth::Visitor {
   void visit(nth::Divide *divide);
   void visit(nth::Exponentiate *exp);
   void visit(nth::Modulo *modulo);
-  
+  void visit(nth::BitShiftLeft *shift_left);
+  void visit(nth::BitShiftRight *shift_right);
+  void visit(nth::BitwiseOr *bitwise_or);
+  void visit(nth::BitwiseAnd *bitwise_and);
+
   std::string getOutput();
  protected:
+  bool pretty_print;
   std::stringstream ast_output;
 };

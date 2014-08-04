@@ -135,3 +135,36 @@ void AstPrinter::visit(nth::Modulo *modulo) {
   modulo->getRightValue()->accept(*this);
   ast_output << ")";
 }
+
+void AstPrinter::visit(nth::BitShiftLeft *shift_left) {
+  ast_output << "bitshiftleft(";
+  shift_left->getLeftValue()->accept(*this);
+  ast_output << ", ";
+  shift_left->getRightValue()->accept(*this);
+  ast_output << ")";
+}
+
+void AstPrinter::visit(nth::BitShiftRight *shift_right) {
+  ast_output << "bitshiftright(";
+  shift_right->getLeftValue()->accept(*this);
+  ast_output << ", ";
+  shift_right->getRightValue()->accept(*this);
+  ast_output << ")";
+}
+
+void AstPrinter::visit(nth::BitwiseOr *bitwise_or) {
+  ast_output << "bitwiseor(";
+  bitwise_or->getLeftValue()->accept(*this);
+  ast_output << ", ";
+  bitwise_or->getRightValue()->accept(*this);
+  ast_output << ")";
+}
+
+void AstPrinter::visit(nth::BitwiseAnd *bitwise_and) {
+  ast_output << "bitwiseand(";
+  bitwise_and->getLeftValue()->accept(*this);
+  ast_output << ", ";
+  bitwise_and->getRightValue()->accept(*this);
+  ast_output << ")";
+}
+

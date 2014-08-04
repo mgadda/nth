@@ -253,5 +253,46 @@ public:
   void accept(Visitor &v) { v.visit(this); }
 };
 
+class BitShiftLeft : public BinaryOperation {
+public:
+  BitShiftLeft(std::unique_ptr<Expression> left,
+         std::unique_ptr<Integer> right)
+    : BinaryOperation(std::move(left), std::move(right)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+};
+
+class BitShiftRight : public BinaryOperation {
+public:
+  BitShiftRight(std::unique_ptr<Expression> left,
+         std::unique_ptr<Integer> right)
+    : BinaryOperation(std::move(left), std::move(right)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+};
+
+class BitwiseOr : public BinaryOperation {
+public:
+  BitwiseOr(std::unique_ptr<Expression> left,
+         std::unique_ptr<Expression> right)
+    : BinaryOperation(std::move(left), std::move(right)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+};
+
+class BitwiseAnd : public BinaryOperation {
+public:
+  BitwiseAnd(std::unique_ptr<Expression> left,
+         std::unique_ptr<Expression> right)
+    : BinaryOperation(std::move(left), std::move(right)) {}
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+};
+
+
 }
 #endif /* defined(__nth__ast__) */

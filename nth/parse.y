@@ -85,7 +85,7 @@
 %type <nth::ExpressionMap*> key_val_list;
 %type <std::pair<nth::String*, nth::Expression*>> key_value;
 %type <nth::String*> key;
-%type <nth::BinaryOperation*> math_op;
+%type <nth::BinaryOperation*> math_op bitwise_op;
 
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
@@ -170,7 +170,7 @@ tuple: "(" exprlist ")";
 binary_op: boolean_op
          | comparison_op
          | math_op        { nth::Expression *e = $1; std::swap($$, e); }
-         | bitwise_op
+         | bitwise_op     { nth::Expression *e = $1; std::swap($$, e); }
          ;
 
 boolean_op: expr "&&" expr
@@ -187,10 +187,10 @@ math_op: expr "+" expr  { $$ = new nth::Add(std::unique_ptr<nth::Expression>($1)
        | expr "%" expr  { $$ = new nth::Modulo(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
        ;
 
-bitwise_op: expr "<<" expr
-          | expr ">>" expr
-          | expr "|" expr
-          | expr "&" expr
+bitwise_op: expr "<<" INT { $$ = new nth::BitShiftLeft(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Integer>(new nth::Integer($3))); }
+          | expr ">>" INT { $$ = new nth::BitShiftRight(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Integer>(new nth::Integer($3))); }
+          | expr "|" expr { $$ = new nth::BitwiseOr(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
+          | expr "&" expr { $$ = new nth::BitwiseAnd(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
           ;
 
 unary_op: "!" expr %prec NOT

@@ -26,6 +26,7 @@ EXPECT_PRED2(compare, expected, actual);
 class DriverTest : public ::testing::Test {
  protected:
   nth::Driver d;
+  AstPrinter printer;
   virtual void SetUp() {}
 };
 
@@ -324,9 +325,30 @@ TEST_F(DriverTest, ParseModulo) {
 
 TEST_F(DriverTest, AstPrinter) {
   d.parseString("1 + 2 + 3");
-  AstPrinter printer;
   d.result->getExpressions()[0]->accept(printer);
   EXPECT_STREQ("add(add(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
 }
 
+TEST_F(DriverTest, ParseBitShiftLeft) {
+  d.parseString("0xff00 << 2");
+  d.result->getExpressions()[0]->accept(printer);
+  EXPECT_STREQ("bitshiftleft(integer(65280), integer(2))", printer.getOutput().c_str());
+}
 
+TEST_F(DriverTest, ParseBitShiftRight) {
+  d.parseString("0xbadf00d >> 3");
+  d.result->getExpressions()[0]->accept(printer);
+  EXPECT_STREQ("bitshiftright(integer(195948557), integer(3))", printer.getOutput().c_str());
+}
+
+TEST_F(DriverTest, ParseBitwiseOr) {
+  d.parseString("0xf0 | 0x0f");
+  d.result->getExpressions()[0]->accept(printer);
+  EXPECT_STREQ("bitwiseor(integer(240), integer(15))", printer.getOutput().c_str());
+}
+
+TEST_F(DriverTest, ParseBitwiseAnd) {
+  d.parseString("0x3e & 0xff");
+  d.result->getExpressions()[0]->accept(printer);
+  EXPECT_STREQ("bitwiseand(integer(62), integer(255))", printer.getOutput().c_str());
+}
