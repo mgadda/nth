@@ -195,3 +195,19 @@ void AstPrinter::visit(nth::BitwiseAnd *bitwise_and) {
   ast_output << ")";
 }
 
+void AstPrinter::visit(nth::LogicalOr *logical_or) {
+  ast_output << "logicalor(";
+  logical_or->getLeftValue()->accept(*this);
+  ast_output << ", ";
+  logical_or->getRightValue()->accept(*this);
+  ast_output << ")";
+}
+
+void AstPrinter::visit(nth::LogicalAnd *logical_and) {
+  ast_output << "logicaland(";
+  logical_and->getLeftValue()->accept(*this);
+  ast_output << ", ";
+  logical_and->getRightValue()->accept(*this);
+  ast_output << ")";
+}
+

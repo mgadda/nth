@@ -85,7 +85,7 @@
 %type <nth::ExpressionMap*> key_val_list;
 %type <std::pair<nth::String*, nth::Expression*>> key_value;
 %type <nth::String*> key;
-%type <nth::BinaryOperation*> math_op bitwise_op;
+%type <nth::BinaryOperation*> math_op bitwise_op boolean_op;
 
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
@@ -167,14 +167,14 @@ tuple: "(" exprlist ")";
   /* end literals */
 
 
-binary_op: boolean_op
+binary_op: boolean_op     { nth::Expression *e = $1; std::swap($$, e); }
          | comparison_op
          | math_op        { nth::Expression *e = $1; std::swap($$, e); }
          | bitwise_op     { nth::Expression *e = $1; std::swap($$, e); }
          ;
 
-boolean_op: expr "&&" expr
-          | expr "||" expr
+boolean_op: expr "&&" expr  { $$ = new nth::LogicalAnd(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
+          | expr "||" expr  { $$ = new nth::LogicalOr(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
           ;
 
 comparison_op: expr CMP expr;

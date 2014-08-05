@@ -32,6 +32,8 @@ class BitShiftLeft;
 class BitShiftRight;
 class BitwiseOr;
 class BitwiseAnd;
+class LogicalOr;
+class LogicalAnd;
 
 class Visitor {
 public:
@@ -54,6 +56,8 @@ public:
   virtual void visit(BitShiftRight *shift_right)=0;
   virtual void visit(BitwiseOr *bitwise_or)=0;
   virtual void visit(BitwiseAnd *bitwise_and)=0;
+  virtual void visit(LogicalOr *logical_or)=0;
+  virtual void visit(LogicalAnd *logical_and)=0;
 };
 
 class Visitable {

@@ -25,7 +25,8 @@ class Expression : public Visitable {
 typedef std::vector<Expression*> ExpressionList;
 typedef std::pair<nth::String*, Expression*> KeyValuePair;
 typedef std::vector<KeyValuePair> ExpressionMap;
-
+typedef std::unique_ptr<Expression> ExpressionPtr;
+  
 class Block : Expression {
  public:
   Block();
@@ -289,6 +290,26 @@ public:
          std::unique_ptr<Expression> right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+};
+
+class LogicalOr : public BinaryOperation {
+public:
+  LogicalOr(ExpressionPtr left,
+            ExpressionPtr right)
+  : BinaryOperation(std::move(left), std::move(right)) {}
+  
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+};
+
+class LogicalAnd : public BinaryOperation {
+public:
+  LogicalAnd(ExpressionPtr left,
+             ExpressionPtr right)
+  : BinaryOperation(std::move(left), std::move(right)) {}
+  
   // Visitable
   void accept(Visitor &v) { v.visit(this); }
 };

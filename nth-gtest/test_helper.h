@@ -42,6 +42,8 @@ class AstPrinter : public nth::Visitor {
   void visit(nth::BitShiftRight *shift_right);
   void visit(nth::BitwiseOr *bitwise_or);
   void visit(nth::BitwiseAnd *bitwise_and);
+  void visit(nth::LogicalOr *logical_or);
+  void visit(nth::LogicalAnd *logical_and);
 
   std::string getOutput();
  protected:

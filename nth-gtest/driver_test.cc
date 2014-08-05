@@ -203,3 +203,16 @@ TEST_F(DriverTest, ParseBitwiseAnd) {
   d.result->getExpressions()[0]->accept(printer);
   EXPECT_STREQ("bitwiseand(integer(62), integer(255))", printer.getOutput().c_str());
 }
+
+TEST_F(DriverTest, ParseLogicalOr) {
+  d.parseString("truth || fiction");
+  d.result->getExpressions()[0]->accept(printer);
+  EXPECT_STREQ("logicalor(ident(truth), ident(fiction))", printer.getOutput().c_str());
+}
+
+TEST_F(DriverTest, ParseLogicalAnd) {
+  d.parseString("is_valid && is_defined");
+  d.result->getExpressions()[0]->accept(printer);
+  EXPECT_STREQ("logicaland(ident(is_valid), ident(is_defined))", printer.getOutput().c_str());
+}
+
