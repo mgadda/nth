@@ -122,7 +122,7 @@ LEADING_DIGIT [1-9]
 
   /* Identifiers */
   /* yylval->build<std::string>() = std::string(yytext); */
-[a-zA-Z][a-zA-Z0-9]*  { return yy::parser::make_IDENT(yytext, loc); }
+[a-zA-Z][a-zA-Z0-9_]*  { return yy::parser::make_IDENT(yytext, loc); }
 
 
 .         { driver.error(loc, "invalid character"); }
