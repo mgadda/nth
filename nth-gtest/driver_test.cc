@@ -48,21 +48,9 @@ TEST_F(DriverTest, ParseSomeInts) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(4, d.result->getExpressions().size());
   
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Integer *i = dynamic_cast<nth::Integer*>(expr);
-  EXPECT_EQ(10, *i);
+  d.result->accept(printer);
   
-  expr = d.result->getExpressions()[1];
-  i = static_cast<nth::Integer*>(expr);
-  EXPECT_EQ(20, *i);
-  
-  expr = d.result->getExpressions()[2];
-  i = static_cast<nth::Integer*>(expr);
-  EXPECT_EQ(30, *i);
-  
-  expr = d.result->getExpressions()[3];
-  i = static_cast<nth::Integer*>(expr);
-  EXPECT_EQ(40, *i);
+  EXPECT_STREQ("block(integer(10), integer(20), integer(30), integer(40))", printer.getOutput().c_str());
 }
 
 
@@ -71,15 +59,9 @@ TEST_F(DriverTest, ParseSomeFloats) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(2, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Float *f = dynamic_cast<nth::Float*>(expr);
-  ASSERT_NE(nullptr, f);
-  EXPECT_EQ(10.2340982, *f);
-
-  expr = d.result->getExpressions()[1];
-  f = dynamic_cast<nth::Float*>(expr);
-  ASSERT_NE(nullptr, f);
-  EXPECT_EQ(0.002234, *f);
+  d.result->accept(printer);
+  
+  EXPECT_STREQ("block(float(10.2340982), float(0.002234))", printer.getOutput().c_str());
 }
 
 TEST_F(DriverTest, ParseSomeStrings) {
@@ -87,15 +69,9 @@ TEST_F(DriverTest, ParseSomeStrings) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(2, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::String *s = dynamic_cast<nth::String*>(expr);
-  ASSERT_NE(nullptr, s);
-  EXPECT_STREQ("Hello, World!\n", *s);
-
-  expr = d.result->getExpressions()[1];
-  s = dynamic_cast<nth::String*>(expr);
-  ASSERT_NE(nullptr, s);
-  EXPECT_STREQ("World: Hello!", *s);
+  d.result->accept(printer);
+  
+  EXPECT_STREQ("block(string(Hello, World!\n), string(World: Hello!))", printer.getOutput().c_str());
 }
 
 TEST_F(DriverTest, ParseSomeBools) {
@@ -103,15 +79,9 @@ TEST_F(DriverTest, ParseSomeBools) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(2, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Boolean *b = dynamic_cast<nth::Boolean*>(expr);
-  ASSERT_NE(nullptr, b);
-  EXPECT_EQ(true, *b);
-
-  expr = d.result->getExpressions()[1];
-  b = dynamic_cast<nth::Boolean*>(expr);
-  ASSERT_NE(nullptr, b);
-  EXPECT_EQ(false, *b);
+  d.result->accept(printer);
+  
+  EXPECT_STREQ("block(true, false)", printer.getOutput().c_str());
 }
 
 TEST_F(DriverTest, ParseIdentifier) {
@@ -119,10 +89,9 @@ TEST_F(DriverTest, ParseIdentifier) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Identifier *i = dynamic_cast<nth::Identifier*>(expr);
-  ASSERT_NE(nullptr, i);
-  EXPECT_STREQ("a", *i);
+  d.result->accept(printer);
+  
+  EXPECT_STREQ("block(ident(a))", printer.getOutput().c_str());
 };
 
 TEST_F(DriverTest, ParseArray) {
@@ -130,13 +99,9 @@ TEST_F(DriverTest, ParseArray) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Array *a = dynamic_cast<nth::Array*>(expr);
-  EXPECT_EQ(3, a->getValues().size());
+  d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_EQ(1, *dynamic_cast<nth::Integer*>(a->getValues()[0]));
-  EXPECT_EQ(2, *dynamic_cast<nth::Integer*>(a->getValues()[1]));
-  EXPECT_EQ(3, *dynamic_cast<nth::Integer*>(a->getValues()[2]));
+  EXPECT_STREQ("array(integer(1), integer(2), integer(3))", printer.getOutput().c_str()); 
 }
 
 TEST_F(DriverTest, ParseMap) {
@@ -144,183 +109,69 @@ TEST_F(DriverTest, ParseMap) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Map *a = dynamic_cast<nth::Map*>(expr);
-  EXPECT_EQ(2, a->getValues().size());
+  d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("foo", *a->getValues()[0].first);
-  EXPECT_EQ(10.342, *dynamic_cast<nth::Float*>(a->getValues()[0].second));
-
-  EXPECT_STREQ("bar", *a->getValues()[1].first);
-  EXPECT_EQ(12.34, *dynamic_cast<nth::Float*>(a->getValues()[1].second));
+  EXPECT_STREQ("map(string(foo): float(10.342), string(bar): float(12.34))", printer.getOutput().c_str()); 
 }
 
 TEST_F(DriverTest, ParseAdd) {
-  // 1 + 2 + 3 => add(add(1,2), 3)
   int status = d.parseString("1 + 2 + 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
-
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Add *a1 = dynamic_cast<nth::Add*>(expr);
   
-  ASSERT_NE(nullptr, a1);
+  d.result->getExpressions()[0]->accept(printer);
 
-  nth::Expression &e1 = *(a1->getLeftValue());
-  nth::Expression &e2 = *(a1->getRightValue());
-  
-  nth::Add* a2 = dynamic_cast<nth::Add*>(&e1);
-  ASSERT_NE(nullptr, a2);
-  
-  nth::Expression &e3 = *(a2->getLeftValue());
-  nth::Expression &e4 = *(a2->getRightValue());
-
-  nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
-  nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
-  nth::Integer* i3 = dynamic_cast<nth::Integer*>(&e2);
-  EXPECT_EQ(1, *i1);
-  EXPECT_EQ(2, *i2);
-  EXPECT_EQ(3, *i3);
+  EXPECT_STREQ("add(add(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
 }
 
 TEST_F(DriverTest, ParseSubtract) {
-  // 1 - 2 - 3 => Subtract(Subtract(1,2), 3)
   int status = d.parseString("1 - 2 - 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Subtract *a1 = dynamic_cast<nth::Subtract*>(expr);
-  
-  ASSERT_NE(nullptr, a1);
+  d.result->getExpressions()[0]->accept(printer);
 
-  nth::Expression &e1 = *(a1->getLeftValue());
-  nth::Expression &e2 = *(a1->getRightValue());
-  
-  nth::Subtract* a2 = dynamic_cast<nth::Subtract*>(&e1);
-  ASSERT_NE(nullptr, a2);
-  
-  nth::Expression &e3 = *(a2->getLeftValue());
-  nth::Expression &e4 = *(a2->getRightValue());
-
-  nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
-  nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
-  nth::Integer* i3 = dynamic_cast<nth::Integer*>(&e2);
-  EXPECT_EQ(1, *i1);
-  EXPECT_EQ(2, *i2);
-  EXPECT_EQ(3, *i3);
+  EXPECT_STREQ("subtract(subtract(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
 }
 
 TEST_F(DriverTest, ParseMultiply) {
-  // 1 * 2 * 3 => Multiply(Multiply(1,2), 3)
   int status = d.parseString("1 * 2 * 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Multiply *a1 = dynamic_cast<nth::Multiply*>(expr);
-  
-  ASSERT_NE(nullptr, a1);
+  d.result->getExpressions()[0]->accept(printer);
 
-  nth::Expression &e1 = *(a1->getLeftValue());
-  nth::Expression &e2 = *(a1->getRightValue());
-  
-  nth::Multiply* a2 = dynamic_cast<nth::Multiply*>(&e1);
-  ASSERT_NE(nullptr, a2);
-  
-  nth::Expression &e3 = *(a2->getLeftValue());
-  nth::Expression &e4 = *(a2->getRightValue());
-
-  nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
-  nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
-  nth::Integer* i3 = dynamic_cast<nth::Integer*>(&e2);
-  EXPECT_EQ(1, *i1);
-  EXPECT_EQ(2, *i2);
-  EXPECT_EQ(3, *i3);
+  EXPECT_STREQ("multiply(multiply(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
 }
 
 TEST_F(DriverTest, ParseDivide) {
-  // 1 / 2 / 3 => Divide(Divide(1,2), 3)
   int status = d.parseString("1 / 2 / 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Divide *a1 = dynamic_cast<nth::Divide*>(expr);
-  
-  ASSERT_NE(nullptr, a1);
+  d.result->getExpressions()[0]->accept(printer);
 
-  nth::Expression &e1 = *(a1->getLeftValue());
-  nth::Expression &e2 = *(a1->getRightValue());
-  
-  nth::Divide* a2 = dynamic_cast<nth::Divide*>(&e1);
-  ASSERT_NE(nullptr, a2);
-  
-  nth::Expression &e3 = *(a2->getLeftValue());
-  nth::Expression &e4 = *(a2->getRightValue());
-
-  nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
-  nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
-  nth::Integer* i3 = dynamic_cast<nth::Integer*>(&e2);
-  EXPECT_EQ(1, *i1);
-  EXPECT_EQ(2, *i2);
-  EXPECT_EQ(3, *i3);
+  EXPECT_STREQ("divide(divide(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
 }
 
 TEST_F(DriverTest, ParseExponentiate) {
-  // 1 ^ 2 ^ 3 => Exponentiate(Exponentiate(1,2), 3)
   int status = d.parseString("1 ^ 2 ^ 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Exponentiate *a1 = dynamic_cast<nth::Exponentiate*>(expr);
-  
-  ASSERT_NE(nullptr, a1);
+  d.result->getExpressions()[0]->accept(printer);
 
-  nth::Expression &e1 = *(a1->getLeftValue());
-  nth::Expression &e2 = *(a1->getRightValue());
-  
-  nth::Exponentiate* a2 = dynamic_cast<nth::Exponentiate*>(&e1);
-  ASSERT_NE(nullptr, a2);
-  
-  nth::Expression &e3 = *(a2->getLeftValue());
-  nth::Expression &e4 = *(a2->getRightValue());
-
-  nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
-  nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
-  nth::Integer* i3 = dynamic_cast<nth::Integer*>(&e2);
-  EXPECT_EQ(1, *i1);
-  EXPECT_EQ(2, *i2);
-  EXPECT_EQ(3, *i3);
+  EXPECT_STREQ("exp(exp(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
 }
 
 TEST_F(DriverTest, ParseModulo) {
-  // 1 % 2 % 3 => Modulo(Modulo(1,2), 3)
   int status = d.parseString("1 % 2 % 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
-  nth::Expression *expr = d.result->getExpressions()[0];
-  nth::Modulo *a1 = dynamic_cast<nth::Modulo*>(expr);
-  
-  ASSERT_NE(nullptr, a1);
+  d.result->getExpressions()[0]->accept(printer);
 
-  nth::Expression &e1 = *(a1->getLeftValue());
-  nth::Expression &e2 = *(a1->getRightValue());
-  
-  nth::Modulo* a2 = dynamic_cast<nth::Modulo*>(&e1);
-  ASSERT_NE(nullptr, a2);
-  
-  nth::Expression &e3 = *(a2->getLeftValue());
-  nth::Expression &e4 = *(a2->getRightValue());
-
-  nth::Integer* i1 = dynamic_cast<nth::Integer*>(&e3);
-  nth::Integer* i2 = dynamic_cast<nth::Integer*>(&e4);
-  nth::Integer* i3 = dynamic_cast<nth::Integer*>(&e2);
-  EXPECT_EQ(1, *i1);
-  EXPECT_EQ(2, *i2);
-  EXPECT_EQ(3, *i3);
+  EXPECT_STREQ("mod(mod(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
 }
 
 TEST_F(DriverTest, AstPrinter) {

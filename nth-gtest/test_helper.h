@@ -14,6 +14,11 @@
 
 std::string getResourcePath();
 
+// Iterate from first to last and append c onto ss
+// between each value in InputIterator
+template <class InputIterator, class Function>
+void join_values(InputIterator first, InputIterator last, std::string c, std::stringstream &ss, Function f);
+
 class AstPrinter : public nth::Visitor {
  public:
   AstPrinter(bool pretty_print=false) : pretty_print(pretty_print) {}

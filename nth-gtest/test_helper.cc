@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Matt Gadda. All rights reserved.
 //
 
+#include <iomanip>
+#include <limits>
+
 #include "test_helper.h"
 #include "ast.h"
 
@@ -33,6 +36,16 @@ std::string getResourcePath() {
 }
 #endif
 
+template <class InputIterator, class Function>
+void join_values(InputIterator first, InputIterator last, std::string c, std::stringstream &ss, Function f)
+{
+  f(*first);
+  ++first;
+  for (; first != last; ++first) {
+    ss << c;
+    f(*first);
+  }
+}
 
 std::string AstPrinter::getOutput() {
   return ast_output.str();
@@ -40,10 +53,12 @@ std::string AstPrinter::getOutput() {
 
 void AstPrinter::visit(nth::Block *block) {
   ast_output << "block(";
-  for(auto expr : block->getExpressions()) {
-    expr->accept(*this);
-    ast_output << ", ";
-  }
+  
+  auto values = block->getExpressions();
+  join_values(values.begin(), values.end(), ", ", ast_output, [this](decltype(values)::value_type value) {
+    value->accept(*this);
+  });
+
   ast_output << ")";
 }
 void AstPrinter::visit(nth::String *string) {
@@ -55,7 +70,10 @@ void AstPrinter::visit(nth::Integer *integer) {
 }
 
 void AstPrinter::visit(nth::Float *flt) {
-  ast_output << "float(" << *flt << ")";
+  ast_output << "float("
+             << std::setprecision(std::numeric_limits<double>::digits10)
+             << *flt
+             << ")";
 }
 
 void AstPrinter::visit(nth::True *tru) {
@@ -72,19 +90,28 @@ void AstPrinter::visit(nth::Identifier *ident) {
 
 void AstPrinter::visit(nth::Array *array) {
   ast_output << "array(";
-  for (auto expr : array->getValues()) {
-    expr->accept(*this);
-  }
+
+  auto values = array->getValues();
+  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionList::value_type value) {
+    
+    value->accept(*this);
+  });
+  
   ast_output << ")";
 }
 
 void AstPrinter::visit(nth::Map *map) {
   ast_output << "map(";
-  for (auto key_value_pair : map->getValues()) {
-    key_value_pair.first->accept(*this);
+  auto values = map->getValues();
+
+  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionMap::value_type value) {
+
+    value.first->accept(*this);
     ast_output << ": ";
-    key_value_pair.second->accept(*this);
-  }
+    value.second->accept(*this);
+    
+  });
+  
   ast_output << ")";
 }
 
