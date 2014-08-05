@@ -179,18 +179,18 @@ boolean_op: expr "&&" expr  { $$ = new nth::LogicalAnd(nth::ExpressionPtr($1), n
 
 comparison_op: expr CMP expr;
 
-math_op: expr "+" expr  { $$ = new nth::Add(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
-       | expr "-" expr  { $$ = new nth::Subtract(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
-       | expr "*" expr  { $$ = new nth::Multiply(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
-       | expr "/" expr  { $$ = new nth::Divide(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
-       | expr "^" expr  { $$ = new nth::Exponentiate(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
-       | expr "%" expr  { $$ = new nth::Modulo(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
+math_op: expr "+" expr  { $$ = new nth::Add(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
+       | expr "-" expr  { $$ = new nth::Subtract(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
+       | expr "*" expr  { $$ = new nth::Multiply(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
+       | expr "/" expr  { $$ = new nth::Divide(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
+       | expr "^" expr  { $$ = new nth::Exponentiate(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
+       | expr "%" expr  { $$ = new nth::Modulo(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
        ;
 
-bitwise_op: expr "<<" INT { $$ = new nth::BitShiftLeft(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Integer>(new nth::Integer($3))); }
-          | expr ">>" INT { $$ = new nth::BitShiftRight(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Integer>(new nth::Integer($3))); }
-          | expr "|" expr { $$ = new nth::BitwiseOr(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
-          | expr "&" expr { $$ = new nth::BitwiseAnd(std::unique_ptr<nth::Expression>($1), std::unique_ptr<nth::Expression>($3)); }
+bitwise_op: expr "<<" INT { $$ = new nth::BitShiftLeft(nth::ExpressionPtr($1), std::unique_ptr<nth::Integer>(new nth::Integer($3))); }
+          | expr ">>" INT { $$ = new nth::BitShiftRight(nth::ExpressionPtr($1), std::unique_ptr<nth::Integer>(new nth::Integer($3))); }
+          | expr "|" expr { $$ = new nth::BitwiseOr(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
+          | expr "&" expr { $$ = new nth::BitwiseAnd(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
           ;
 
 unary_op: "!" expr %prec NOT

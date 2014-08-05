@@ -171,33 +171,33 @@ class Map : public Expression {
 
 class UnaryOperation : public Expression {
  public:
-  UnaryOperation(std::unique_ptr<Expression> value) : value(std::move(value)) {}
+  UnaryOperation(ExpressionPtr value) : value(std::move(value)) {}
  protected:
-  std::unique_ptr<Expression> value;
+  ExpressionPtr value;
 };
 
 class BooleanNegation : public UnaryOperation {
  public:
-  BooleanNegation(std::unique_ptr<Expression> value): UnaryOperation(std::move(value)) {}
+  BooleanNegation(ExpressionPtr value): UnaryOperation(std::move(value)) {}
 };
 
 class BinaryOperation : public Expression {
  public:
-  BinaryOperation(std::unique_ptr<Expression> left,
-                  std::unique_ptr<Expression> right)
+  BinaryOperation(ExpressionPtr left,
+                  ExpressionPtr right)
     : left(std::move(left)), right(std::move(right)) {}
 
-  std::unique_ptr<Expression> &getLeftValue() { return left; }
-  std::unique_ptr<Expression> &getRightValue() { return right; }
+  ExpressionPtr &getLeftValue() { return left; }
+  ExpressionPtr &getRightValue() { return right; }
  protected:
-  std::unique_ptr<Expression> left;
-  std::unique_ptr<Expression> right;
+  ExpressionPtr left;
+  ExpressionPtr right;
 };
 
 class Add : public BinaryOperation {
  public:
-  Add(std::unique_ptr<Expression> left,
-      std::unique_ptr<Expression> right)
+  Add(ExpressionPtr left,
+      ExpressionPtr right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
@@ -206,8 +206,8 @@ class Add : public BinaryOperation {
 
 class Subtract : public BinaryOperation {
 public:
-  Subtract(std::unique_ptr<Expression> left,
-           std::unique_ptr<Expression> right)
+  Subtract(ExpressionPtr left,
+           ExpressionPtr right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
@@ -216,8 +216,8 @@ public:
 
 class Multiply : public BinaryOperation {
 public:
-  Multiply(std::unique_ptr<Expression> left,
-           std::unique_ptr<Expression> right)
+  Multiply(ExpressionPtr left,
+           ExpressionPtr right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
@@ -226,8 +226,8 @@ public:
 
 class Divide : public BinaryOperation {
 public:
-  Divide(std::unique_ptr<Expression> left,
-         std::unique_ptr<Expression> right)
+  Divide(ExpressionPtr left,
+         ExpressionPtr right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
@@ -236,8 +236,8 @@ public:
 
 class Exponentiate : public BinaryOperation {
 public:
-  Exponentiate(std::unique_ptr<Expression> left,
-         std::unique_ptr<Expression> right)
+  Exponentiate(ExpressionPtr left,
+         ExpressionPtr right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
@@ -246,8 +246,8 @@ public:
 
 class Modulo : public BinaryOperation {
 public:
-  Modulo(std::unique_ptr<Expression> left,
-         std::unique_ptr<Expression> right)
+  Modulo(ExpressionPtr left,
+         ExpressionPtr right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
@@ -256,7 +256,7 @@ public:
 
 class BitShiftLeft : public BinaryOperation {
 public:
-  BitShiftLeft(std::unique_ptr<Expression> left,
+  BitShiftLeft(ExpressionPtr left,
          std::unique_ptr<Integer> right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
@@ -266,7 +266,7 @@ public:
 
 class BitShiftRight : public BinaryOperation {
 public:
-  BitShiftRight(std::unique_ptr<Expression> left,
+  BitShiftRight(ExpressionPtr left,
          std::unique_ptr<Integer> right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
@@ -276,8 +276,8 @@ public:
 
 class BitwiseOr : public BinaryOperation {
 public:
-  BitwiseOr(std::unique_ptr<Expression> left,
-         std::unique_ptr<Expression> right)
+  BitwiseOr(ExpressionPtr left,
+         ExpressionPtr right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
@@ -286,8 +286,8 @@ public:
 
 class BitwiseAnd : public BinaryOperation {
 public:
-  BitwiseAnd(std::unique_ptr<Expression> left,
-         std::unique_ptr<Expression> right)
+  BitwiseAnd(ExpressionPtr left,
+         ExpressionPtr right)
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
