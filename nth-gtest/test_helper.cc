@@ -211,3 +211,9 @@ void AstPrinter::visit(nth::LogicalAnd *logical_and) {
   ast_output << ")";
 }
 
+void AstPrinter::visit(nth::LogicalNot *logical_not) {
+  ast_output << "logicalnot(";
+  logical_not->getValue()->accept(*this);
+  ast_output << ")";
+}
+

@@ -77,8 +77,8 @@
 %left "&&" "||"
 
 %type <nth::Block*> file;
-%type <nth::Block*> expressions;
-%type <nth::Expression*> expr literal compound_literal binary_op;
+%type <nth::Block*> expressions block;
+%type <nth::Expression*> expr literal compound_literal binary_op unary_op;
 %type <nth::ExpressionList*> exprlist;
 %type <nth::Array*> array;
 %type <nth::Map*> map;
@@ -102,9 +102,9 @@ expressions: expr              { $$ = new nth::Block($1); }
            | expressions expr  { std::swap($$, $1); $$->insertAfter($2); }
            ;
 
-expr: literal { std::swap($$, $1); }
+expr: literal   { std::swap($$, $1); }
     | binary_op { std::swap($$, $1); }
-    | unary_op
+    | unary_op  { std::swap($$, $1); }
     | func_def
     | val_def
     | if_else
@@ -193,7 +193,7 @@ bitwise_op: expr "<<" INT { $$ = new nth::BitShiftLeft(nth::ExpressionPtr($1), s
           | expr "&" expr { $$ = new nth::BitwiseAnd(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
           ;
 
-unary_op: "!" expr %prec NOT
+unary_op: "!" expr %prec NOT { $$ = new nth::LogicalNot(nth::ExpressionPtr($2)); }
 
   /* end binary ops */
 

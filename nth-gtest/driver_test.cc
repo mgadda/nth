@@ -216,3 +216,9 @@ TEST_F(DriverTest, ParseLogicalAnd) {
   EXPECT_STREQ("logicaland(ident(is_valid), ident(is_defined))", printer.getOutput().c_str());
 }
 
+TEST_F(DriverTest, ParseLogicalNot) {
+  d.parseString("!is_defined");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(logicalnot(ident(is_defined)))", printer.getOutput().c_str());
+}
+

@@ -172,6 +172,7 @@ class Map : public Expression {
 class UnaryOperation : public Expression {
  public:
   UnaryOperation(ExpressionPtr value) : value(std::move(value)) {}
+  ExpressionPtr &getValue() { return value; }
  protected:
   ExpressionPtr value;
 };
@@ -309,6 +310,15 @@ public:
   LogicalAnd(ExpressionPtr left,
              ExpressionPtr right)
   : BinaryOperation(std::move(left), std::move(right)) {}
+  
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+};
+
+class LogicalNot : public UnaryOperation {
+public:
+  LogicalNot(ExpressionPtr expr)
+  : UnaryOperation(std::move(expr)) {}
   
   // Visitable
   void accept(Visitor &v) { v.visit(this); }

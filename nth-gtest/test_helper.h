@@ -44,7 +44,8 @@ class AstPrinter : public nth::Visitor {
   void visit(nth::BitwiseAnd *bitwise_and);
   void visit(nth::LogicalOr *logical_or);
   void visit(nth::LogicalAnd *logical_and);
-
+  void visit(nth::LogicalNot *logical_not);
+  
   std::string getOutput();
  protected:
   bool pretty_print;
