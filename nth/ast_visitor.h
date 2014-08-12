@@ -35,6 +35,7 @@ class BitwiseAnd;
 class LogicalOr;
 class LogicalAnd;
 class LogicalNot;
+class Range;
   
 class Visitor {
 public:
@@ -60,6 +61,7 @@ public:
   virtual void visit(LogicalOr *logical_or)=0;
   virtual void visit(LogicalAnd *logical_and)=0;
   virtual void visit(LogicalNot *logical_not)=0;
+  virtual void visit(Range *range)=0;
 };
 
 class Visitable {

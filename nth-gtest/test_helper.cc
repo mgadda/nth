@@ -217,3 +217,15 @@ void AstPrinter::visit(nth::LogicalNot *logical_not) {
   ast_output << ")";
 }
 
+void AstPrinter::visit(nth::Range *range) {
+  ast_output << "range(";
+  range->getStart()->accept(*this);
+  ast_output << ", ";
+  range->getEnd()->accept(*this);
+  ast_output << ", ";
+  nth::Range::Exclusivity ex = range->getExclusivity();
+  if (ex == nth::Range::Exclusivity::Exclusive)
+    ast_output << "exclusive)";
+  else if (ex == nth::Range::Exclusivity::Inclusive)
+    ast_output << "inclusive)";
+}

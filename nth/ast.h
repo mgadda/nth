@@ -324,6 +324,25 @@ public:
   void accept(Visitor &v) { v.visit(this); }
 };
 
-
+class Range : public Expression {
+ public:
+  enum class Exclusivity { Exclusive, Inclusive };
+  
+  Range(Integer *start, Integer *end, Exclusivity exclusivity) :
+    start(start),
+    end(end),
+    exclusivity(exclusivity) {}
+  
+  void accept(Visitor &v) { v.visit(this); }
+  
+  Integer *getStart() { return start; }
+  Integer *getEnd() { return end; }
+  Exclusivity getExclusivity() { return exclusivity; }
+ protected:
+  Integer *start;
+  Integer *end;
+  Exclusivity exclusivity;
+};
+  
 }
 #endif /* defined(__nth__ast__) */

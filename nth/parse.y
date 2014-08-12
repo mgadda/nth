@@ -82,6 +82,7 @@
 %type <nth::ExpressionList*> exprlist;
 %type <nth::Array*> array;
 %type <nth::Map*> map;
+%type <nth::Range*> range;
 %type <nth::ExpressionMap*> key_val_list;
 %type <std::pair<nth::String*, nth::Expression*>> key_value;
 %type <nth::String*> key;
@@ -116,15 +117,15 @@ expr: literal   { std::swap($$, $1); }
 literal: INT     { $$ = new nth::Integer($1); }
        | FLOAT   { $$ = new nth::Float($1); }
        | STRING  { $$ = new nth::String($1.substr(1, $1.size()-2)); }
-       | TRUE    { $$ = new nth::True; } 
+       | TRUE    { $$ = new nth::True; }
        | FALSE   { $$ = new nth::False; }
        | IDENT   { $$ = new nth::Identifier($1); }
        | compound_literal { std::swap($$, $1); }
        ;
 
 compound_literal: array { nth::Expression *e = $1; std::swap($$, e); }
-                | map  { nth::Expression *e = $1; std::swap($$, e); }
-                | range
+                | map   { nth::Expression *e = $1; std::swap($$, e); }
+                | range { nth::Expression *e = $1; std::swap($$, e); }
                 | tuple
                 ;
 
@@ -156,8 +157,8 @@ key: STRING { $$ = new nth::String($1.substr(1, $1.size()-2)); }
 
 
   /* Range */
-range: INT ".." INT
-     | INT "..." INT
+range: INT ".." INT   { $$ = new nth::Range(new nth::Integer($1), new nth::Integer($3), nth::Range::Exclusivity::Exclusive); }
+     | INT "..." INT  { $$ = new nth::Range(new nth::Integer($1), new nth::Integer($3), nth::Range::Exclusivity::Inclusive); }
      ;
 
 

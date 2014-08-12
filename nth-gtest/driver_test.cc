@@ -222,3 +222,14 @@ TEST_F(DriverTest, ParseLogicalNot) {
   EXPECT_STREQ("block(logicalnot(ident(is_defined)))", printer.getOutput().c_str());
 }
 
+TEST_F(DriverTest, ParseExclusiveRange) {
+  d.parseString("1..10");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(range(integer(1), integer(10), exclusive))", printer.getOutput().c_str());
+}
+
+TEST_F(DriverTest, ParseInclusiveRange) {
+  d.parseString("-3...3");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(range(integer(-3), integer(3), inclusive))", printer.getOutput().c_str());
+}
