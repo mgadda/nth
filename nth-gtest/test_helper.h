@@ -53,3 +53,16 @@ class AstPrinter : public nth::Visitor {
   bool pretty_print;
   std::stringstream ast_output;
 };
+
+// Used by EXPECT_EXPR_EQ below
+template<typename T, typename U>
+bool compare(U expected, const T &actual) {
+  return actual == expected;
+}
+
+// TODO: fix this
+#define EXPECT_EXPR_EQ(derived_type, expected, expr) \
+nth::derived_type *casted = static_cast<nth::derived_type*>(expr); \
+nth::derived_type &actual = *casted; \
+EXPECT_PRED2(compare, expected, actual);
+

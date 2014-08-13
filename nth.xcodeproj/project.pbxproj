@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7D33BE5F19731F5C006F3769 /* driver_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D33BE5D19731F5C006F3769 /* driver_test.cc */; };
+		7D33BE5F19731F5C006F3769 /* parse_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D33BE5D19731F5C006F3769 /* parse_test.cc */; };
 		7D33BE641973209E006F3769 /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
 		7D33BE651973209E006F3769 /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
 		7D33BE661973209E006F3769 /* scan.l in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F5F1940C5D0008D5BBD /* scan.l */; };
@@ -26,6 +26,7 @@
 		7D6E3F571940C2B4008D5BBD /* nth.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D6E3F561940C2B4008D5BBD /* nth.1 */; };
 		7D6E3F601940C5D0008D5BBD /* scan.l in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F5F1940C5D0008D5BBD /* scan.l */; settings = {COMPILER_FLAGS = "-d"; }; };
 		7D6E3F651943D5C1008D5BBD /* ast.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cc */; };
+		7D7F4A81199B024700A0DC87 /* driver_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A7F199B024700A0DC87 /* driver_test.cc */; };
 		7D8CC7E0195BD4900009B20C /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
 		7D8CC7E9195C6EB40009B20C /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
 		7DA4984219730C1D0056BB77 /* nth_gtest.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DA4984119730C1D0056BB77 /* nth_gtest.1 */; };
@@ -172,7 +173,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7D33BE5D19731F5C006F3769 /* driver_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver_test.cc; sourceTree = "<group>"; };
+		7D33BE5D19731F5C006F3769 /* parse_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parse_test.cc; sourceTree = "<group>"; };
 		7D33BE6819732162006F3769 /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		7D33BE6F1973237B006F3769 /* test_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test_helper.h; sourceTree = "<group>"; };
 		7D33BE701973237B006F3769 /* test_helper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_helper.cc; sourceTree = "<group>"; };
@@ -186,6 +187,7 @@
 		7D6E3F631943D5C1008D5BBD /* ast.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ast.cc; sourceTree = "<group>"; };
 		7D6E3F641943D5C1008D5BBD /* ast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ast.h; sourceTree = "<group>"; };
 		7D6E3F6619440F00008D5BBD /* parse.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; lineEnding = 0; path = parse.y; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
+		7D7F4A7F199B024700A0DC87 /* driver_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver_test.cc; sourceTree = "<group>"; };
 		7D8CC7DE195BD4900009B20C /* driver.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver.cc; sourceTree = "<group>"; };
 		7D8CC7DF195BD4900009B20C /* driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = driver.h; sourceTree = "<group>"; };
 		7DA4983D19730C1D0056BB77 /* nth-gtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "nth-gtest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -276,11 +278,12 @@
 		7DA4983E19730C1D0056BB77 /* nth-gtest */ = {
 			isa = PBXGroup;
 			children = (
-				7D33BE5D19731F5C006F3769 /* driver_test.cc */,
+				7D33BE5D19731F5C006F3769 /* parse_test.cc */,
 				7DA4984119730C1D0056BB77 /* nth_gtest.1 */,
 				7D33BE6819732162006F3769 /* main.cc */,
 				7D33BE6F1973237B006F3769 /* test_helper.h */,
 				7D33BE701973237B006F3769 /* test_helper.cc */,
+				7D7F4A7F199B024700A0DC87 /* driver_test.cc */,
 			);
 			path = "nth-gtest";
 			sourceTree = "<group>";
@@ -453,8 +456,9 @@
 				7D33BE651973209E006F3769 /* parse.y in Sources */,
 				7D33BE711973237B006F3769 /* test_helper.cc in Sources */,
 				7D33BE661973209E006F3769 /* scan.l in Sources */,
+				7D7F4A81199B024700A0DC87 /* driver_test.cc in Sources */,
 				7D33BE671973209E006F3769 /* ast.cc in Sources */,
-				7D33BE5F19731F5C006F3769 /* driver_test.cc in Sources */,
+				7D33BE5F19731F5C006F3769 /* parse_test.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
