@@ -62,12 +62,12 @@ LEADING_DIGIT [1-9]
 ".."      { return yy::parser::make_DOUBLE_DOT(loc); }
 
   /* comparison */
-"=="      { return yy::parser::make_CMP(loc); }
-"!="      { return yy::parser::make_CMP(loc); }
-"<"       { return yy::parser::make_CMP(loc); }
-">"       { return yy::parser::make_CMP(loc); }
-"<="      { return yy::parser::make_CMP(loc); }
-">="      { return yy::parser::make_CMP(loc); }
+"=="      { return yy::parser::make_CMP(nth::Comparison::Type::Equality, loc); }
+"!="      { return yy::parser::make_CMP(nth::Comparison::Type::Inequality, loc); }
+"<"       { return yy::parser::make_CMP(nth::Comparison::Type::LessThan, loc); }
+">"       { return yy::parser::make_CMP(nth::Comparison::Type::GreaterThan, loc); }
+"<="      { return yy::parser::make_CMP(nth::Comparison::Type::LessThanOrEqualTo, loc); }
+">="      { return yy::parser::make_CMP(nth::Comparison::Type::GreaterThanOrEqualTo, loc); }
 
   /* boolean */
 "&&"      { return yy::parser::make_AND(loc); }

@@ -56,7 +56,7 @@
   SEMICOLON ";"
   ;
 
-%token CMP
+%token <nth::Comparison::Type> CMP
 %token AND "&&" OR "||" NOT "!" IF ELSE DEF VAL CLASS
 %token TRUE FALSE
 %token <double> FLOAT
@@ -87,7 +87,7 @@
 %type <nth::ExpressionMap*> key_val_list;
 %type <std::pair<nth::String*, nth::Expression*>> key_value;
 %type <nth::String*> key;
-%type <nth::BinaryOperation*> math_op bitwise_op boolean_op;
+%type <nth::BinaryOperation*> math_op bitwise_op boolean_op comparison_op;
 
 
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
@@ -172,7 +172,7 @@ tuple: "(" exprlist ")" { $$ = new nth::Tuple(*$2); }
 
 
 binary_op: boolean_op     { nth::Expression *e = $1; std::swap($$, e); }
-         | comparison_op
+         | comparison_op  { nth::Expression *e = $1; std::swap($$, e); } 
          | math_op        { nth::Expression *e = $1; std::swap($$, e); }
          | bitwise_op     { nth::Expression *e = $1; std::swap($$, e); }
          ;
@@ -181,7 +181,8 @@ boolean_op: expr "&&" expr  { $$ = new nth::LogicalAnd(nth::ExpressionPtr($1), n
           | expr "||" expr  { $$ = new nth::LogicalOr(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
           ;
 
-comparison_op: expr CMP expr;
+comparison_op: expr CMP expr { $$ = new nth::Comparison(nth::ExpressionPtr($1), nth::ExpressionPtr($3), $2); }
+             ;
 
 math_op: expr "+" expr  { $$ = new nth::Add(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
        | expr "-" expr  { $$ = new nth::Subtract(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }

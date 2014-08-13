@@ -241,3 +241,34 @@ void AstPrinter::visit(nth::Tuple *tuple) {
   ast_output << ")";
 }
 
+void AstPrinter::visit(nth::Comparison *comparison) {
+  std::string type;
+  
+  switch (comparison->getType()) {
+    case nth::Comparison::Type::Equality:
+      type = "equality";
+      break;
+    case nth::Comparison::Type::Inequality:
+      type = "inequality";
+      break;
+    case nth::Comparison::Type::LessThan:
+      type = "lessthan";
+      break;
+    case nth::Comparison::Type::GreaterThan:
+      type = "greaterthan";
+      break;
+    case nth::Comparison::Type::LessThanOrEqualTo:
+      type = "lessthanorequalto";
+      break;
+    case nth::Comparison::Type::GreaterThanOrEqualTo:
+      type = "greaterthanorequalto";
+      break;
+  }
+  
+  ast_output << type << "(";
+  comparison->getLeftValue()->accept(*this);
+  ast_output << ", ";
+  comparison->getRightValue()->accept(*this);
+  ast_output << ")";
+}
+

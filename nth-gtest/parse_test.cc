@@ -245,6 +245,42 @@ TEST_F(ParseTest, ParseEmptyTuple) {
   EXPECT_STREQ("block(tuple())", printer.getOutput().c_str());
 }
 
+TEST_F(ParseTest, ParseEquality) {
+  d.parseString("min_val == 2.3252");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(equality(ident(min_val), float(2.3252)))", printer.getOutput().c_str());
+}
+
+TEST_F(ParseTest, ParseInequality) {
+  d.parseString("cond != true");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(inequality(ident(cond), boolean(true)))", printer.getOutput().c_str());
+}
+
+TEST_F(ParseTest, ParseLessThan) {
+  d.parseString("1.00005 < 1.0001");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(lessthan(float(1.00005), float(1.0001)))", printer.getOutput().c_str());
+}
+
+TEST_F(ParseTest, ParseGreaterThan) {
+  d.parseString("4.3 > 3.2");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(greaterthan(float(4.3), float(3.2)))", printer.getOutput().c_str());
+}
+
+TEST_F(ParseTest, ParseLessThanOrEqualTo) {
+  d.parseString("3 <= 4");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(lessthanorequalto(integer(3), integer(4)))", printer.getOutput().c_str());
+}
+
+TEST_F(ParseTest, ParseGreaterThanOrEqualTo) {
+  d.parseString("6 >= 4");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(greaterthanorequalto(integer(6), integer(4)))", printer.getOutput().c_str());
+}
+
 
 //TEST_F(ParseTest, ParseBlock) {
 //  d.parseString("{10 * 2\\n3 / 4}");

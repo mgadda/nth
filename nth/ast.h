@@ -358,6 +358,27 @@ class Tuple : public Expression {
   ExpressionList values;
 };
 
+class Comparison : public BinaryOperation {
+ public:
+  enum class Type {
+    Equality,
+    Inequality,
+    LessThan,
+    GreaterThan,
+    LessThanOrEqualTo,
+    GreaterThanOrEqualTo
+  };
+
+  Comparison(ExpressionPtr left, ExpressionPtr right, Type type)
+    : BinaryOperation(std::move(left), std::move(right)), type(type) {}
+
+  Type getType() { return type; }
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
+
+ protected:
+  Type type;
+};
 
 }
 #endif /* defined(__nth__ast__) */
