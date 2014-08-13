@@ -36,7 +36,8 @@ class LogicalOr;
 class LogicalAnd;
 class LogicalNot;
 class Range;
-  
+class Tuple;
+
 class Visitor {
 public:
   virtual void visit(Block *block)=0;
@@ -62,6 +63,7 @@ public:
   virtual void visit(LogicalAnd *logical_and)=0;
   virtual void visit(LogicalNot *logical_not)=0;
   virtual void visit(Range *range)=0;
+  virtual void visit(Tuple *tuple)=0;
 };
 
 class Visitable {

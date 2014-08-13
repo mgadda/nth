@@ -46,7 +46,8 @@ class AstPrinter : public nth::Visitor {
   void visit(nth::LogicalAnd *logical_and);
   void visit(nth::LogicalNot *logical_not);
   void visit(nth::Range *range);
-  
+  void visit(nth::Tuple *tuple);
+
   std::string getOutput();
  protected:
   bool pretty_print;

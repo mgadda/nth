@@ -233,3 +233,9 @@ TEST_F(DriverTest, ParseInclusiveRange) {
   d.result->accept(printer);
   EXPECT_STREQ("block(range(integer(-3), integer(3), inclusive))", printer.getOutput().c_str());
 }
+
+TEST_F(DriverTest, ParseTuple) {
+  d.parseString("(\"name\", 3, foo)");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(tuple(string(name), integer(3), ident(foo)))", printer.getOutput().c_str());
+}

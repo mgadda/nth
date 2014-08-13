@@ -229,3 +229,15 @@ void AstPrinter::visit(nth::Range *range) {
   else if (ex == nth::Range::Exclusivity::Inclusive)
     ast_output << "inclusive)";
 }
+
+void AstPrinter::visit(nth::Tuple *tuple) {
+  ast_output << "tuple(";
+
+  auto values = tuple->getValues();
+  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionList::value_type value) {
+    value->accept(*this);
+  });
+  
+  ast_output << ")";
+}
+

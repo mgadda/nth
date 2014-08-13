@@ -83,10 +83,12 @@
 %type <nth::Array*> array;
 %type <nth::Map*> map;
 %type <nth::Range*> range;
+%type <nth::Tuple*> tuple;
 %type <nth::ExpressionMap*> key_val_list;
 %type <std::pair<nth::String*, nth::Expression*>> key_value;
 %type <nth::String*> key;
 %type <nth::BinaryOperation*> math_op bitwise_op boolean_op;
+
 
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
@@ -126,7 +128,7 @@ literal: INT     { $$ = new nth::Integer($1); }
 compound_literal: array { nth::Expression *e = $1; std::swap($$, e); }
                 | map   { nth::Expression *e = $1; std::swap($$, e); }
                 | range { nth::Expression *e = $1; std::swap($$, e); }
-                | tuple
+                | tuple { nth::Expression *e = $1; std::swap($$, e); }
                 ;
 
 
@@ -163,7 +165,8 @@ range: INT ".." INT   { $$ = new nth::Range(new nth::Integer($1), new nth::Integ
 
 
   /* Tuple */
-tuple: "(" exprlist ")";
+tuple: "(" exprlist ")" { $$ = new nth::Tuple(*$2); }
+     | "(" ")"          { $$ = new nth::Tuple(); }
 
   /* end literals */
 

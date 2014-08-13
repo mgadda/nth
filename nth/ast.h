@@ -27,7 +27,7 @@ typedef std::pair<nth::String*, Expression*> KeyValuePair;
 typedef std::vector<KeyValuePair> ExpressionMap;
 typedef std::unique_ptr<Expression> ExpressionPtr;
   
-class Block : Expression {
+class Block : public Expression {
  public:
   Block();
   Block(Expression *expr);
@@ -343,6 +343,21 @@ class Range : public Expression {
   Integer *end;
   Exclusivity exclusivity;
 };
+
+class Tuple : public Expression {
+ public:
+  Tuple() {}
+  Tuple(ExpressionList &values) : values(values) {}
+  ExpressionList &getExpressions();
+
+  // Visitable
+  void accept(Visitor &v) { v.visit(this); }
   
+  const ExpressionList &getValues() { return values; }
+ protected:
+  ExpressionList values;
+};
+
+
 }
 #endif /* defined(__nth__ast__) */
