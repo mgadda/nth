@@ -77,11 +77,11 @@ void AstPrinter::visit(nth::Float *flt) {
 }
 
 void AstPrinter::visit(nth::True *tru) {
-  ast_output << "true";
+  ast_output << "boolean(true)";
 }
 
 void AstPrinter::visit(nth::False *flse) {
-  ast_output << "false";
+  ast_output << "boolean(false)";
 }
 
 void AstPrinter::visit(nth::Identifier *ident) {

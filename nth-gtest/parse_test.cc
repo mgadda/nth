@@ -60,7 +60,7 @@ TEST_F(ParseTest, ParseSomeBools) {
 
   d.result->accept(printer);
   
-  EXPECT_STREQ("block(true, false)", printer.getOutput().c_str());
+  EXPECT_STREQ("block(boolean(true), boolean(false))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseIdentifier) {
