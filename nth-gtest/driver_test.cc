@@ -104,6 +104,16 @@ TEST_F(DriverTest, ParseArray) {
   EXPECT_STREQ("array(integer(1), integer(2), integer(3))", printer.getOutput().c_str()); 
 }
 
+TEST_F(DriverTest, ParseEmptyArray) {
+  int status = d.parseString("[]");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(1, d.result->getExpressions().size());
+
+  d.result->getExpressions()[0]->accept(printer);
+
+  EXPECT_STREQ("array()", printer.getOutput().c_str()); 
+}
+
 TEST_F(DriverTest, ParseMap) {
   int status = d.parseString("{\"foo\": 10.342,\n\"bar\": 12.34}");
   EXPECT_EQ(0, status);
@@ -112,6 +122,16 @@ TEST_F(DriverTest, ParseMap) {
   d.result->getExpressions()[0]->accept(printer);
 
   EXPECT_STREQ("map(string(foo): float(10.342), string(bar): float(12.34))", printer.getOutput().c_str()); 
+}
+
+TEST_F(DriverTest, ParseEmptyMap) {
+  int status = d.parseString("{}");
+  EXPECT_EQ(0, status);
+  EXPECT_EQ(1, d.result->getExpressions().size());
+
+  d.result->getExpressions()[0]->accept(printer);
+
+  EXPECT_STREQ("map()", printer.getOutput().c_str()); 
 }
 
 TEST_F(DriverTest, ParseAdd) {
@@ -238,4 +258,10 @@ TEST_F(DriverTest, ParseTuple) {
   d.parseString("(\"name\", 3, foo)");
   d.result->accept(printer);
   EXPECT_STREQ("block(tuple(string(name), integer(3), ident(foo)))", printer.getOutput().c_str());
+}
+
+TEST_F(DriverTest, ParseEmptyTuple) {
+  d.parseString("()");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(tuple())", printer.getOutput().c_str());
 }
