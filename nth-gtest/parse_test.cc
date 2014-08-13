@@ -9,7 +9,7 @@ class ParseTest : public ::testing::Test {
   virtual void SetUp() {}
 };
 
-// Sanity check that we can still parse the nth spec
+// Sanity check that we can still parse the nth "spec"
 // TODO: replace this with something akin to LLVM's lit (or lit itself)
 TEST_F(ParseTest, ParseNth) {
   int status = d.parse(getResourcePath() + "/nth.nth");
