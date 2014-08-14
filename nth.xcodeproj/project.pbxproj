@@ -275,14 +275,22 @@
 			path = notes;
 			sourceTree = "<group>";
 		};
-		7DA4983E19730C1D0056BB77 /* nth-gtest */ = {
+		7D7F4A88199D1C5300A0DC87 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				7D33BE5D19731F5C006F3769 /* parse_test.cc */,
+				7D7F4A7F199B024700A0DC87 /* driver_test.cc */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		7DA4983E19730C1D0056BB77 /* nth-gtest */ = {
+			isa = PBXGroup;
+			children = (
+				7D7F4A88199D1C5300A0DC87 /* Tests */,
 				7D33BE6819732162006F3769 /* main.cc */,
 				7D33BE6F1973237B006F3769 /* test_helper.h */,
 				7D33BE701973237B006F3769 /* test_helper.cc */,
-				7D7F4A7F199B024700A0DC87 /* driver_test.cc */,
 				7D7F4A85199D1AAA00A0DC87 /* ast_printer.cc */,
 				7D7F4A86199D1AAA00A0DC87 /* ast_printer.h */,
 			);
