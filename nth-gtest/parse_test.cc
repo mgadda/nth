@@ -332,8 +332,10 @@ TEST_F(ParseTest, ParseParenthesis) {
   EXPECT_STREQ("block(multiply(integer(3), add(integer(4), integer(5))))", printer.getOutput().c_str());
 }
 
-//TEST_F(ParseTest, ParseBlock) {
-//  d.parseString("{10 * 2\\n3 / 4}");
-//  d.result->getExpressions()[0]->accept(printer);
-//  EXPECT_STREQ("", printer.getOutput().c_str());
+//TEST_F(ParseTest, ParseFunctionDefinition) {
+//  d.parseString("def add(a: Integer, b: Integer): Integer {\n\
+//                   a + b\n\
+//                 }");
+//  d.result->accept(printer);
+//  EXPECT_STREQ("block(funcdef(arglist(argument(ident(a), type(Integer)), argument(ident(b), type(Integer)))))", printer.getOutput().c_str());
 //}

@@ -213,5 +213,7 @@ void AstPrinter::visit(nth::TupleFieldAccess *field_access) {
   ast_output << "tuplefieldaccess";
 }
 
+void AstPrinter::visit(nth::FunctionDef *functionDef) {
+}
 
 

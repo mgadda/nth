@@ -31,6 +31,7 @@
 		7D7F4A8B199D1D8C00A0DC87 /* ast_dot_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */; };
 		7D7F4A8C199D9B1C00A0DC87 /* ast_dot_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */; };
 		7D7F4A8D199D9B1E00A0DC87 /* ast_dot_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */; };
+		7D7F4A84199B15AD00A0DC87 /* test_helper_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A82199B15AD00A0DC87 /* test_helper_test.cc */; };
 		7D8CC7E0195BD4900009B20C /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
 		7D8CC7E9195C6EB40009B20C /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
 		7DC44E7C1960D71500DEB624 /* nth.nth in Resources */ = {isa = PBXBuildFile; fileRef = 7DC44E7B1960D71500DEB624 /* nth.nth */; };
@@ -194,6 +195,7 @@
 		7D7F4A86199D1AAA00A0DC87 /* ast_printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ast_printer.h; sourceTree = "<group>"; };
 		7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ast_dot_printer.cc; path = nth/ast_dot_printer.cc; sourceTree = SOURCE_ROOT; };
 		7D7F4A8A199D1D8C00A0DC87 /* ast_dot_printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ast_dot_printer.h; path = nth/ast_dot_printer.h; sourceTree = SOURCE_ROOT; };
+		7D7F4A82199B15AD00A0DC87 /* test_helper_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_helper_test.cc; sourceTree = "<group>"; };
 		7D8CC7DE195BD4900009B20C /* driver.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver.cc; sourceTree = "<group>"; };
 		7D8CC7DF195BD4900009B20C /* driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = driver.h; sourceTree = "<group>"; };
 		7DA4983D19730C1D0056BB77 /* nth-gtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "nth-gtest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -300,6 +302,8 @@
 				7D33BE701973237B006F3769 /* test_helper.cc */,
 				7D7F4A85199D1AAA00A0DC87 /* ast_printer.cc */,
 				7D7F4A86199D1AAA00A0DC87 /* ast_printer.h */,
+				7D7F4A7F199B024700A0DC87 /* driver_test.cc */,
+				7D7F4A82199B15AD00A0DC87 /* test_helper_test.cc */,
 			);
 			path = "nth-gtest";
 			sourceTree = "<group>";
@@ -476,6 +480,7 @@
 				7D33BE711973237B006F3769 /* test_helper.cc in Sources */,
 				7D33BE661973209E006F3769 /* scan.l in Sources */,
 				7D7F4A81199B024700A0DC87 /* driver_test.cc in Sources */,
+				7D7F4A84199B15AD00A0DC87 /* test_helper_test.cc in Sources */,
 				7D33BE671973209E006F3769 /* ast.cc in Sources */,
 				7D33BE5F19731F5C006F3769 /* parse_test.cc in Sources */,
 			);

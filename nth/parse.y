@@ -219,7 +219,7 @@ tuple_field_access: expr "." INT { $$ = new nth::TupleFieldAccess($1, new nth::I
   /* end binary ops */
 
   /* Functions */
-block: "{" statements "}"
+block: "{" statements "}"  { $$ = new nth::Block($2); }
 
 func_def: DEF IDENT "(" arglist ")" ":" type block;
 lambda:  "{" "(" arglist ")" ":" type "=>" expr "}";

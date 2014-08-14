@@ -8,11 +8,13 @@
 
 #include <string>
 #include <sstream>
+#include <regex>
 
 #include "ast_visitor.h"
 
 
 std::string getResourcePath();
+std::string stripMargin(std::string str);
 
 // Used by EXPECT_EXPR_EQ below
 template<typename T, typename U>

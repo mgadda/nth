@@ -43,6 +43,9 @@ class Tuple;
 class Comparison;
 class Subscript;
 class TupleFieldAccess;
+class FunctionDef;
+class Argument;
+class TypeIdentifier;
 
 class Visitor {
 public:
@@ -76,7 +79,7 @@ public:
   virtual void visit(Comparison *comparison)=0;
   virtual void visit(Subscript *subscript)=0;
   virtual void visit(TupleFieldAccess *field_access)=0;
-
+  virtual void visit(FunctionDef *functionDef)=0;
 };
 
 class Visitable {

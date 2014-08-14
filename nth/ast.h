@@ -26,6 +26,7 @@ typedef std::vector<Expression*> ExpressionList;
 typedef std::pair<nth::String*, Expression*> KeyValuePair;
 typedef std::vector<KeyValuePair> ExpressionMap;
 typedef std::unique_ptr<Expression> ExpressionPtr;
+typedef std::vector<Argument*> ArgList;
 
 class Block : public Expression {
  public:
@@ -139,6 +140,12 @@ class Identifier : public Expression {
   std::string getValue() { return value; }
  protected:
   std::string value;
+};
+
+// TODO: should this inherit Identifier
+class TypeIdentifier : public Identifier {
+ public:
+  bool operator==(const TypeIdentifier &i) const { return value == i.value; }
 };
 
 class Array : public Expression {
@@ -410,6 +417,28 @@ class TupleFieldAccess : public BinaryOperation {
   : BinaryOperation(ExpressionPtr(tupleExpr), ExpressionPtr(fieldIndex)) {}
 
   void accept(Visitor &v);
+};
+
+class Argument {
+public:
+  Argument(std::string name, TypeIdentifier type);
+};
+
+// TODO: function definitions should probably be statements, not expressions
+// but lambdas should remain expressions
+// does this require two different AST types?
+// can it be enforced entirely by the parser? (probably)
+class FunctionDef : public Expression {
+ public:
+  FunctionDef(std::string name, ArgList &argList, std::string returnType, Block *block)
+    : name(name), argList(argList), returnType(returnType), block(block) {}
+
+  void accept(Visitor &v) { v.visit(this); }
+ protected:
+  std::string name;
+  ArgList argList;
+  std::string returnType; // todo should this some kind of Type object?
+  Block *block;
 };
 
 }

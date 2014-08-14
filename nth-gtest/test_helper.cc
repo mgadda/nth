@@ -33,3 +33,8 @@ std::string getResourcePath() {
 }
 #endif
 
+std::string stripMargin(std::string str) {
+  // look for "\s+|\s" and remove
+  std::regex margin("^\\s+|(.*)\n");
+  return std::regex_replace(str, margin, "$1\n");
+};

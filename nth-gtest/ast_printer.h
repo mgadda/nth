@@ -41,6 +41,7 @@ public:
   void visit(nth::Comparison *comparison);
   void visit(nth::Subscript *subscript);
   void visit(nth::TupleFieldAccess *field_access);
+  void visit(nth::FunctionDef *functionDef);
 
   std::string getOutput();
 protected:
