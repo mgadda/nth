@@ -39,6 +39,8 @@ std::string getResourcePath() {
 template <class InputIterator, class Function>
 void join_values(InputIterator first, InputIterator last, std::string c, std::stringstream &ss, Function f)
 {
+  if (first == last) return;
+
   f(*first);
   ++first;
   for (; first != last; ++first) {
