@@ -377,8 +377,9 @@ class Comparison : public BinaryOperation {
     : BinaryOperation(std::move(left), std::move(right)), type(type) {}
 
   Type getType() { return type; }
+
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 
  protected:
   Type type;

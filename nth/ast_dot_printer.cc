@@ -158,58 +158,49 @@ void AstDotPrinter::visit(nth::LogicalNot *logical_not) {
 }
 
 void AstDotPrinter::visit(nth::Range *range) {
-//  ast_output << "range(";
-//  range->getStart()->accept(*this);
-//  ast_output << ", ";
-//  range->getEnd()->accept(*this);
-//  ast_output << ", ";
-//  nth::Range::Exclusivity ex = range->getExclusivity();
-//  if (ex == nth::Range::Exclusivity::Exclusive)
-//    ast_output << "exclusive)";
-//  else if (ex == nth::Range::Exclusivity::Inclusive)
-//    ast_output << "inclusive)";
+  nodes[range] = "range";
+  
+  edges.push_back(std::make_pair(range, range->getStart()));
+  edges.push_back(std::make_pair(range, range->getEnd()));
+  
+  range->getStart()->accept(*this);
+  range->getEnd()->accept(*this);
 }
 
 void AstDotPrinter::visit(nth::Tuple *tuple) {
-//  ast_output << "tuple(";
-//  
-//  auto values = tuple->getValues();
-//  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionList::value_type value) {
-//    value->accept(*this);
-//  });
-//  
-//  ast_output << ")";
+  nodes[tuple] = "tuple";
+
+  for (auto value : tuple->getValues()) {
+    edges.push_back(std::make_pair(tuple, value));
+    value->accept(*this);
+  }
 }
 
 void AstDotPrinter::visit(nth::Comparison *comparison) {
-//  std::string type;
-//  
-//  switch (comparison->getType()) {
-//    case nth::Comparison::Type::Equality:
-//      type = "equality";
-//      break;
-//    case nth::Comparison::Type::Inequality:
-//      type = "inequality";
-//      break;
-//    case nth::Comparison::Type::LessThan:
-//      type = "lessthan";
-//      break;
-//    case nth::Comparison::Type::GreaterThan:
-//      type = "greaterthan";
-//      break;
-//    case nth::Comparison::Type::LessThanOrEqualTo:
-//      type = "lessthanorequalto";
-//      break;
-//    case nth::Comparison::Type::GreaterThanOrEqualTo:
-//      type = "greaterthanorequalto";
-//      break;
-//  }
-//  
-//  ast_output << type << "(";
-//  comparison->getLeftValue()->accept(*this);
-//  ast_output << ", ";
-//  comparison->getRightValue()->accept(*this);
-//  ast_output << ")";
+  std::string type;
+  
+  switch (comparison->getType()) {
+    case nth::Comparison::Type::Equality:
+      type = "==";
+      break;
+    case nth::Comparison::Type::Inequality:
+      type = "!=";
+      break;
+    case nth::Comparison::Type::LessThan:
+      type = "<";
+      break;
+    case nth::Comparison::Type::GreaterThan:
+      type = ">";
+      break;
+    case nth::Comparison::Type::LessThanOrEqualTo:
+      type = "<=";
+      break;
+    case nth::Comparison::Type::GreaterThanOrEqualTo:
+      type = ">=";
+      break;
+  }
+  
+  nodes[comparison] = type;
 }
 
 

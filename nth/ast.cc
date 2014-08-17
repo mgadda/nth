@@ -88,3 +88,8 @@ void LogicalNot::accept(Visitor &v) {
   UnaryOperation::accept(v);
   v.visit(this);
 }
+
+void Comparison::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
