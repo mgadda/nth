@@ -22,6 +22,8 @@ class False;
 class Identifier;
 class Array;
 class Map;
+class BinaryOperation;
+class UnaryOperation;
 class Add;
 class Subtract;
 class Multiply;
@@ -50,6 +52,8 @@ public:
   virtual void visit(Identifier *ident)=0;
   virtual void visit(Array *array)=0;
   virtual void visit(Map *map)=0;
+  virtual void visit(BinaryOperation *bin_op)=0;
+  virtual void visit(UnaryOperation *un_op)=0;
   virtual void visit(Add *add)=0;
   virtual void visit(Subtract *subtract)=0;
   virtual void visit(Multiply *multiply)=0;

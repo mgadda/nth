@@ -1,15 +1,16 @@
-
-#ifndef __nth__ast_printer__
-#define __nth__ast_printer__
+#ifndef __nth__ast_dot_printer__
+#define __nth__ast_dot_printer__
 
 #include <string>
 #include <sstream>
+#include <vector>
+#include <map>
 
 #include "ast_visitor.h"
 
-class AstPrinter : public nth::Visitor {
+class AstDotPrinter : public nth::Visitor {
 public:
-  AstPrinter(bool pretty_print=false) : pretty_print(pretty_print) {}
+  AstDotPrinter();
   
   void visit(nth::Block *block);
   void visit(nth::String *string);
@@ -39,15 +40,17 @@ public:
   void visit(nth::Tuple *tuple);
   void visit(nth::Comparison *comparison);
   
+  
   std::string getOutput();
 protected:
   bool pretty_print;
   std::stringstream ast_output;
+  
+  typedef std::vector<std::pair<nth::Expression*, nth::Expression*>> EdgeList;
+  typedef std::map<nth::Expression*, std::string> NodeMap;
+  
+  EdgeList edges;
+  NodeMap nodes;
 };
 
-// Iterate from first to last and append c onto ss
-// between each value in InputIterator
-template <class InputIterator, class Function>
-void join_values(InputIterator first, InputIterator last, std::string c, std::stringstream &ss, Function f);
-
-#endif /* defined(__nth__ast_printer__) */
+#endif /* defined(__nth__ast_dot_printer__) */

@@ -90,6 +90,7 @@ class String : public Expression {
   operator const std::string() const { return value; }
   operator const char*() const { return value.c_str(); }
  
+  std::string getValue() { return value; }
  protected:
   std::string value;
 };
@@ -134,6 +135,8 @@ class Identifier : public Expression {
   bool operator==(const Identifier &i) const { return value == i.value; }
   bool operator==(const char *c) const { return value == c; }
   operator const char*() const { return value.c_str(); }
+
+  std::string getValue() { return value; }
  protected:
   std::string value;
 };
@@ -173,13 +176,11 @@ class UnaryOperation : public Expression {
  public:
   UnaryOperation(ExpressionPtr value) : value(std::move(value)) {}
   ExpressionPtr &getValue() { return value; }
+  
+  void accept(Visitor &v) { v.visit(this); }
+  
  protected:
   ExpressionPtr value;
-};
-
-class BooleanNegation : public UnaryOperation {
- public:
-  BooleanNegation(ExpressionPtr value): UnaryOperation(std::move(value)) {}
 };
 
 class BinaryOperation : public Expression {
@@ -190,6 +191,9 @@ class BinaryOperation : public Expression {
 
   ExpressionPtr &getLeftValue() { return left; }
   ExpressionPtr &getRightValue() { return right; }
+  
+  void accept(Visitor &v) { v.visit(this); }
+  
  protected:
   ExpressionPtr left;
   ExpressionPtr right;
@@ -202,7 +206,7 @@ class Add : public BinaryOperation {
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class Subtract : public BinaryOperation {
@@ -212,7 +216,7 @@ public:
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class Multiply : public BinaryOperation {
@@ -222,7 +226,7 @@ public:
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class Divide : public BinaryOperation {
@@ -232,7 +236,7 @@ public:
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class Exponentiate : public BinaryOperation {
@@ -242,7 +246,7 @@ public:
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class Modulo : public BinaryOperation {
@@ -252,7 +256,7 @@ public:
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class BitShiftLeft : public BinaryOperation {
@@ -262,7 +266,7 @@ public:
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class BitShiftRight : public BinaryOperation {
@@ -272,7 +276,7 @@ public:
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class BitwiseOr : public BinaryOperation {
@@ -282,7 +286,7 @@ public:
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class BitwiseAnd : public BinaryOperation {
@@ -292,7 +296,7 @@ public:
     : BinaryOperation(std::move(left), std::move(right)) {}
 
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class LogicalOr : public BinaryOperation {
@@ -302,7 +306,7 @@ public:
   : BinaryOperation(std::move(left), std::move(right)) {}
   
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class LogicalAnd : public BinaryOperation {
@@ -312,7 +316,7 @@ public:
   : BinaryOperation(std::move(left), std::move(right)) {}
   
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class LogicalNot : public UnaryOperation {
@@ -321,7 +325,7 @@ public:
   : UnaryOperation(std::move(expr)) {}
   
   // Visitable
-  void accept(Visitor &v) { v.visit(this); }
+  void accept(Visitor &v);
 };
 
 class Range : public Expression {

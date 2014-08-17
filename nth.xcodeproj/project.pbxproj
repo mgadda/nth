@@ -28,6 +28,9 @@
 		7D6E3F651943D5C1008D5BBD /* ast.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cc */; };
 		7D7F4A81199B024700A0DC87 /* driver_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A7F199B024700A0DC87 /* driver_test.cc */; };
 		7D7F4A87199D1AAA00A0DC87 /* ast_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A85199D1AAA00A0DC87 /* ast_printer.cc */; };
+		7D7F4A8B199D1D8C00A0DC87 /* ast_dot_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */; };
+		7D7F4A8C199D9B1C00A0DC87 /* ast_dot_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */; };
+		7D7F4A8D199D9B1E00A0DC87 /* ast_dot_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */; };
 		7D8CC7E0195BD4900009B20C /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
 		7D8CC7E9195C6EB40009B20C /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
 		7DC44E7C1960D71500DEB624 /* nth.nth in Resources */ = {isa = PBXBuildFile; fileRef = 7DC44E7B1960D71500DEB624 /* nth.nth */; };
@@ -189,6 +192,8 @@
 		7D7F4A7F199B024700A0DC87 /* driver_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver_test.cc; sourceTree = "<group>"; };
 		7D7F4A85199D1AAA00A0DC87 /* ast_printer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ast_printer.cc; sourceTree = "<group>"; };
 		7D7F4A86199D1AAA00A0DC87 /* ast_printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ast_printer.h; sourceTree = "<group>"; };
+		7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ast_dot_printer.cc; path = nth/ast_dot_printer.cc; sourceTree = SOURCE_ROOT; };
+		7D7F4A8A199D1D8C00A0DC87 /* ast_dot_printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ast_dot_printer.h; path = nth/ast_dot_printer.h; sourceTree = SOURCE_ROOT; };
 		7D8CC7DE195BD4900009B20C /* driver.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver.cc; sourceTree = "<group>"; };
 		7D8CC7DF195BD4900009B20C /* driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = driver.h; sourceTree = "<group>"; };
 		7DA4983D19730C1D0056BB77 /* nth-gtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "nth-gtest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -264,6 +269,8 @@
 				7D6E3F631943D5C1008D5BBD /* ast.cc */,
 				7D6E3F641943D5C1008D5BBD /* ast.h */,
 				7DF8F216198EA164002F06B4 /* ast_visitor.h */,
+				7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */,
+				7D7F4A8A199D1D8C00A0DC87 /* ast_dot_printer.h */,
 			);
 			path = nth;
 			sourceTree = "<group>";
@@ -451,6 +458,7 @@
 				7D8CC7E9195C6EB40009B20C /* parse.y in Sources */,
 				7D6E3F651943D5C1008D5BBD /* ast.cc in Sources */,
 				7D8CC7E0195BD4900009B20C /* driver.cc in Sources */,
+				7D7F4A8C199D9B1C00A0DC87 /* ast_dot_printer.cc in Sources */,
 				7D6E3F551940C2B4008D5BBD /* main.cc in Sources */,
 				7D6E3F601940C5D0008D5BBD /* scan.l in Sources */,
 			);
@@ -461,6 +469,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D33BE6A19732162006F3769 /* main.cc in Sources */,
+				7D7F4A8B199D1D8C00A0DC87 /* ast_dot_printer.cc in Sources */,
 				7D33BE641973209E006F3769 /* driver.cc in Sources */,
 				7D33BE651973209E006F3769 /* parse.y in Sources */,
 				7D7F4A87199D1AAA00A0DC87 /* ast_printer.cc in Sources */,
@@ -479,6 +488,7 @@
 				7D660D61195FBFA8008E0D21 /* main.cc in Sources */,
 				7D660D60195FBF9D008E0D21 /* driver.cc in Sources */,
 				7D660D5C195FBDE0008E0D21 /* parse.y in Sources */,
+				7D7F4A8D199D9B1E00A0DC87 /* ast_dot_printer.cc in Sources */,
 				7D660D5F195FBF79008E0D21 /* scan.l in Sources */,
 				7D660D5B195FBD24008E0D21 /* driver_test.mm in Sources */,
 			);

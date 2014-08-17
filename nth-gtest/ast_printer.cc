@@ -84,6 +84,9 @@ void AstPrinter::visit(nth::Map *map) {
   ast_output << ")";
 }
 
+void AstPrinter::visit(nth::BinaryOperation *bin_op) {}
+void AstPrinter::visit(nth::UnaryOperation *un_op) {}
+
 void AstPrinter::visit(nth::Add *add) {
   ast_output << "add(";
   add->getLeftValue()->accept(*this);

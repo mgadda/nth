@@ -24,3 +24,67 @@ ExpressionList &Block::getExpressions() {
   return expressions;
 }
 
+void Add::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void Subtract::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void Multiply::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void Divide::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void Exponentiate::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void Modulo::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void BitShiftLeft::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void BitShiftRight::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void BitwiseOr::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void BitwiseAnd::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void LogicalOr::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void LogicalAnd::accept(Visitor &v) {
+  BinaryOperation::accept(v);
+  v.visit(this);
+}
+
+void LogicalNot::accept(Visitor &v) {
+  UnaryOperation::accept(v);
+  v.visit(this);
+}
