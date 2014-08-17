@@ -282,7 +282,11 @@ TEST_F(ParseTest, ParseGreaterThanOrEqualTo) {
   EXPECT_STREQ("block(greaterthanorequalto(integer(6), integer(4)))", printer.getOutput().c_str());
 }
 
-
+TEST_F(ParseTest, ParseParenthesis) {
+  d.parseString("3 * (4 + 5)");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(multiply(integer(3), add(integer(4), integer(5))))", printer.getOutput().c_str());
+}
 //TEST_F(ParseTest, ParseBlock) {
 //  d.parseString("{10 * 2\\n3 / 4}");
 //  d.result->getExpressions()[0]->accept(printer);
