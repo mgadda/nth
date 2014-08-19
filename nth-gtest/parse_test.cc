@@ -34,6 +34,12 @@ TEST_F(ParseTest, ParseSomeInts) {
 }
 
 
+TEST_F(ParseTest, ParseBinary) {
+  d.parseString("0b101010");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(integer(42))", printer.getOutput().c_str());
+}
+
 TEST_F(ParseTest, ParseSomeFloats) {
   int status = d.parseString("10.2340982\n2.234e-3");
   EXPECT_EQ(0, status);

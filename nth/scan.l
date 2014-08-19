@@ -92,7 +92,7 @@ LEADING_DIGIT [1-9]
 
 [-+]?(0|([1-9]{DIGIT}*))        { return yy::parser::make_INT(strtol(yytext, NULL, 10), loc); }
 "0x"[a-fA-F0-9]+                { return yy::parser::make_INT(strtol(yytext, NULL, 16), loc); }
-"0b"[01]+                       { return yy::parser::make_INT(strtol(yytext, NULL, 2), loc); }
+"0b"[01]+                       { return yy::parser::make_INT(strtol(yytext+2, NULL, 2), loc); }
 0[0-7]+                         { return yy::parser::make_INT(strtol(yytext, NULL, 8), loc); }
 
   /* strings */
