@@ -27,9 +27,9 @@ TEST_F(ParseTest, ParseSomeInts) {
   int status = d.parseString("10\n20\n30\n40\n");
   EXPECT_EQ(0, status);
   EXPECT_EQ(4, d.result->getExpressions().size());
-  
+
   d.result->accept(printer);
-  
+
   EXPECT_STREQ("block(integer(10), integer(20), integer(30), integer(40))", printer.getOutput().c_str());
 }
 
@@ -57,7 +57,7 @@ TEST_F(ParseTest, ParseSomeFloats) {
   EXPECT_EQ(2, d.result->getExpressions().size());
 
   d.result->accept(printer);
-  
+
   EXPECT_STREQ("block(float(10.2340982), float(0.002234))", printer.getOutput().c_str());
 }
 
@@ -67,7 +67,7 @@ TEST_F(ParseTest, ParseSomeStrings) {
   EXPECT_EQ(2, d.result->getExpressions().size());
 
   d.result->accept(printer);
-  
+
   EXPECT_STREQ("block(string(Hello, World!\n), string(World: Hello!))", printer.getOutput().c_str());
 }
 
@@ -77,7 +77,7 @@ TEST_F(ParseTest, ParseSomeBools) {
   EXPECT_EQ(2, d.result->getExpressions().size());
 
   d.result->accept(printer);
-  
+
   EXPECT_STREQ("block(boolean(true), boolean(false))", printer.getOutput().c_str());
 }
 
@@ -87,7 +87,7 @@ TEST_F(ParseTest, ParseIdentifier) {
   EXPECT_EQ(1, d.result->getExpressions().size());
 
   d.result->accept(printer);
-  
+
   EXPECT_STREQ("block(ident(a))", printer.getOutput().c_str());
 };
 
@@ -98,7 +98,7 @@ TEST_F(ParseTest, ParseArray) {
 
   d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("array(integer(1), integer(2), integer(3))", printer.getOutput().c_str()); 
+  EXPECT_STREQ("array(integer(1), integer(2), integer(3))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseEmptyArray) {
@@ -108,7 +108,7 @@ TEST_F(ParseTest, ParseEmptyArray) {
 
   d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("array()", printer.getOutput().c_str()); 
+  EXPECT_STREQ("array()", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseMap) {
@@ -118,7 +118,7 @@ TEST_F(ParseTest, ParseMap) {
 
   d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("map(string(foo): float(10.342), string(bar): float(12.34))", printer.getOutput().c_str()); 
+  EXPECT_STREQ("map(string(foo): float(10.342), string(bar): float(12.34))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseEmptyMap) {
@@ -128,17 +128,17 @@ TEST_F(ParseTest, ParseEmptyMap) {
 
   d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("map()", printer.getOutput().c_str()); 
+  EXPECT_STREQ("map()", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseAdd) {
   int status = d.parseString("1 + 2 + 3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
-  
+
   d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("add(add(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
+  EXPECT_STREQ("add(add(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseSubtract) {
@@ -148,7 +148,7 @@ TEST_F(ParseTest, ParseSubtract) {
 
   d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("subtract(subtract(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
+  EXPECT_STREQ("subtract(subtract(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseMultiply) {
@@ -158,7 +158,7 @@ TEST_F(ParseTest, ParseMultiply) {
 
   d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("multiply(multiply(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
+  EXPECT_STREQ("multiply(multiply(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseDivide) {
@@ -168,7 +168,7 @@ TEST_F(ParseTest, ParseDivide) {
 
   d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("divide(divide(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
+  EXPECT_STREQ("divide(divide(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseExponentiate) {
@@ -178,7 +178,7 @@ TEST_F(ParseTest, ParseExponentiate) {
 
   d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("exp(exp(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
+  EXPECT_STREQ("exp(exp(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseModulo) {
@@ -188,7 +188,7 @@ TEST_F(ParseTest, ParseModulo) {
 
   d.result->getExpressions()[0]->accept(printer);
 
-  EXPECT_STREQ("mod(mod(integer(1), integer(2)), integer(3))", printer.getOutput().c_str()); 
+  EXPECT_STREQ("mod(mod(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, AstPrinter) {
@@ -310,6 +310,7 @@ TEST_F(ParseTest, ParseParenthesis) {
   d.result->accept(printer);
   EXPECT_STREQ("block(multiply(integer(3), add(integer(4), integer(5))))", printer.getOutput().c_str());
 }
+
 //TEST_F(ParseTest, ParseBlock) {
 //  d.parseString("{10 * 2\\n3 / 4}");
 //  d.result->getExpressions()[0]->accept(printer);
