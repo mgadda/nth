@@ -74,6 +74,11 @@ void BitwiseAnd::accept(Visitor &v) {
   v.visit(this);
 }
 
+void BitwiseNot::accept(Visitor &v) {
+  UnaryOperation::accept(v);
+  v.visit(this);
+}
+
 void LogicalOr::accept(Visitor &v) {
   BinaryOperation::accept(v);
   v.visit(this);

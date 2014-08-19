@@ -44,6 +44,7 @@
   MODULO  "%"
   BIT_OR  "|"
   BIT_AND "&"
+  BIT_NOT "~"
   PERIOD  "."
   COMMA   ","
   LPAREN  "("
@@ -73,6 +74,7 @@
 %left "%" "|" "^" "&"
 %left "<<" ">>"
 %left CMP
+%left BIT_NOT
 %left NOT
 %left "&&" "||"
 
@@ -198,7 +200,9 @@ bitwise_op: expr "<<" INT { $$ = new nth::BitShiftLeft(nth::ExpressionPtr($1), s
           | expr "&" expr { $$ = new nth::BitwiseAnd(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
           ;
 
-unary_op: "!" expr %prec NOT { $$ = new nth::LogicalNot(nth::ExpressionPtr($2)); }
+unary_op: "!" expr %prec NOT      { $$ = new nth::LogicalNot(nth::ExpressionPtr($2)); }
+        | "~" expr %prec BIT_NOT  { $$ = new nth::BitwiseNot(nth::ExpressionPtr($2)); }
+        ;
 
   /* end binary ops */
 

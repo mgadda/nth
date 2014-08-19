@@ -204,6 +204,12 @@ TEST_F(ParseTest, ParseBitwiseAnd) {
   EXPECT_STREQ("bitwiseand(integer(62), integer(255))", printer.getOutput().c_str());
 }
 
+TEST_F(ParseTest, ParseBitwiseNot) {
+  d.parseString("~0b101010");
+  d.result->getExpressions()[0]->accept(printer);
+  EXPECT_STREQ("bitwisenot(integer(42))", printer.getOutput().c_str());
+}
+
 TEST_F(ParseTest, ParseLogicalOr) {
   d.parseString("truth || fiction");
   d.result->getExpressions()[0]->accept(printer);

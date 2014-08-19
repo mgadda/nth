@@ -299,6 +299,15 @@ public:
   void accept(Visitor &v);
 };
 
+class BitwiseNot : public UnaryOperation {
+public:
+  BitwiseNot(ExpressionPtr expr)
+  : UnaryOperation(std::move(expr)) {}
+  
+  // Visitable
+  void accept(Visitor &v);
+};
+
 class LogicalOr : public BinaryOperation {
 public:
   LogicalOr(ExpressionPtr left,

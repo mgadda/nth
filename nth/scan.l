@@ -42,7 +42,8 @@ LEADING_DIGIT [1-9]
    /* bitwise */
 "|"       { return yy::parser::make_BIT_OR(loc); }
 "&"       { return yy::parser::make_BIT_AND(loc); }
-
+"~"       { return yy::parser::make_BIT_NOT(loc); }
+  
  /* misc */
 "."       { return yy::parser::make_PERIOD(loc);  }
 ","       { return yy::parser::make_COMMA(loc); }

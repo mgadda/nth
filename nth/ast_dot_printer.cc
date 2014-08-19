@@ -145,6 +145,10 @@ void AstDotPrinter::visit(nth::BitwiseAnd *bitwise_and) {
   nodes[bitwise_and] = "&";
 }
 
+void AstDotPrinter::visit(nth::BitwiseNot *bitwise_not) {
+  nodes[bitwise_not] = "~";
+}
+
 void AstDotPrinter::visit(nth::LogicalOr *logical_or) {
   nodes[logical_or] = "||";
 }
