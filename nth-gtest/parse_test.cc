@@ -33,11 +33,22 @@ TEST_F(ParseTest, ParseSomeInts) {
   EXPECT_STREQ("block(integer(10), integer(20), integer(30), integer(40))", printer.getOutput().c_str());
 }
 
+TEST_F(ParseTest, ParseHex) {
+  d.parseString("0xbaddcafe");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(integer(3135097598))", printer.getOutput().c_str());
+}
 
 TEST_F(ParseTest, ParseBinary) {
   d.parseString("0b101010");
   d.result->accept(printer);
   EXPECT_STREQ("block(integer(42))", printer.getOutput().c_str());
+}
+
+TEST_F(ParseTest, ParseOctal) {
+  d.parseString("010");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(integer(8))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseSomeFloats) {
