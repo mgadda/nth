@@ -62,13 +62,16 @@ TEST_F(ParseTest, ParseSomeFloats) {
 }
 
 TEST_F(ParseTest, ParseSomeStrings) {
-  int status = d.parseString("\"Hello, World!\n\"\n\"World: Hello!\"");
+  int status = d.parseString("\"Hello,\\n\\\"World\\\"!\"   \n \"World: Hello!\"");
+
+  printf("\"Hello,\\n\\\"World\\\"!\"    \"World: Hello!\"");
   EXPECT_EQ(0, status);
   EXPECT_EQ(2, d.result->getExpressions().size());
 
   d.result->accept(printer);
 
-  EXPECT_STREQ("block(string(Hello, World!\n), string(World: Hello!))", printer.getOutput().c_str());
+  std::string expectedValue = "block(string(Hello,\\n\\\"World\\\"!), string(World: Hello!))";
+  EXPECT_STREQ(expectedValue.c_str(), printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseSomeBools) {
