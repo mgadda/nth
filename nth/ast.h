@@ -26,7 +26,7 @@ typedef std::vector<Expression*> ExpressionList;
 typedef std::pair<nth::String*, Expression*> KeyValuePair;
 typedef std::vector<KeyValuePair> ExpressionMap;
 typedef std::unique_ptr<Expression> ExpressionPtr;
-  
+
 class Block : public Expression {
  public:
   Block();
@@ -36,7 +36,7 @@ class Block : public Expression {
 
   // Visitable
   void accept(Visitor &v) { v.visit(this); }
-  
+
  protected:
   ExpressionList expressions;
 };
@@ -46,14 +46,14 @@ class Integer : public Expression {
   Integer(long value): value(value) {}
   Integer(Integer &&other) : value(other.value) {}
   virtual ~Integer() {}
-  
+
   // Visitable
   void accept(Visitor &v) { v.visit(this); }
-  
+
   bool operator==(const int &i) const { return value == i; }
   bool operator==(const long &i) const { return value == i; }
   operator long() const { return value; }
-  
+
   long getValue() { return value; }
  protected:
   long value;
@@ -71,7 +71,7 @@ class Float : public Expression {
   bool operator==(const float &i) const { return value == i; }
   bool operator==(const double &i) const { return value == i; }
   operator double() const { return value; }
-  
+
   double getValue() { return value; }
 protected:
   double value;
@@ -89,7 +89,7 @@ class String : public Expression {
   bool operator==(const char *i) const { return value == i; }
   operator const std::string() const { return value; }
   operator const char*() const { return value.c_str(); }
- 
+
   std::string getValue() { return value; }
  protected:
   std::string value;
@@ -102,7 +102,7 @@ class Boolean : public Expression {
 
   bool operator==(const bool &i) const { return value == i; }
   operator const bool() const { return value; }
-  
+
  protected:
   bool value;
 };
@@ -118,7 +118,7 @@ class True : public Boolean {
 class False : public Boolean {
  public:
   False() : Boolean(false) {}
-  
+
   // Visitable
   void accept(Visitor &v) { v.visit(this); }
 };
@@ -155,7 +155,7 @@ class Array : public Expression {
  protected:
   ExpressionList values;
 };
- 
+
 class Map : public Expression {
  public:
   Map() {}
@@ -176,9 +176,9 @@ class UnaryOperation : public Expression {
  public:
   UnaryOperation(ExpressionPtr value) : value(std::move(value)) {}
   ExpressionPtr &getValue() { return value; }
-  
+
   void accept(Visitor &v) { v.visit(this); }
-  
+
  protected:
   ExpressionPtr value;
 };
@@ -191,9 +191,9 @@ class BinaryOperation : public Expression {
 
   ExpressionPtr &getLeftValue() { return left; }
   ExpressionPtr &getRightValue() { return right; }
-  
+
   void accept(Visitor &v) { v.visit(this); }
-  
+
  protected:
   ExpressionPtr left;
   ExpressionPtr right;
@@ -303,7 +303,7 @@ class BitwiseNot : public UnaryOperation {
 public:
   BitwiseNot(ExpressionPtr expr)
   : UnaryOperation(std::move(expr)) {}
-  
+
   // Visitable
   void accept(Visitor &v);
 };
@@ -313,7 +313,7 @@ public:
   LogicalOr(ExpressionPtr left,
             ExpressionPtr right)
   : BinaryOperation(std::move(left), std::move(right)) {}
-  
+
   // Visitable
   void accept(Visitor &v);
 };
@@ -323,7 +323,7 @@ public:
   LogicalAnd(ExpressionPtr left,
              ExpressionPtr right)
   : BinaryOperation(std::move(left), std::move(right)) {}
-  
+
   // Visitable
   void accept(Visitor &v);
 };
@@ -332,7 +332,7 @@ class LogicalNot : public UnaryOperation {
 public:
   LogicalNot(ExpressionPtr expr)
   : UnaryOperation(std::move(expr)) {}
-  
+
   // Visitable
   void accept(Visitor &v);
 };
@@ -340,14 +340,14 @@ public:
 class Range : public Expression {
  public:
   enum class Exclusivity { Exclusive, Inclusive };
-  
+
   Range(Integer *start, Integer *end, Exclusivity exclusivity) :
     start(start),
     end(end),
     exclusivity(exclusivity) {}
-  
+
   void accept(Visitor &v) { v.visit(this); }
-  
+
   Integer *getStart() { return start; }
   Integer *getEnd() { return end; }
   Exclusivity getExclusivity() { return exclusivity; }
@@ -365,7 +365,7 @@ class Tuple : public Expression {
 
   // Visitable
   void accept(Visitor &v) { v.visit(this); }
-  
+
   const ExpressionList &getValues() { return values; }
  protected:
   ExpressionList values;
