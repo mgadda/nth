@@ -39,6 +39,8 @@ public:
   void visit(nth::Range *range);
   void visit(nth::Tuple *tuple);
   void visit(nth::Comparison *comparison);
+  void visit(nth::Subscript *subscript);
+  void visit(nth::TupleFieldAccess *field_access);
 
   std::string getOutput();
 protected:

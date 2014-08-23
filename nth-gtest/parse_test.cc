@@ -129,6 +129,13 @@ TEST_F(ParseTest, ParseMap) {
   EXPECT_STREQ("map(string(foo): float(10.342), string(bar): float(12.34))", printer.getOutput().c_str());
 }
 
+TEST_F(ParseTest, ParseMapSubscript) {
+  d.parseString("h[\"key1\"]");
+  d.result->accept(printer);
+
+  EXPECT_STREQ("block(subscript(ident(h), string(key1)))", printer.getOutput().c_str());
+}
+
 TEST_F(ParseTest, ParseEmptyMap) {
   int status = d.parseString("{}");
   EXPECT_EQ(0, status);
@@ -275,6 +282,12 @@ TEST_F(ParseTest, ParseEmptyTuple) {
   d.parseString("()");
   d.result->accept(printer);
   EXPECT_STREQ("block(tuple())", printer.getOutput().c_str());
+}
+
+TEST_F(ParseTest, ParseTupleFieldAccess) {
+  d.parseString("(\"name\", 3).1");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(tuplefieldaccess(tuple(string(name), integer(3)), integer(1)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseEquality) {

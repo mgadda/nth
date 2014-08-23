@@ -207,4 +207,11 @@ void AstDotPrinter::visit(nth::Comparison *comparison) {
   nodes[comparison] = type;
 }
 
+void AstDotPrinter::visit(nth::Subscript *subscript) {
+
+}
+void AstDotPrinter::visit(nth::TupleFieldAccess *field_access) {
+
+}
+
 

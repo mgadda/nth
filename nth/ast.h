@@ -394,5 +394,23 @@ class Comparison : public BinaryOperation {
   Type type;
 };
 
+class Subscript : public BinaryOperation {
+ public:
+  // TODO: type checker should verify that key is a string
+  // and that expr is a thing-that-supports-subscript-operations
+  Subscript(Expression *expr, Expression *key)
+  : BinaryOperation(ExpressionPtr(expr), ExpressionPtr(key)) {}
+
+  void accept(Visitor &v);
+};
+
+class TupleFieldAccess : public BinaryOperation {
+ public:
+  TupleFieldAccess(Expression *tupleExpr, Integer *fieldIndex)
+  : BinaryOperation(ExpressionPtr(tupleExpr), ExpressionPtr(fieldIndex)) {}
+
+  void accept(Visitor &v);
+};
+
 }
 #endif /* defined(__nth__ast__) */

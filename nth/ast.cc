@@ -98,3 +98,13 @@ void Comparison::accept(Visitor &v) {
   v.visit(this);
   BinaryOperation::accept(v);
 }
+
+void Subscript::accept(Visitor &v) {
+  v.visit(this);
+  BinaryOperation::accept(v);
+}
+
+void TupleFieldAccess::accept(Visitor &v) {
+  v.visit(this);
+  BinaryOperation::accept(v);
+}

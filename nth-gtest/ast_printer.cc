@@ -205,4 +205,13 @@ void AstPrinter::visit(nth::Comparison *comparison) {
   ast_output << type;
 }
 
+void AstPrinter::visit(nth::Subscript *subscript) {
+  ast_output << "subscript";
+}
+
+void AstPrinter::visit(nth::TupleFieldAccess *field_access) {
+  ast_output << "tuplefieldaccess";
+}
+
+
 

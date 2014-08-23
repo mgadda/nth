@@ -89,7 +89,7 @@
 %type <nth::ExpressionMap*> key_val_list;
 %type <std::pair<nth::String*, nth::Expression*>> key_value;
 %type <nth::String*> key;
-%type <nth::BinaryOperation*> math_op bitwise_op boolean_op comparison_op;
+%type <nth::BinaryOperation*> math_op bitwise_op boolean_op comparison_op subscript tuple_field_access;
 
 
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
@@ -114,7 +114,6 @@ expr: literal   { std::swap($$, $1); }
     | val_def
     | if_else
     | func_call
-    | deref
     | "(" expr ")"
     ;
 
@@ -174,9 +173,11 @@ tuple: "(" exprlist ")" { $$ = new nth::Tuple(*$2); }
 
 
 binary_op: boolean_op     { nth::Expression *e = $1; std::swap($$, e); }
-         | comparison_op  { nth::Expression *e = $1; std::swap($$, e); } 
+         | comparison_op  { nth::Expression *e = $1; std::swap($$, e); }
          | math_op        { nth::Expression *e = $1; std::swap($$, e); }
          | bitwise_op     { nth::Expression *e = $1; std::swap($$, e); }
+         | subscript      { nth::Expression *e = $1; std::swap($$, e); }
+         | tuple_field_access { nth::Expression *e = $1; std::swap($$, e); }
          ;
 
 boolean_op: expr "&&" expr  { $$ = new nth::LogicalAnd(nth::ExpressionPtr($1), nth::ExpressionPtr($3)); }
@@ -204,6 +205,13 @@ unary_op: "!" expr %prec NOT      { $$ = new nth::LogicalNot(nth::ExpressionPtr(
         | "~" expr %prec BIT_NOT  { $$ = new nth::BitwiseNot(nth::ExpressionPtr($2)); }
         ;
 
+subscript: expr "[" expr "]" { $$ = new nth::Subscript($1, $3); }
+         ;
+
+tuple_field_access: expr "." INT { $$ = new nth::TupleFieldAccess($1, new nth::Integer($3)); }
+                  ;
+
+
   /* end binary ops */
 
   /* Functions */
@@ -222,10 +230,6 @@ func_call: IDENT "(" exprlist ")";
 
   /* Variables */
 val_def: VAL IDENT ":" type "=" expr;
-
-deref: IDENT "[" expr "]"
-     | IDENT "." INT
-     ;
 
   /* Control Flow */
 

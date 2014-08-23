@@ -120,12 +120,12 @@ val name: String = "Matt"
 "He said \"Hello, World!\""
 
 
-// Hash, requires generics???
-val h: Hash[String, Int] = {
+// Map
+val h: Map[String, Int] = {
   "key1": 1,
   "key2": 2
 }
-{} // empty Hash
+{} // empty Map
 
 
 h["key1"]
