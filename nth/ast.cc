@@ -25,53 +25,53 @@ ExpressionList &Block::getExpressions() {
 }
 
 void Add::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void Subtract::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void Multiply::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void Divide::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void Exponentiate::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void Modulo::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void BitShiftLeft::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void BitShiftRight::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void BitwiseOr::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void BitwiseAnd::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void BitwiseNot::accept(Visitor &v) {
@@ -80,13 +80,13 @@ void BitwiseNot::accept(Visitor &v) {
 }
 
 void LogicalOr::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void LogicalAnd::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }
 
 void LogicalNot::accept(Visitor &v) {
@@ -95,6 +95,6 @@ void LogicalNot::accept(Visitor &v) {
 }
 
 void Comparison::accept(Visitor &v) {
-  BinaryOperation::accept(v);
   v.visit(this);
+  BinaryOperation::accept(v);
 }

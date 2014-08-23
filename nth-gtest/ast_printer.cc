@@ -7,7 +7,7 @@ template <class InputIterator, class Function>
 void join_values(InputIterator first, InputIterator last, std::string c, std::stringstream &ss, Function f)
 {
   if (first == last) return;
-  
+
   f(*first);
   ++first;
   for (; first != last; ++first) {
@@ -22,12 +22,12 @@ std::string AstPrinter::getOutput() {
 
 void AstPrinter::visit(nth::Block *block) {
   ast_output << "block(";
-  
+
   auto values = block->getExpressions();
   join_values(values.begin(), values.end(), ", ", ast_output, [this](decltype(values)::value_type value) {
     value->accept(*this);
   });
-  
+
   ast_output << ")";
 }
 void AstPrinter::visit(nth::String *string) {
@@ -59,112 +59,79 @@ void AstPrinter::visit(nth::Identifier *ident) {
 
 void AstPrinter::visit(nth::Array *array) {
   ast_output << "array(";
-  
+
   auto values = array->getValues();
   join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionList::value_type value) {
-    
+
     value->accept(*this);
   });
-  
+
   ast_output << ")";
 }
 
 void AstPrinter::visit(nth::Map *map) {
   ast_output << "map(";
   auto values = map->getValues();
-  
+
   join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionMap::value_type value) {
-    
+
     value.first->accept(*this);
     ast_output << ": ";
     value.second->accept(*this);
-    
+
   });
-  
+
   ast_output << ")";
 }
 
-void AstPrinter::visit(nth::BinaryOperation *bin_op) {}
+void AstPrinter::visit(nth::BinaryOperation *bin_op) {
+  ast_output << "(";
+  bin_op->getLeftValue()->accept(*this);
+  ast_output << ", ";
+  bin_op->getRightValue()->accept(*this);
+  ast_output << ")";
+}
+
 void AstPrinter::visit(nth::UnaryOperation *un_op) {}
 
 void AstPrinter::visit(nth::Add *add) {
-  ast_output << "add(";
-  add->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  add->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "add";
 }
 
 void AstPrinter::visit(nth::Subtract *subtract) {
-  ast_output << "subtract(";
-  subtract->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  subtract->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "subtract";
 }
 
 void AstPrinter::visit(nth::Multiply *multiply) {
-  ast_output << "multiply(";
-  multiply->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  multiply->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "multiply";
 }
 
 void AstPrinter::visit(nth::Divide *divide) {
-  ast_output << "divide(";
-  divide->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  divide->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "divide";
 }
 
 void AstPrinter::visit(nth::Exponentiate *exp) {
-  ast_output << "exp(";
-  exp->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  exp->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "exp";
 }
 
 void AstPrinter::visit(nth::Modulo *modulo) {
-  ast_output << "mod(";
-  modulo->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  modulo->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "mod";
 }
 
 void AstPrinter::visit(nth::BitShiftLeft *shift_left) {
-  ast_output << "bitshiftleft(";
-  shift_left->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  shift_left->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "bitshiftleft";
 }
 
 void AstPrinter::visit(nth::BitShiftRight *shift_right) {
-  ast_output << "bitshiftright(";
-  shift_right->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  shift_right->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "bitshiftright";
 }
 
 void AstPrinter::visit(nth::BitwiseOr *bitwise_or) {
-  ast_output << "bitwiseor(";
-  bitwise_or->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  bitwise_or->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "bitwiseor";
 }
 
 void AstPrinter::visit(nth::BitwiseAnd *bitwise_and) {
-  ast_output << "bitwiseand(";
-  bitwise_and->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  bitwise_and->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "bitwiseand";
 }
 
 void AstPrinter::visit(nth::BitwiseNot *bitwise_not) {
@@ -174,19 +141,11 @@ void AstPrinter::visit(nth::BitwiseNot *bitwise_not) {
 }
 
 void AstPrinter::visit(nth::LogicalOr *logical_or) {
-  ast_output << "logicalor(";
-  logical_or->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  logical_or->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "logicalor";
 }
 
 void AstPrinter::visit(nth::LogicalAnd *logical_and) {
-  ast_output << "logicaland(";
-  logical_and->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  logical_and->getRightValue()->accept(*this);
-  ast_output << ")";
+  ast_output << "logicaland";
 }
 
 void AstPrinter::visit(nth::LogicalNot *logical_not) {
@@ -210,18 +169,18 @@ void AstPrinter::visit(nth::Range *range) {
 
 void AstPrinter::visit(nth::Tuple *tuple) {
   ast_output << "tuple(";
-  
+
   auto values = tuple->getValues();
   join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionList::value_type value) {
     value->accept(*this);
   });
-  
+
   ast_output << ")";
 }
 
 void AstPrinter::visit(nth::Comparison *comparison) {
   std::string type;
-  
+
   switch (comparison->getType()) {
     case nth::Comparison::Type::Equality:
       type = "equality";
@@ -242,12 +201,8 @@ void AstPrinter::visit(nth::Comparison *comparison) {
       type = "greaterthanorequalto";
       break;
   }
-  
-  ast_output << type << "(";
-  comparison->getLeftValue()->accept(*this);
-  ast_output << ", ";
-  comparison->getRightValue()->accept(*this);
-  ast_output << ")";
+
+  ast_output << type;
 }
 
 
