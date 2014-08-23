@@ -10,7 +10,7 @@
 class AstPrinter : public nth::Visitor {
 public:
   AstPrinter(bool pretty_print=false) : pretty_print(pretty_print) {}
-  
+
   void visit(nth::Block *block);
   void visit(nth::String *string);
   void visit(nth::Integer *integer);
@@ -39,7 +39,7 @@ public:
   void visit(nth::Range *range);
   void visit(nth::Tuple *tuple);
   void visit(nth::Comparison *comparison);
-  
+
   std::string getOutput();
 protected:
   bool pretty_print;

@@ -13,9 +13,9 @@ AstDotPrinter::AstDotPrinter() {
 
 std::string AstDotPrinter::getOutput() {
   ast_output << "digraph ast {\n";
-  
+
   for (auto node : nodes) {
-    
+
     ast_output << (int64_t)node.first
                << " [label=\"" << node.second << "\"];\n";
   }
@@ -31,7 +31,7 @@ std::string AstDotPrinter::getOutput() {
 
 void AstDotPrinter::visit(nth::Block *block) {
   nodes[block] = "block";
-  
+
   for (auto child : block->getExpressions()) {
     if (child) {
       edges.push_back(std::make_pair(block, child));
@@ -66,7 +66,7 @@ void AstDotPrinter::visit(nth::Identifier *ident) {
 
 void AstDotPrinter::visit(nth::Array *array) {
   nodes[array] = "array";
-  
+
   for (auto child : array->getValues()) {
     if (child) {
       edges.push_back(std::make_pair(array, child));
@@ -77,7 +77,7 @@ void AstDotPrinter::visit(nth::Array *array) {
 
 void AstDotPrinter::visit(nth::Map *map) {
   nodes[map] = "map";
-  
+
   for (auto child : map->getValues()) {
     edges.push_back(std::make_pair(map, child.first));
     edges.push_back(std::make_pair(child.first, child.second));
@@ -89,19 +89,19 @@ void AstDotPrinter::visit(nth::Map *map) {
 void AstDotPrinter::visit(nth::BinaryOperation *bin_op) {
   nth::ExpressionPtr &left = bin_op->getLeftValue();
   nth::ExpressionPtr &right = bin_op->getRightValue();
-  
+
   edges.push_back(std::make_pair(bin_op, right.get()));
   edges.push_back(std::make_pair(bin_op, left.get()));
-  
-  left->accept(*this);  
+
+  left->accept(*this);
   right->accept(*this);
 }
 
 void AstDotPrinter::visit(nth::UnaryOperation *un_op) {
   nth::ExpressionPtr &value = un_op->getValue();
-  
+
   edges.push_back(std::make_pair(un_op, value.get()));
-  
+
   value->accept(*this);
 }
 
@@ -163,10 +163,10 @@ void AstDotPrinter::visit(nth::LogicalNot *logical_not) {
 
 void AstDotPrinter::visit(nth::Range *range) {
   nodes[range] = "range";
-  
+
   edges.push_back(std::make_pair(range, range->getStart()));
   edges.push_back(std::make_pair(range, range->getEnd()));
-  
+
   range->getStart()->accept(*this);
   range->getEnd()->accept(*this);
 }
@@ -182,7 +182,7 @@ void AstDotPrinter::visit(nth::Tuple *tuple) {
 
 void AstDotPrinter::visit(nth::Comparison *comparison) {
   std::string type;
-  
+
   switch (comparison->getType()) {
     case nth::Comparison::Type::Equality:
       type = "==";
@@ -203,7 +203,7 @@ void AstDotPrinter::visit(nth::Comparison *comparison) {
       type = ">=";
       break;
   }
-  
+
   nodes[comparison] = type;
 }
 

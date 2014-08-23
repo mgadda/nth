@@ -11,7 +11,7 @@
 class AstDotPrinter : public nth::Visitor {
 public:
   AstDotPrinter();
-  
+
   void visit(nth::Block *block);
   void visit(nth::String *string);
   void visit(nth::Integer *integer);
@@ -40,16 +40,16 @@ public:
   void visit(nth::Range *range);
   void visit(nth::Tuple *tuple);
   void visit(nth::Comparison *comparison);
-  
-  
+
+
   std::string getOutput();
 protected:
   bool pretty_print;
   std::stringstream ast_output;
-  
+
   typedef std::vector<std::pair<nth::Expression*, nth::Expression*>> EdgeList;
   typedef std::map<nth::Expression*, std::string> NodeMap;
-  
+
   EdgeList edges;
   NodeMap nodes;
 };

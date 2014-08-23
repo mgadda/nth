@@ -41,7 +41,7 @@ class LogicalNot;
 class Range;
 class Tuple;
 class Comparison;
-  
+
 class Visitor {
 public:
   virtual void visit(Block *block)=0;
