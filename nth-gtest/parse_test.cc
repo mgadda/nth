@@ -19,7 +19,7 @@ TEST_F(ParseTest, ParseNth) {
 }
 
 TEST_F(ParseTest, ParseNothing) {
-  int status = d.parseString("");
+  int status = d.parseString("\n");
   EXPECT_EQ(1, status);
 }
 

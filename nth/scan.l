@@ -8,6 +8,14 @@
   #include "driver.h"
 
   static yy::location loc;
+
+  int line_count(char *str, int n, char m) {
+    int count=0;
+    for (int i=0; i < n; i++) {
+      if (str[i] == m) count++;
+    }
+    return count;
+  }
 %}
 
 %x STR
@@ -43,7 +51,7 @@ LEADING_DIGIT [1-9]
 "|"       { return yy::parser::make_BIT_OR(loc); }
 "&"       { return yy::parser::make_BIT_AND(loc); }
 "~"       { return yy::parser::make_BIT_NOT(loc); }
-  
+
  /* misc */
 "."       { return yy::parser::make_PERIOD(loc);  }
 ","       { return yy::parser::make_COMMA(loc); }
@@ -107,20 +115,25 @@ LEADING_DIGIT [1-9]
 
   /* Whitespace */
 
-[ \s\t]     { loc.step(); }
-\n          { loc.lines(1); }
+[ \s\t]+     { loc.step(); }
+  /* newlines are significant! */
+\n+          { loc.lines(yyleng); return yy::parser::make_NEWLINE(loc); }
 
   /* Comments */
 
-"//".*      { loc.step(); }
+^"//".*\n*      { loc.lines(line_count(yytext, yyleng, '\n')); loc.step(); }
+"//".*\n*      {
+                  loc.lines(line_count(yytext, yyleng, '\n')-1);
+                  loc.step();
+                  yyless(yyleng-1); // put back one newline
+                }
 
   /* Multiline Comments */
 "/*"                  { BEGIN(COMMENT); }
 <COMMENT>\n           { loc.lines(1); }
 <COMMENT>[^\*\n]+|.
-<COMMENT>"*/"         { BEGIN(INITIAL); }
+<COMMENT>"*/"\n*         { BEGIN(INITIAL); loc.lines(line_count(yytext, yyleng, '\n')); loc.step(); }
 <COMMENT><<EOF>>      { printf("Line %d: Unterminated comment\n", yylineno); }
-
   /* Identifiers */
   /* yylval->build<std::string>() = std::string(yytext); */
 [a-zA-Z][a-zA-Z0-9_]*  { return yy::parser::make_IDENT(yytext, loc); }

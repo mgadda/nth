@@ -55,6 +55,7 @@
   RCURLY  "}"
   COLON   ":"
   SEMICOLON ";"
+  NEWLINE "\n"
   ;
 
 %token <nth::Comparison::Type> CMP
@@ -103,11 +104,18 @@ file: statements  { driver.result = $1; }
     ;
 
 statements: statement             { $$ = new nth::Block($1); }
-          | statements statement  { std::swap($$, $1); $$->insertAfter($2); }
+          | statements NEWLINE statement  {
+              std::swap($$, $1);
+              if ($3) {
+                $$->insertAfter($3);
+              }
+            }
+          ;
 
-statement: expr
+statement: expr       { std::swap($$, $1); }
          | val_def
          | func_def
+         | END        { $$ = nullptr; }
          ;
 
 /*
@@ -156,14 +164,19 @@ exprlist: expr               { $$ = new nth::ExpressionList(1, $1); }
 
   /* Map */
 map: "{" key_val_list "}" { $$ = new nth::Map(*$2); }
+    | "{" NEWLINE key_val_list "}" { $$ = new nth::Map(*$3); }
+    | "{" key_val_list NEWLINE "}" { $$ = new nth::Map(*$2); }
     | "{" "}"              { $$ = new nth::Map(); }
+    | "{" NEWLINE "}"              { $$ = new nth::Map(); }
     ;
 
 key_val_list: key_value                   { $$ = new nth::ExpressionMap(); $$->push_back($1); }
             | key_val_list "," key_value  { std::swap($$, $1); $$->push_back($3); }
+            | key_val_list "," NEWLINE key_value  { std::swap($$, $1); $$->push_back($4); }
             ;
 
 key_value: key ":" expr { $$ = std::make_pair($1, $3); }
+         | key ":" expr NEWLINE { $$ = std::make_pair($1, $3); }
          ;
 
 key: STRING { $$ = new nth::String($1.substr(1, $1.size()-2)); }
@@ -227,6 +240,8 @@ tuple_field_access: expr "." INT { $$ = new nth::TupleFieldAccess($1, new nth::I
 
   /* Functions */
 block: "{" statements "}"
+     | "{" NEWLINE statements NEWLINE "}"
+     ;
 
 func_def: DEF IDENT "(" arglist ")" ":" type block
         ;
