@@ -24,7 +24,7 @@ TEST_F(ParseTest, ParseNothing) {
 }
 
 TEST_F(ParseTest, ParseSomeInts) {
-  int status = d.parseString("10\n20\n30\n40\n");
+  int status = d.parseString("10;\n20;\n30;\n40;\n");
   EXPECT_EQ(0, status);
   EXPECT_EQ(4, d.result->getExpressions().size());
 
@@ -34,25 +34,25 @@ TEST_F(ParseTest, ParseSomeInts) {
 }
 
 TEST_F(ParseTest, ParseHex) {
-  d.parseString("0xbaddcafe");
+  d.parseString("0xbaddcafe;");
   d.result->accept(printer);
   EXPECT_STREQ("block(integer(3135097598))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseBinary) {
-  d.parseString("0b101010");
+  d.parseString("0b101010;");
   d.result->accept(printer);
   EXPECT_STREQ("block(integer(42))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseOctal) {
-  d.parseString("010");
+  d.parseString("010;");
   d.result->accept(printer);
   EXPECT_STREQ("block(integer(8))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseSomeFloats) {
-  int status = d.parseString("10.2340982\n2.234e-3");
+  int status = d.parseString("10.2340982;\n2.234e-3;");
   EXPECT_EQ(0, status);
   EXPECT_EQ(2, d.result->getExpressions().size());
 
@@ -62,7 +62,7 @@ TEST_F(ParseTest, ParseSomeFloats) {
 }
 
 TEST_F(ParseTest, ParseSomeStrings) {
-  int status = d.parseString("\"Hello,\\n\\\"World\\\"!\"   \n \"World: Hello!\"");
+  int status = d.parseString("\"Hello,\\n\\\"World\\\"!\";   \n \"World: Hello!\";");
 
   EXPECT_EQ(0, status);
   EXPECT_EQ(2, d.result->getExpressions().size());
@@ -74,13 +74,13 @@ TEST_F(ParseTest, ParseSomeStrings) {
 }
 
 TEST_F(ParseTest, ParseEscapedEscapeCharacters) {
-  d.parseString(R"("a\\b")");
+  d.parseString(R"("a\\b";)");
   d.result->accept(printer);
   EXPECT_STREQ(R"*(block(string(a\\b)))*", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseSomeBools) {
-  int status = d.parseString("true\nfalse");
+  int status = d.parseString("true;\nfalse;");
   EXPECT_EQ(0, status);
   EXPECT_EQ(2, d.result->getExpressions().size());
 
@@ -90,7 +90,7 @@ TEST_F(ParseTest, ParseSomeBools) {
 }
 
 TEST_F(ParseTest, ParseIdentifier) {
-  int status = d.parseString("a");
+  int status = d.parseString("a;");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -100,7 +100,7 @@ TEST_F(ParseTest, ParseIdentifier) {
 };
 
 TEST_F(ParseTest, ParseArray) {
-  int status = d.parseString("[1,2,3]");
+  int status = d.parseString("[1,2,3];");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -110,7 +110,7 @@ TEST_F(ParseTest, ParseArray) {
 }
 
 TEST_F(ParseTest, ParseEmptyArray) {
-  int status = d.parseString("[]");
+  int status = d.parseString("[];");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -120,7 +120,7 @@ TEST_F(ParseTest, ParseEmptyArray) {
 }
 
 TEST_F(ParseTest, ParseMap) {
-  int status = d.parseString("{\"foo\": 10.342,\n\"bar\": 12.34}");
+  int status = d.parseString("{\"foo\": 10.342,\n\"bar\": 12.34};");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -130,14 +130,14 @@ TEST_F(ParseTest, ParseMap) {
 }
 
 TEST_F(ParseTest, ParseMapSubscript) {
-  d.parseString("h[\"key1\"]");
+  d.parseString("h[\"key1\"];");
   d.result->accept(printer);
 
   EXPECT_STREQ("block(subscript(ident(h), string(key1)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseEmptyMap) {
-  int status = d.parseString("{}");
+  int status = d.parseString("{};");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -147,7 +147,7 @@ TEST_F(ParseTest, ParseEmptyMap) {
 }
 
 TEST_F(ParseTest, ParseAdd) {
-  int status = d.parseString("1 + 2 + 3");
+  int status = d.parseString("1 + 2 + 3;");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -157,7 +157,7 @@ TEST_F(ParseTest, ParseAdd) {
 }
 
 TEST_F(ParseTest, ParseSubtract) {
-  int status = d.parseString("1 - 2 - 3");
+  int status = d.parseString("1 - 2 - 3;");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -167,7 +167,7 @@ TEST_F(ParseTest, ParseSubtract) {
 }
 
 TEST_F(ParseTest, ParseMultiply) {
-  int status = d.parseString("1 * 2 * 3");
+  int status = d.parseString("1 * 2 * 3;");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -177,7 +177,7 @@ TEST_F(ParseTest, ParseMultiply) {
 }
 
 TEST_F(ParseTest, ParseDivide) {
-  int status = d.parseString("1 / 2 / 3");
+  int status = d.parseString("1 / 2 / 3;");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -187,7 +187,7 @@ TEST_F(ParseTest, ParseDivide) {
 }
 
 TEST_F(ParseTest, ParseExponentiate) {
-  int status = d.parseString("1 ^ 2 ^ 3");
+  int status = d.parseString("1 ^ 2 ^ 3;");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -197,7 +197,7 @@ TEST_F(ParseTest, ParseExponentiate) {
 }
 
 TEST_F(ParseTest, ParseModulo) {
-  int status = d.parseString("1 % 2 % 3");
+  int status = d.parseString("1 % 2 % 3;");
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getExpressions().size());
 
@@ -207,127 +207,127 @@ TEST_F(ParseTest, ParseModulo) {
 }
 
 TEST_F(ParseTest, AstPrinter) {
-  d.parseString("1 + 2 + 3");
+  d.parseString("1 + 2 + 3;");
   d.result->getExpressions()[0]->accept(printer);
   EXPECT_STREQ("add(add(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseBitShiftLeft) {
-  d.parseString("0xff00 << 2");
+  d.parseString("0xff00 << 2;");
   d.result->getExpressions()[0]->accept(printer);
   EXPECT_STREQ("bitshiftleft(integer(65280), integer(2))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseBitShiftRight) {
-  d.parseString("0xbadf00d >> 3");
+  d.parseString("0xbadf00d >> 3;");
   d.result->getExpressions()[0]->accept(printer);
   EXPECT_STREQ("bitshiftright(integer(195948557), integer(3))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseBitwiseOr) {
-  d.parseString("0xf0 | 0x0f");
+  d.parseString("0xf0 | 0x0f;");
   d.result->getExpressions()[0]->accept(printer);
   EXPECT_STREQ("bitwiseor(integer(240), integer(15))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseBitwiseAnd) {
-  d.parseString("0x3e & 0xff");
+  d.parseString("0x3e & 0xff;");
   d.result->getExpressions()[0]->accept(printer);
   EXPECT_STREQ("bitwiseand(integer(62), integer(255))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseBitwiseNot) {
-  d.parseString("~0b101010");
+  d.parseString("~0b101010;");
   d.result->getExpressions()[0]->accept(printer);
   EXPECT_STREQ("bitwisenot(integer(42))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseLogicalOr) {
-  d.parseString("truth || fiction");
+  d.parseString("truth || fiction;");
   d.result->getExpressions()[0]->accept(printer);
   EXPECT_STREQ("logicalor(ident(truth), ident(fiction))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseLogicalAnd) {
-  d.parseString("is_valid && is_defined");
+  d.parseString("is_valid && is_defined;");
   d.result->getExpressions()[0]->accept(printer);
   EXPECT_STREQ("logicaland(ident(is_valid), ident(is_defined))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseLogicalNot) {
-  d.parseString("!is_defined");
+  d.parseString("!is_defined;");
   d.result->accept(printer);
   EXPECT_STREQ("block(logicalnot(ident(is_defined)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseExclusiveRange) {
-  d.parseString("1..10");
+  d.parseString("1..10;");
   d.result->accept(printer);
   EXPECT_STREQ("block(range(integer(1), integer(10), exclusive))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseInclusiveRange) {
-  d.parseString("-3...3");
+  d.parseString("-3...3;");
   d.result->accept(printer);
   EXPECT_STREQ("block(range(integer(-3), integer(3), inclusive))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseTuple) {
-  d.parseString("(\"name\", 3, foo)");
+  d.parseString("(\"name\", 3, foo);");
   d.result->accept(printer);
   EXPECT_STREQ("block(tuple(string(name), integer(3), ident(foo)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseEmptyTuple) {
-  d.parseString("()");
+  d.parseString("();");
   d.result->accept(printer);
   EXPECT_STREQ("block(tuple())", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseTupleFieldAccess) {
-  d.parseString("(\"name\", 3).1");
+  d.parseString("(\"name\", 3).1;");
   d.result->accept(printer);
   EXPECT_STREQ("block(tuplefieldaccess(tuple(string(name), integer(3)), integer(1)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseEquality) {
-  d.parseString("min_val == 2.3252");
+  d.parseString("min_val == 2.3252;");
   d.result->accept(printer);
   EXPECT_STREQ("block(equality(ident(min_val), float(2.3252)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseInequality) {
-  d.parseString("cond != true");
+  d.parseString("cond != true;");
   d.result->accept(printer);
   EXPECT_STREQ("block(inequality(ident(cond), boolean(true)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseLessThan) {
-  d.parseString("1.00005 < 1.0001");
+  d.parseString("1.00005 < 1.0001;");
   d.result->accept(printer);
   EXPECT_STREQ("block(lessthan(float(1.00005), float(1.0001)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseGreaterThan) {
-  d.parseString("4.3 > 3.2");
+  d.parseString("4.3 > 3.2;");
   d.result->accept(printer);
   EXPECT_STREQ("block(greaterthan(float(4.3), float(3.2)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseLessThanOrEqualTo) {
-  d.parseString("3 <= 4");
+  d.parseString("3 <= 4;");
   d.result->accept(printer);
   EXPECT_STREQ("block(lessthanorequalto(integer(3), integer(4)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseGreaterThanOrEqualTo) {
-  d.parseString("6 >= 4");
+  d.parseString("6 >= 4;");
   d.result->accept(printer);
   EXPECT_STREQ("block(greaterthanorequalto(integer(6), integer(4)))", printer.getOutput().c_str());
 }
 
 TEST_F(ParseTest, ParseParenthesis) {
-  d.parseString("3 * (4 + 5)");
+  d.parseString("3 * (4 + 5);");
   d.result->accept(printer);
   EXPECT_STREQ("block(multiply(integer(3), add(integer(4), integer(5))))", printer.getOutput().c_str());
 }
