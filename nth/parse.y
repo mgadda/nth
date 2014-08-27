@@ -79,8 +79,8 @@
 %left "&&" "||"
 
 %type <nth::Block*> file;
-%type <nth::Block*> expressions block;
-%type <nth::Expression*> expr literal compound_literal binary_op unary_op;
+%type <nth::Block*> statements block;
+%type <nth::Expression*> statement expr literal compound_literal binary_op unary_op val_def;
 %type <nth::ExpressionList*> exprlist;
 %type <nth::Array*> array;
 %type <nth::Map*> map;
@@ -100,18 +100,22 @@
 %%
 
 
-file: expressions  { driver.result = $1; }
+file: statements  { driver.result = $1; }
     ;
 
-expressions: expr              { $$ = new nth::Block($1); }
-           | expressions expr  { std::swap($$, $1); $$->insertAfter($2); }
+statements: statement              { $$ = new nth::Block($1); }
+           | statements statement  { std::swap($$, $1); $$->insertAfter($2); }
            ;
+
+statement: expr      { std::swap($$, $1); }
+         | val_def   { std::swap($$, $1); }
+         | func_def
+         ;
 
 expr: literal   { std::swap($$, $1); }
     | binary_op { std::swap($$, $1); }
     | unary_op  { std::swap($$, $1); }
-    | func_def
-    | val_def
+    | lambda
     | if_else
     | func_call
     | "(" expr ")"
@@ -215,10 +219,10 @@ tuple_field_access: expr "." INT { $$ = new nth::TupleFieldAccess($1, new nth::I
   /* end binary ops */
 
   /* Functions */
-block: "{" expressions "}"
+block: "{" statements "}"
 
-func_def: DEF IDENT "(" arglist ")" ":" type block
-        | "{" "(" arglist ")" ":" type "=>" expr "}"
+func_def: DEF IDENT "(" arglist ")" ":" type block;
+lambda:  "{" "(" arglist ")" ":" type "=>" expr "}";
 
 arglist: arg
        | arg "," arglist
