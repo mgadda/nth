@@ -10,18 +10,22 @@
 
 using namespace nth;
 
+Identifier *Identifier::forTemplatedType(std::string name, int subtypeCount) {
+  return new nth::Identifier(name + std::to_string(subtypeCount));
+}
+
 Block::Block() {}
 
-Block::Block(Expression *expr) {
-  expressions.push_back(expr);
+Block::Block(ASTNode *node) {
+  nodes.push_back(node);
 }
 
-void Block::insertAfter(Expression *expr) {
-  expressions.push_back(expr);
+void Block::insertAfter(ASTNode *node) {
+  nodes.push_back(node);
 }
 
-ExpressionList &Block::getExpressions() {
-  return expressions;
+NodeList &Block::getNodes() {
+  return nodes;
 }
 
 void Add::accept(Visitor &v) {

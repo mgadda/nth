@@ -1,5 +1,6 @@
 %code requires {
   #include "ast.h"
+  #include "type.h"
 
   namespace nth {
     // Forward declaration because Driver
@@ -14,7 +15,6 @@
   #include "driver.h"
 
  int exit_status;
-
 %}
 
 %language "C++"
@@ -80,7 +80,8 @@
 
 %type <nth::Block*> file;
 %type <nth::Block*> statements block;
-%type <nth::Expression*> statement expr literal compound_literal binary_op unary_op val_def;
+%type <nth::ASTNode*> statement;
+%type <nth::Expression*> expr literal compound_literal binary_op unary_op val_def;
 %type <nth::ExpressionList*> exprlist;
 %type <nth::Array*> array;
 %type <nth::Map*> map;
@@ -90,7 +91,11 @@
 %type <std::pair<nth::String*, nth::Expression*>> key_value;
 %type <nth::String*> key;
 %type <nth::BinaryOperation*> math_op bitwise_op boolean_op comparison_op subscript tuple_field_access;
-
+%type <nth::FunctionDef*> func_def;
+%type <nth::ArgList*> arglist;
+%type <nth::TypeList*> typelist;
+%type <nth::Type*> type;
+%type <nth::Argument*> arg;
 
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
@@ -103,13 +108,13 @@
 file: statements  { driver.result = $1; }
     ;
 
-statements: statement              { $$ = new nth::Block($1); }
-           | statements statement  { std::swap($$, $1); $$->insertAfter($2); }
-           ;
+statements: statement             { $$ = new nth::Block($1); }
+          | statements statement  { std::swap($$, $1); $$->insertAfter($2); }
+          ;
 
-statement: expr      { std::swap($$, $1); }
-         | val_def   { std::swap($$, $1); }
-         | func_def
+statement: expr      { nth::ASTNode* node = $1; std::swap($$, node); }
+         | val_def   { nth::ASTNode* node = $1; std::swap($$, node); }
+         | func_def  { nth::ASTNode* node = $1; std::swap($$, node); }
          ;
 
 expr: literal   { std::swap($$, $1); }
@@ -221,14 +226,22 @@ tuple_field_access: expr "." INT { $$ = new nth::TupleFieldAccess($1, new nth::I
   /* Functions */
 block: "{" statements "}"  { $$ = new nth::Block($2); }
 
-func_def: DEF IDENT "(" arglist ")" ":" type block;
+func_def: DEF IDENT "(" arglist ")" ":" type block {
+            $$ = new nth::FunctionDef(
+              new nth::Identifier($2),
+              *$4, $7, $8
+            );
+          }
+        ;
+
 lambda:  "{" "(" arglist ")" ":" type "=>" expr "}";
 
-arglist: arg
-       | arg "," arglist
+arglist: arg               { $$ = new nth::ArgList(1, $1); }
+       | arg "," arglist   { std::swap($$, $3); $$->push_front($1); }
        ;
 
-arg: IDENT ":" type;
+arg: IDENT ":" type { $$ = new nth::Argument(new nth::Identifier($1), $3); }
+   ;
 
 func_call: IDENT "(" exprlist ")";
 
@@ -243,14 +256,14 @@ if_else: IF "(" expr ")" block
 
   /* Types */
 
-typelist: type
-        | type "," typelist
+typelist: type               { $$ = new nth::TypeList(1, $1); }
+        | type "," typelist  { std::swap($$, $3); $$->push_front($1); }
         ;
 
-type: IDENT
-    | IDENT "[" typelist "]"
-    | "(" typelist ")"
-    | "(" typelist ")" "=>" type
+type: IDENT                       { $$ = new nth::SimpleType(new nth::Identifier($1)); }
+    | IDENT "[" typelist "]"      { $$ = new nth::TemplatedType(new nth::Identifier($1), *$3); }
+    | "(" typelist ")"            { $$ = new nth::TupleType(*$2); } /* TODO: replace N with length of typelist */
+    | "(" typelist ")" "=>" type  { $$ = new nth::FunctionType(*$2, $5); } /* TODO: look up type instance by string */
     ;
 %%
 

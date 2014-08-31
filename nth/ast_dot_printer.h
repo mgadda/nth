@@ -42,15 +42,19 @@ public:
   void visit(nth::Comparison *comparison);
   void visit(nth::Subscript *subscript);
   void visit(nth::TupleFieldAccess *field_access);
+  void visit(nth::FunctionDef *functionDef);
+  void visit(nth::Argument *argument);
 
+  void visit(nth::SimpleType *type);
+  void visit(nth::TemplatedType *type);
 
   std::string getOutput();
 protected:
   bool pretty_print;
   std::stringstream ast_output;
 
-  typedef std::vector<std::pair<nth::Expression*, nth::Expression*>> EdgeList;
-  typedef std::map<nth::Expression*, std::string> NodeMap;
+  typedef std::vector<std::pair<nth::ASTNode*, nth::ASTNode*>> EdgeList;
+  typedef std::map<nth::ASTNode*, std::string> NodeMap;
 
   EdgeList edges;
   NodeMap nodes;

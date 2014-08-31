@@ -11,35 +11,47 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
 #include <memory>
 
 #include "ast_visitor.h"
 
 namespace nth {
 
-class Expression : public Visitable {
+class Type;
+
+// Anything at all
+class ASTNode : public Visitable {
+ public:
+  virtual ~ASTNode() {}
+};
+
+// Anything that has a value
+class Expression : public ASTNode {
  public:
   virtual ~Expression() {}
 };
 
+typedef std::vector<ASTNode*> NodeList;
 typedef std::vector<Expression*> ExpressionList;
 typedef std::pair<nth::String*, Expression*> KeyValuePair;
 typedef std::vector<KeyValuePair> ExpressionMap;
 typedef std::unique_ptr<Expression> ExpressionPtr;
-typedef std::vector<Argument*> ArgList;
+typedef std::list<Argument*> ArgList;
+typedef std::list<Type*> TypeList;
 
 class Block : public Expression {
  public:
   Block();
-  Block(Expression *expr);
-  void insertAfter(Expression *expr);
-  ExpressionList &getExpressions();
+  Block(ASTNode *node);
+  void insertAfter(ASTNode *node);
+  NodeList &getNodes();
 
   // Visitable
   void accept(Visitor &v) { v.visit(this); }
 
  protected:
-  ExpressionList expressions;
+  NodeList nodes;
 };
 
 class Integer : public Expression {
@@ -129,6 +141,8 @@ class Identifier : public Expression {
   Identifier(std::string value) : value(value) {}
   Identifier(Identifier &&other) : value(other.value) {}
 
+  static Identifier *forTemplatedType(std::string name, int subtypeCount);
+
   // Visitable
   void accept(Visitor &v) { v.visit(this); }
 
@@ -140,12 +154,6 @@ class Identifier : public Expression {
   std::string getValue() { return value; }
  protected:
   std::string value;
-};
-
-// TODO: should this inherit Identifier
-class TypeIdentifier : public Identifier {
- public:
-  bool operator==(const TypeIdentifier &i) const { return value == i.value; }
 };
 
 class Array : public Expression {
@@ -419,26 +427,38 @@ class TupleFieldAccess : public BinaryOperation {
   void accept(Visitor &v);
 };
 
-class Argument {
-public:
-  Argument(std::string name, TypeIdentifier type);
+
+class Argument : public ASTNode {
+ public:
+  Argument(Identifier *name, Type *type) : name(name), type(type) {}
+
+  void accept(Visitor &v) { v.visit(this); }
+
+  Identifier *getName() { return name; }
+  Type *getType() { return type; }
+
+ protected:
+  Identifier *name;
+  Type *type;
 };
 
-// TODO: function definitions should probably be statements, not expressions
-// but lambdas should remain expressions
-// does this require two different AST types?
-// can it be enforced entirely by the parser? (probably)
-class FunctionDef : public Expression {
+class FunctionDef : public ASTNode {
  public:
-  FunctionDef(std::string name, ArgList &argList, std::string returnType, Block *block)
+  FunctionDef(Identifier *name, ArgList &argList, Type *returnType, Block *block)
     : name(name), argList(argList), returnType(returnType), block(block) {}
 
   void accept(Visitor &v) { v.visit(this); }
+
+  Identifier *getName() { return name; }
+  ArgList &getArguments() { return argList; }
+  Type *getReturnType() { return returnType; }
+  Block *getBlock() { return block; }
+
  protected:
-  std::string name;
-  ArgList argList;
-  std::string returnType; // todo should this some kind of Type object?
-  Block *block;
+  Identifier      *name;
+  ArgList         argList;
+  Type            *returnType;
+  Block           *block;
 };
 
 }

@@ -2,6 +2,7 @@
 #include <limits>
 
 #include "ast_printer.h"
+#include "type.h"
 
 template <class InputIterator, class Function>
 void join_values(InputIterator first, InputIterator last, std::string c, std::stringstream &ss, Function f)
@@ -23,7 +24,7 @@ std::string AstPrinter::getOutput() {
 void AstPrinter::visit(nth::Block *block) {
   ast_output << "block(";
 
-  auto values = block->getExpressions();
+  auto values = block->getNodes();
   join_values(values.begin(), values.end(), ", ", ast_output, [this](decltype(values)::value_type value) {
     value->accept(*this);
   });
@@ -214,6 +215,44 @@ void AstPrinter::visit(nth::TupleFieldAccess *field_access) {
 }
 
 void AstPrinter::visit(nth::FunctionDef *functionDef) {
+  ast_output << "funcdef(name(";
+  functionDef->getName()->accept(*this);
+  ast_output << "), arglist(";
+  auto values = functionDef->getArguments();
+  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ArgList::value_type value) {
+    value->accept(*this);
+  });
+  ast_output << "), returning(";
+  functionDef->getReturnType()->accept(*this);
+  ast_output << "), ";
+  functionDef->getBlock()->accept(*this);
+  ast_output << ")";
+}
+
+void AstPrinter::visit(nth::Argument *argument) {
+  ast_output << "argument(";
+  argument->getName()->accept(*this);
+  ast_output << ", ";
+  argument->getType()->accept(*this);
+  ast_output << ")";
+}
+
+void AstPrinter::visit(nth::SimpleType *type) {
+  ast_output << "simple_type(";
+  type->getName()->accept(*this);
+  ast_output << ")";
+}
+
+void AstPrinter::visit(nth::TemplatedType *type) {
+  ast_output << "templated_type(";
+  type->getName()->accept(*this);
+  ast_output << ", ";
+  auto values = type->getSubtypes();
+  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::TypeList::value_type value) {
+    value->accept(*this);
+  });
+
+  ast_output << ")";
 }
 
 

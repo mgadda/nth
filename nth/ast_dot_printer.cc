@@ -32,7 +32,7 @@ std::string AstDotPrinter::getOutput() {
 void AstDotPrinter::visit(nth::Block *block) {
   nodes[block] = "block";
 
-  for (auto child : block->getExpressions()) {
+  for (auto child : block->getNodes()) {
     if (child) {
       edges.push_back(std::make_pair(block, child));
       child->accept(*this);
@@ -214,4 +214,13 @@ void AstDotPrinter::visit(nth::TupleFieldAccess *field_access) {
 
 }
 
+void AstDotPrinter::visit(nth::FunctionDef *functionDef) {
+}
+
+void AstDotPrinter::visit(nth::Argument *argument) {
+
+}
+
+void AstDotPrinter::visit(nth::SimpleType *type) {}
+void AstDotPrinter::visit(nth::TemplatedType *type) {}
 

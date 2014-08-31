@@ -42,6 +42,10 @@ public:
   void visit(nth::Subscript *subscript);
   void visit(nth::TupleFieldAccess *field_access);
   void visit(nth::FunctionDef *functionDef);
+  void visit(nth::Argument *argument);
+
+  void visit(nth::SimpleType *type);
+  void visit(nth::TemplatedType *type);
 
   std::string getOutput();
 protected:

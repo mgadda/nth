@@ -46,6 +46,8 @@ class TupleFieldAccess;
 class FunctionDef;
 class Argument;
 class TypeIdentifier;
+class SimpleType;
+class TemplatedType;
 
 class Visitor {
 public:
@@ -80,6 +82,10 @@ public:
   virtual void visit(Subscript *subscript)=0;
   virtual void visit(TupleFieldAccess *field_access)=0;
   virtual void visit(FunctionDef *functionDef)=0;
+  virtual void visit(Argument *argument)=0;
+
+  virtual void visit(SimpleType *type)=0;
+  virtual void visit(TemplatedType *type)=0;
 };
 
 class Visitable {
