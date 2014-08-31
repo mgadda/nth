@@ -224,7 +224,7 @@ tuple_field_access: expr "." INT { $$ = new nth::TupleFieldAccess($1, new nth::I
   /* end binary ops */
 
   /* Functions */
-block: "{" statements "}"  { $$ = new nth::Block($2); }
+block: "{" statements "}"  { std::swap($$, $2); }
 
 func_def: DEF IDENT "(" arglist ")" ":" type block {
             $$ = new nth::FunctionDef(
