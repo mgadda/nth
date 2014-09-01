@@ -217,7 +217,7 @@ void AstDotPrinter::visit(nth::TupleFieldAccess *field_access) {
 }
 
 void AstDotPrinter::visit(nth::FunctionDef *functionDef) {
-  nodes[functionDef] = "function";
+  nodes[functionDef] = "function_def";
 
   edges.push_back(std::make_pair(functionDef, functionDef->getName()));
   functionDef->getName()->accept(*this);
@@ -248,7 +248,7 @@ void AstDotPrinter::visit(nth::FunctionCall *functionCall) {
 }
 
 void AstDotPrinter::visit(nth::VariableDef *variableDef) {
-  nodes[variableDef] = "val";
+  nodes[variableDef] = "val_def";
 
   edges.push_back(std::make_pair(variableDef, variableDef->getName()));
   variableDef->getName()->accept(*this);
@@ -261,7 +261,7 @@ void AstDotPrinter::visit(nth::VariableDef *variableDef) {
 }
 
 void AstDotPrinter::visit(nth::Argument *argument) {
-  nodes[argument] = "argument";
+  nodes[argument] = "argument_def";
 
   edges.push_back(std::make_pair(argument, argument->getName()));
   argument->getName()->accept(*this);
