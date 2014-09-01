@@ -333,9 +333,9 @@ TEST_F(ParseTest, ParseParenthesis) {
 }
 
 TEST_F(ParseTest, ParseFunctionDefinition) {
- d.parseString("def add(a: Integer, b: (String, Integer)): Integer {\n\
-                  a + b.1\n\
-                }");
- d.result->accept(printer);
- EXPECT_STREQ("block(funcdef(name(ident(add)), arglist(argument(ident(a), simple_type(ident(Integer))), argument(ident(b), templated_type(ident(Tuple2), simple_type(ident(String)), simple_type(ident(Integer))))), returning(simple_type(ident(Integer))), block(add(ident(a), tuplefieldaccess(ident(b), integer(1))))))", printer.getOutput().c_str());
+  d.parseString("def add(a: Integer, b: (String, Integer)): Integer {\n\
+                   a + b.1\n\
+                 }");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(funcdef(name(ident(add)), arglist(argument(ident(a), simple_type(ident(Integer))), argument(ident(b), templated_type(ident(Tuple2), simple_type(ident(String)), simple_type(ident(Integer))))), returning(simple_type(ident(Integer))), block(add(ident(a), tuplefieldaccess(ident(b), integer(1))))))", printer.getOutput().c_str());
 }
