@@ -11,7 +11,7 @@
 
 namespace nth {
 
-class Type : public Visitable {
+class Type : public ASTNode {
  public:
   Identifier *getName() { return name; }
 

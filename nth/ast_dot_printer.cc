@@ -7,6 +7,7 @@
 //
 
 #include "ast_dot_printer.h"
+#include "type.h"
 
 AstDotPrinter::AstDotPrinter() {
 }
@@ -208,23 +209,72 @@ void AstDotPrinter::visit(nth::Comparison *comparison) {
 }
 
 void AstDotPrinter::visit(nth::Subscript *subscript) {
+  nodes[subscript] = "subscript";
 
 }
 void AstDotPrinter::visit(nth::TupleFieldAccess *field_access) {
-
+  nodes[field_access] = "field_access";
 }
 
 void AstDotPrinter::visit(nth::FunctionDef *functionDef) {
+  nodes[functionDef] = "function";
+
+  edges.push_back(std::make_pair(functionDef, functionDef->getName()));
+  functionDef->getName()->accept(*this);
+
+  // arguments
+  for (auto value : functionDef->getArguments()) {
+    edges.push_back(std::make_pair(functionDef, value));
+    value->accept(*this);
+  }
+
+  edges.push_back(std::make_pair(functionDef, functionDef->getReturnType()));
+  functionDef->getReturnType()->accept(*this);
+
+  edges.push_back(std::make_pair(functionDef, functionDef->getBlock()));
+  functionDef->getBlock()->accept(*this);
+
 }
 
 void AstDotPrinter::visit(nth::VariableDef *variableDef) {
+  nodes[variableDef] = "val";
 
+  edges.push_back(std::make_pair(variableDef, variableDef->getName()));
+  variableDef->getName()->accept(*this);
+
+  edges.push_back(std::make_pair(variableDef, variableDef->getVarType()));
+  variableDef->getVarType()->accept(*this);
+
+  edges.push_back(std::make_pair(variableDef, variableDef->getValue()));
+  variableDef->getValue()->accept(*this);
 }
 
 void AstDotPrinter::visit(nth::Argument *argument) {
+  nodes[argument] = "argument";
 
+  edges.push_back(std::make_pair(argument, argument->getName()));
+  argument->getName()->accept(*this);
+
+  edges.push_back(std::make_pair(argument, argument->getType()));
+  argument->getType()->accept(*this);
 }
 
-void AstDotPrinter::visit(nth::SimpleType *type) {}
-void AstDotPrinter::visit(nth::TemplatedType *type) {}
+void AstDotPrinter::visit(nth::SimpleType *type) {
+  nodes[type] = "simple_type";
+
+  edges.push_back(std::make_pair(type, type->getName()));
+  type->getName()->accept(*this);
+}
+
+void AstDotPrinter::visit(nth::TemplatedType *type) {
+  nodes[type] = "templated_type";
+
+  edges.push_back(std::make_pair(type, type->getName()));
+  type->getName()->accept(*this);
+
+  for (auto value : type->getSubtypes()) {
+    edges.push_back(std::make_pair(type, value));
+    value->accept(*this);
+  }
+}
 
