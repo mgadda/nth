@@ -13,7 +13,7 @@ AstDotPrinter::AstDotPrinter() {
 }
 
 std::string AstDotPrinter::getOutput() {
-  ast_output << "digraph ast {\n";
+  ast_output << "digraph ast {\nordering=out;\n";
 
   for (auto node : nodes) {
 
