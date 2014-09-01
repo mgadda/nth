@@ -236,6 +236,17 @@ void AstDotPrinter::visit(nth::FunctionDef *functionDef) {
 
 }
 
+void AstDotPrinter::visit(nth::FunctionCall *functionCall) {
+  nodes[functionCall] = "call";
+  edges.push_back(std::make_pair(functionCall, functionCall->getName()));
+  functionCall->getName()->accept(*this);
+
+  for (auto value : functionCall->getArguments()) {
+    edges.push_back(std::make_pair(functionCall, value));
+    value->accept(*this);
+  }
+}
+
 void AstDotPrinter::visit(nth::VariableDef *variableDef) {
   nodes[variableDef] = "val";
 

@@ -345,3 +345,9 @@ TEST_F(ParseTest, ParseVariableDef) {
  d.result->accept(printer);
  EXPECT_STREQ("block(variabledef(name(ident(a)), simple_type(ident(Boolean)), boolean(true)))", printer.getOutput().c_str());
 }
+
+TEST_F(ParseTest, ParseFunctionCall) {
+  d.parseString("foo(10, 3 + 5)");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(call(ident(foo), arguments(integer(10), add(integer(3), integer(5)))))", printer.getOutput().c_str());
+}

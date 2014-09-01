@@ -229,6 +229,17 @@ void AstPrinter::visit(nth::FunctionDef *functionDef) {
   ast_output << ")";
 }
 
+void AstPrinter::visit(nth::FunctionCall *functionCall) {
+  ast_output << "call(";
+  functionCall->getName()->accept(*this);
+  ast_output << ", arguments(";
+  auto values = functionCall->getArguments();
+  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionList::value_type value) {
+    value->accept(*this);
+  });
+  ast_output << "))";
+}
+
 void AstPrinter::visit(nth::VariableDef *variableDef) {
   ast_output << "variabledef(name(";
   variableDef->getName()->accept(*this);

@@ -461,6 +461,20 @@ class FunctionDef : public ASTNode {
   Block           *block;
 };
 
+class FunctionCall : public Expression {
+ public:
+  FunctionCall(Identifier *name, ExpressionList &arguments)
+  : name(name), arguments(arguments) {}
+
+  void accept(Visitor &v) { v.visit(this); }
+
+  Identifier *getName() { return name; }
+  ExpressionList &getArguments() { return arguments; }
+ protected:
+  Identifier *name;
+  ExpressionList arguments;
+};
+
 class VariableDef : public ASTNode {
  public:
   VariableDef(Identifier *name, Type *varType, Expression *value)

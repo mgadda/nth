@@ -92,6 +92,7 @@
 %type <nth::String*> key;
 %type <nth::BinaryOperation*> math_op bitwise_op boolean_op comparison_op subscript tuple_field_access;
 %type <nth::FunctionDef*> func_def;
+%type <nth::FunctionCall*> func_call;
 %type <nth::VariableDef*> val_def;
 %type <nth::ArgList*> arglist;
 %type <nth::TypeList*> typelist;
@@ -123,7 +124,7 @@ expr: literal   { std::swap($$, $1); }
     | unary_op  { std::swap($$, $1); }
     | lambda
     | if_else
-    | func_call
+    | func_call { nth::Expression *expr = $1; std::swap($$, expr); }
     | "(" expr ")"
     ;
 
@@ -244,7 +245,8 @@ arglist: arg               { $$ = new nth::ArgList(1, $1); }
 arg: IDENT ":" type { $$ = new nth::Argument(new nth::Identifier($1), $3); }
    ;
 
-func_call: IDENT "(" exprlist ")";
+func_call: IDENT "(" exprlist ")"  { $$ = new nth::FunctionCall(new nth::Identifier($1), *$3); }
+         ;
 
   /* Variables */
 val_def: VAL IDENT ":" type "=" expr {

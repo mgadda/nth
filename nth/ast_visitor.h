@@ -44,6 +44,7 @@ class Comparison;
 class Subscript;
 class TupleFieldAccess;
 class FunctionDef;
+class FunctionCall;
 class VariableDef;
 class Argument;
 class TypeIdentifier;
@@ -83,6 +84,7 @@ public:
   virtual void visit(Subscript *subscript)=0;
   virtual void visit(TupleFieldAccess *field_access)=0;
   virtual void visit(FunctionDef *functionDef)=0;
+  virtual void visit(FunctionCall *functionCall)=0;
   virtual void visit(VariableDef *variableDef)=0;
   virtual void visit(Argument *argument)=0;
 
