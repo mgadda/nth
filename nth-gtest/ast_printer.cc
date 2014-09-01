@@ -229,6 +229,16 @@ void AstPrinter::visit(nth::FunctionDef *functionDef) {
   ast_output << ")";
 }
 
+void AstPrinter::visit(nth::VariableDef *variableDef) {
+  ast_output << "variabledef(name(";
+  variableDef->getName()->accept(*this);
+  ast_output << "), ";
+  variableDef->getVarType()->accept(*this);
+  ast_output << ", ";
+  variableDef->getValue()->accept(*this);
+  ast_output << ")";
+}
+
 void AstPrinter::visit(nth::Argument *argument) {
   ast_output << "argument(";
   argument->getName()->accept(*this);

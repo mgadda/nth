@@ -339,3 +339,9 @@ TEST_F(ParseTest, ParseFunctionDefinition) {
   d.result->accept(printer);
   EXPECT_STREQ("block(funcdef(name(ident(add)), arglist(argument(ident(a), simple_type(ident(Integer))), argument(ident(b), templated_type(ident(Tuple2), simple_type(ident(String)), simple_type(ident(Integer))))), returning(simple_type(ident(Integer))), block(add(ident(a), tuplefieldaccess(ident(b), integer(1))))))", printer.getOutput().c_str());
 }
+
+TEST_F(ParseTest, ParseVariableDef) {
+ d.parseString("val a: Boolean = true");
+ d.result->accept(printer);
+ EXPECT_STREQ("block(variabledef(name(ident(a)), simple_type(ident(Boolean)), boolean(true)))", printer.getOutput().c_str());
+}

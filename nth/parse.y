@@ -81,7 +81,7 @@
 %type <nth::Block*> file;
 %type <nth::Block*> statements block;
 %type <nth::ASTNode*> statement;
-%type <nth::Expression*> expr literal compound_literal binary_op unary_op val_def;
+%type <nth::Expression*> expr literal compound_literal binary_op unary_op;
 %type <nth::ExpressionList*> exprlist;
 %type <nth::Array*> array;
 %type <nth::Map*> map;
@@ -92,6 +92,7 @@
 %type <nth::String*> key;
 %type <nth::BinaryOperation*> math_op bitwise_op boolean_op comparison_op subscript tuple_field_access;
 %type <nth::FunctionDef*> func_def;
+%type <nth::VariableDef*> val_def;
 %type <nth::ArgList*> arglist;
 %type <nth::TypeList*> typelist;
 %type <nth::Type*> type;
@@ -246,7 +247,10 @@ arg: IDENT ":" type { $$ = new nth::Argument(new nth::Identifier($1), $3); }
 func_call: IDENT "(" exprlist ")";
 
   /* Variables */
-val_def: VAL IDENT ":" type "=" expr;
+val_def: VAL IDENT ":" type "=" expr {
+           $$ = new nth::VariableDef(new nth::Identifier($2), $4, $6);
+         }
+       ;
 
   /* Control Flow */
 

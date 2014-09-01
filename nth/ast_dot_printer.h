@@ -43,6 +43,7 @@ public:
   void visit(nth::Subscript *subscript);
   void visit(nth::TupleFieldAccess *field_access);
   void visit(nth::FunctionDef *functionDef);
+  void visit(nth::VariableDef *variableDef);
   void visit(nth::Argument *argument);
 
   void visit(nth::SimpleType *type);

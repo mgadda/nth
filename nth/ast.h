@@ -461,5 +461,22 @@ class FunctionDef : public ASTNode {
   Block           *block;
 };
 
+class VariableDef : public ASTNode {
+ public:
+  VariableDef(Identifier *name, Type *varType, Expression *value)
+  : name(name), varType(varType), value(value) {}
+
+  void accept(Visitor &v) { v.visit(this); }
+
+  Identifier *getName() { return name; }
+  Type *getVarType() { return varType; }
+  Expression *getValue() { return value; }
+
+ protected:
+  Identifier *name;
+  Type *varType;
+  Expression *value;
+};
+
 }
 #endif /* defined(__nth__ast__) */

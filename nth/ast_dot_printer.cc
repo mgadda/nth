@@ -217,6 +217,10 @@ void AstDotPrinter::visit(nth::TupleFieldAccess *field_access) {
 void AstDotPrinter::visit(nth::FunctionDef *functionDef) {
 }
 
+void AstDotPrinter::visit(nth::VariableDef *variableDef) {
+
+}
+
 void AstDotPrinter::visit(nth::Argument *argument) {
 
 }
