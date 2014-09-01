@@ -340,6 +340,12 @@ TEST_F(ParseTest, ParseFunctionDefinition) {
   EXPECT_STREQ("block(funcdef(name(ident(add)), arglist(argument(ident(a), simple_type(ident(Integer))), argument(ident(b), templated_type(ident(Tuple2), simple_type(ident(String)), simple_type(ident(Integer))))), returning(simple_type(ident(Integer))), block(add(ident(a), tuplefieldaccess(ident(b), integer(1))))))", printer.getOutput().c_str());
 }
 
+TEST_F(ParseTest, ParseFunctionDefWithoutArguments) {
+  d.parseString("def getName(): String { \"Matt\" }");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(funcdef(name(ident(getName)), arglist(), returning(simple_type(ident(String))), block(string(Matt))))", printer.getOutput().c_str());
+}
+
 TEST_F(ParseTest, ParseVariableDef) {
  d.parseString("val a: Boolean = true");
  d.result->accept(printer);
@@ -351,6 +357,13 @@ TEST_F(ParseTest, ParseFunctionCall) {
   d.result->accept(printer);
   EXPECT_STREQ("block(call(ident(foo), arguments(integer(10), add(integer(3), integer(5)))))", printer.getOutput().c_str());
 }
+
+TEST_F(ParseTest, ParseFunctionCallWithoutArguments) {
+  d.parseString("argless()");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(call(ident(argless), arguments()))", printer.getOutput().c_str());
+}
+
 TEST_F(ParseTest, ParseIfElse) {
   d.parseString("if (done) { doSomething() } else { doSomethingElse() }");
   d.result->accept(printer);

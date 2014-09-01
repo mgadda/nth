@@ -242,6 +242,7 @@ lambda:  "{" "(" arglist ")" ":" type "=>" expr "}";
 
 arglist: arg               { $$ = new nth::ArgList(1, $1); }
        | arg "," arglist   { std::swap($$, $3); $$->push_front($1); }
+       | /* no arguments */{ $$ = new nth::ArgList(); }
        ;
 
 arg: IDENT ":" type { $$ = new nth::Argument(new nth::Identifier($1), $3); }
@@ -272,6 +273,7 @@ type: IDENT                       { $$ = new nth::SimpleType(new nth::Identifier
     | IDENT "[" typelist "]"      { $$ = new nth::TemplatedType(new nth::Identifier($1), *$3); }
     | "(" typelist ")"            { $$ = new nth::TupleType(*$2); } /* TODO: replace N with length of typelist */
     | "(" typelist ")" "=>" type  { $$ = new nth::FunctionType(*$2, $5); } /* TODO: look up type instance by string */
+    | "(" ")" "=>" type           { $$ = new nth::FunctionType(*(new nth::TypeList()), $4); }
     ;
 %%
 
