@@ -153,7 +153,7 @@ def add(a: Int, b: Int): Int {
   a + b // no return keyword
 }
 // Closure definition
-val fun: (Int, Int) => Int = { (a: Int, b: Int): Int => a * b }
+val fun: (Int, Int) => Int = (a: Int, b: Int): Int => a * b
 
 
 // Function invocation

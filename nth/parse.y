@@ -239,7 +239,7 @@ func_def: DEF IDENT "(" arglist ")" ":" type block {
           }
         ;
 
-lambda:  "{" "(" arglist ")" ":" type "=>" expr "}" { $$ = new nth::LambdaDef(*$3, $6, $8); }
+lambda: "(" arglist ")" ":" type "=>" expr { $$ = new nth::LambdaDef(*$2, $5, $7); }
       ;
 
 arglist: arg               { $$ = new nth::ArgList(1, $1); }

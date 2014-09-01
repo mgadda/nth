@@ -58,7 +58,7 @@ class FunctionType : public TemplatedType {
  public:
   FunctionType(TypeList &argTypes, Type *returnType)
    : TemplatedType(
-       Identifier::forTemplatedType("Function", argTypes.size() + 1),
+       Identifier::forTemplatedType("Function", argTypes.size()),
        FunctionType::concat_ctr_args(argTypes, returnType)
      ) {}
 

@@ -371,7 +371,19 @@ TEST_F(ParseTest, ParseIfElse) {
 }
 
 TEST_F(ParseTest, ParseLambdaDef) {
-  d.parseString("{ (a: Int): Int => a * 2 }");
+  d.parseString("(a: Int): Int => a * 2");
   d.result->accept(printer);
   EXPECT_STREQ("block(lambda(arglist(argument(ident(a), simple_type(ident(Int)))), returning(simple_type(ident(Int))), multiply(ident(a), integer(2))))", printer.getOutput().c_str());
+}
+
+TEST_F(ParseTest, ParseLambdaAsReturnType) {
+  d.parseString("def makeAdder(a: Int): (Int) => Int { (x: Int): Int => x * a }");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(funcdef(name(ident(makeAdder)), arglist(argument(ident(a), simple_type(ident(Int)))), returning(templated_type(ident(Function1), simple_type(ident(Int)), simple_type(ident(Int)))), block(lambda(arglist(argument(ident(x), simple_type(ident(Int)))), returning(simple_type(ident(Int))), multiply(ident(x), ident(a))))))", printer.getOutput().c_str());
+}
+
+TEST_F(ParseTest, ParseLambdaAsArgument) {
+  d.parseString("def doWork(callbackFun: () => Int): Int { callbackFun() }");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(funcdef(name(ident(doWork)), arglist(argument(ident(callbackFun), templated_type(ident(Function0), simple_type(ident(Int))))), returning(simple_type(ident(Int))), block(call(ident(callbackFun), arguments()))))", printer.getOutput().c_str());
 }
