@@ -492,5 +492,23 @@ class VariableDef : public ASTNode {
   Expression *value;
 };
 
+
+class IfElse : public Expression {
+ public:
+  IfElse(Expression *condExpr, Block *ifBlock, Block *elseBlock)
+  : condExpr(condExpr), ifBlock(ifBlock), elseBlock(elseBlock) {}
+
+  void accept(Visitor &v) { v.visit(this); }
+
+  Expression *getCond() { return condExpr; }
+  Block *getIfBlock() { return ifBlock; }
+  Block *getElseBlock() { return elseBlock; }
+
+ protected:
+  Expression *condExpr;
+  Block *ifBlock;
+  Block *elseBlock;
+};
+
 }
 #endif /* defined(__nth__ast__) */

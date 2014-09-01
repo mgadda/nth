@@ -258,6 +258,16 @@ void AstPrinter::visit(nth::Argument *argument) {
   ast_output << ")";
 }
 
+void AstPrinter::visit(nth::IfElse *ifElse) {
+  ast_output << "ifelse(";
+  ifElse->getCond()->accept(*this);
+  ast_output << ", ";
+  ifElse->getIfBlock()->accept(*this);
+  ast_output << ", ";
+  ifElse->getElseBlock()->accept(*this);
+  ast_output << ")";
+}
+
 void AstPrinter::visit(nth::SimpleType *type) {
   ast_output << "simple_type(";
   type->getName()->accept(*this);

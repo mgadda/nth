@@ -45,6 +45,7 @@ public:
   void visit(nth::FunctionCall *functionCall);
   void visit(nth::VariableDef *variableDef);
   void visit(nth::Argument *argument);
+  void visit(nth::IfElse *ifElse);
 
   void visit(nth::SimpleType *type);
   void visit(nth::TemplatedType *type);

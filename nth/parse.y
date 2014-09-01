@@ -98,6 +98,7 @@
 %type <nth::TypeList*> typelist;
 %type <nth::Type*> type;
 %type <nth::Argument*> arg;
+%type <nth::IfElse*> if_else;
 
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
@@ -123,7 +124,7 @@ expr: literal   { std::swap($$, $1); }
     | binary_op { std::swap($$, $1); }
     | unary_op  { std::swap($$, $1); }
     | lambda
-    | if_else
+    | if_else   { nth::Expression *expr = $1; std::swap($$, expr); }
     | func_call { nth::Expression *expr = $1; std::swap($$, expr); }
     | "(" expr ")"
     ;
@@ -151,6 +152,7 @@ array: "[" exprlist "]" { $$ = new nth::Array(*$2); }
 
 exprlist: expr               { $$ = new nth::ExpressionList(1, $1); }
         | exprlist "," expr  { std::swap($$, $1); $$->push_back($3); }
+        | /* empty list */   { $$ = new nth::ExpressionList(); }
         ;
 
 
@@ -256,8 +258,8 @@ val_def: VAL IDENT ":" type "=" expr {
 
   /* Control Flow */
 
-if_else: IF "(" expr ")" block
-       | IF "(" expr ")" block ELSE block
+if_else: IF "(" expr ")" block             { $$ = new nth::IfElse($3, $5, nullptr); }
+       | IF "(" expr ")" block ELSE block  { $$ = new nth::IfElse($3, $5, $7); }
        ;
 
   /* Types */

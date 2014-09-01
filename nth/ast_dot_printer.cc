@@ -270,6 +270,19 @@ void AstDotPrinter::visit(nth::Argument *argument) {
   argument->getType()->accept(*this);
 }
 
+void AstDotPrinter::visit(nth::IfElse *ifElse) {
+  nodes[ifElse] = "ifelse";
+
+  edges.push_back(std::make_pair(ifElse, ifElse->getCond()));
+  ifElse->getCond()->accept(*this);
+
+  edges.push_back(std::make_pair(ifElse, ifElse->getIfBlock()));
+  ifElse->getIfBlock()->accept(*this);
+
+  edges.push_back(std::make_pair(ifElse, ifElse->getElseBlock()));
+  ifElse->getElseBlock()->accept(*this);
+}
+
 void AstDotPrinter::visit(nth::SimpleType *type) {
   nodes[type] = "simple_type";
 
