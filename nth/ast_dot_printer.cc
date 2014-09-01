@@ -17,8 +17,12 @@ std::string AstDotPrinter::getOutput() {
 
   for (auto node : nodes) {
 
-    ast_output << (int64_t)node.first
-               << " [label=\"" << node.second << "\"];\n";
+    ast_output << (int64_t)node.first;
+    ast_output << " [label=\"" << node.second << "\"";
+    if (node.second == "simple_type" || node.second == "templated_type") {
+      ast_output << " shape=box";
+    }
+    ast_output << "];\n";
   }
   for (auto edge : edges) {
     ast_output << (int64_t)edge.first
