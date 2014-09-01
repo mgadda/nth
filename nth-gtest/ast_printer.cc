@@ -229,6 +229,19 @@ void AstPrinter::visit(nth::FunctionDef *functionDef) {
   ast_output << ")";
 }
 
+void AstPrinter::visit(nth::LambdaDef *lambdaDef) {
+  ast_output << "lambda(arglist(";
+  auto values = lambdaDef->getArguments();
+  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ArgList::value_type value) {
+    value->accept(*this);
+  });
+  ast_output << "), returning(";
+  lambdaDef->getReturnType()->accept(*this);
+  ast_output << "), ";
+  lambdaDef->getBody()->accept(*this);
+  ast_output << ")";
+}
+
 void AstPrinter::visit(nth::FunctionCall *functionCall) {
   ast_output << "call(";
   functionCall->getName()->accept(*this);

@@ -236,6 +236,22 @@ void AstDotPrinter::visit(nth::FunctionDef *functionDef) {
 
 }
 
+void AstDotPrinter::visit(nth::LambdaDef *lambdaDef) {
+  nodes[lambdaDef] = "lambda_def";
+
+  for (auto value : lambdaDef->getArguments()) {
+    edges.push_back(std::make_pair(lambdaDef, value));
+    value->accept(*this);
+  }
+
+  edges.push_back(std::make_pair(lambdaDef, lambdaDef->getReturnType()));
+  lambdaDef->getReturnType()->accept(*this);
+
+  edges.push_back(std::make_pair(lambdaDef, lambdaDef->getBody()));
+  lambdaDef->getBody()->accept(*this);
+
+}
+
 void AstDotPrinter::visit(nth::FunctionCall *functionCall) {
   nodes[functionCall] = "call";
   edges.push_back(std::make_pair(functionCall, functionCall->getName()));

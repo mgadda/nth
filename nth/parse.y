@@ -92,6 +92,7 @@
 %type <nth::String*> key;
 %type <nth::BinaryOperation*> math_op bitwise_op boolean_op comparison_op subscript tuple_field_access;
 %type <nth::FunctionDef*> func_def;
+%type <nth::LambdaDef*> lambda;
 %type <nth::FunctionCall*> func_call;
 %type <nth::VariableDef*> val_def;
 %type <nth::ArgList*> arglist;
@@ -123,7 +124,7 @@ statement: expr      { nth::ASTNode* node = $1; std::swap($$, node); }
 expr: literal   { std::swap($$, $1); }
     | binary_op { std::swap($$, $1); }
     | unary_op  { std::swap($$, $1); }
-    | lambda
+    | lambda    { nth::Expression *expr = $1; std::swap($$, expr); }
     | if_else   { nth::Expression *expr = $1; std::swap($$, expr); }
     | func_call { nth::Expression *expr = $1; std::swap($$, expr); }
     | "(" expr ")"
@@ -238,7 +239,8 @@ func_def: DEF IDENT "(" arglist ")" ":" type block {
           }
         ;
 
-lambda:  "{" "(" arglist ")" ":" type "=>" expr "}";
+lambda:  "{" "(" arglist ")" ":" type "=>" expr "}" { $$ = new nth::LambdaDef(*$3, $6, $8); }
+      ;
 
 arglist: arg               { $$ = new nth::ArgList(1, $1); }
        | arg "," arglist   { std::swap($$, $3); $$->push_front($1); }

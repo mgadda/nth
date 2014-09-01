@@ -369,3 +369,9 @@ TEST_F(ParseTest, ParseIfElse) {
   d.result->accept(printer);
   EXPECT_STREQ("block(ifelse(ident(done), block(call(ident(doSomething), arguments())), block(call(ident(doSomethingElse), arguments()))))", printer.getOutput().c_str());
 }
+
+TEST_F(ParseTest, ParseLambdaDef) {
+  d.parseString("{ (a: Int): Int => a * 2 }");
+  d.result->accept(printer);
+  EXPECT_STREQ("block(lambda(arglist(argument(ident(a), simple_type(ident(Int)))), returning(simple_type(ident(Int))), multiply(ident(a), integer(2))))", printer.getOutput().c_str());
+}

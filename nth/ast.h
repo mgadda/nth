@@ -461,6 +461,23 @@ class FunctionDef : public ASTNode {
   Block           *block;
 };
 
+class LambdaDef : public Expression {
+ public:
+  LambdaDef(ArgList &argList, Type *returnType, Expression *body)
+  : argList(argList), returnType(returnType), body(body) {}
+
+  void accept(Visitor &v) { v.visit(this); }
+
+  ArgList &getArguments() { return argList; }
+  Type *getReturnType() { return returnType; }
+  Expression *getBody() { return body; }
+
+ protected:
+  ArgList         argList;
+  Type            *returnType;
+  Expression      *body;
+};
+
 class FunctionCall : public Expression {
  public:
   FunctionCall(Identifier *name, ExpressionList &arguments)
