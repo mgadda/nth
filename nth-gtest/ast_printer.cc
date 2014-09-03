@@ -25,7 +25,7 @@ void AstPrinter::visit(nth::Block *block) {
   ast_output << "block(";
 
   auto values = block->getNodes();
-  join_values(values.begin(), values.end(), ", ", ast_output, [this](decltype(values)::value_type value) {
+  join_values(values.begin(), values.end(), ",", ast_output, [this](decltype(values)::value_type value) {
     value->accept(*this);
   });
 
@@ -62,7 +62,7 @@ void AstPrinter::visit(nth::Array *array) {
   ast_output << "array(";
 
   auto values = array->getValues();
-  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionList::value_type value) {
+  join_values(values.begin(), values.end(), ",", ast_output, [this](nth::ExpressionList::value_type value) {
 
     value->accept(*this);
   });
@@ -74,7 +74,7 @@ void AstPrinter::visit(nth::Map *map) {
   ast_output << "map(";
   auto values = map->getValues();
 
-  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionMap::value_type value) {
+  join_values(values.begin(), values.end(), ",", ast_output, [this](nth::ExpressionMap::value_type value) {
 
     value.first->accept(*this);
     ast_output << ": ";
@@ -88,7 +88,7 @@ void AstPrinter::visit(nth::Map *map) {
 void AstPrinter::visit(nth::BinaryOperation *bin_op) {
   ast_output << "(";
   bin_op->getLeftValue()->accept(*this);
-  ast_output << ", ";
+  ast_output << ",";
   bin_op->getRightValue()->accept(*this);
   ast_output << ")";
 }
@@ -158,9 +158,9 @@ void AstPrinter::visit(nth::LogicalNot *logical_not) {
 void AstPrinter::visit(nth::Range *range) {
   ast_output << "range(";
   range->getStart()->accept(*this);
-  ast_output << ", ";
+  ast_output << ",";
   range->getEnd()->accept(*this);
-  ast_output << ", ";
+  ast_output << ",";
   nth::Range::Exclusivity ex = range->getExclusivity();
   if (ex == nth::Range::Exclusivity::Exclusive)
     ast_output << "exclusive)";
@@ -172,7 +172,7 @@ void AstPrinter::visit(nth::Tuple *tuple) {
   ast_output << "tuple(";
 
   auto values = tuple->getValues();
-  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionList::value_type value) {
+  join_values(values.begin(), values.end(), ",", ast_output, [this](nth::ExpressionList::value_type value) {
     value->accept(*this);
   });
 
@@ -217,14 +217,14 @@ void AstPrinter::visit(nth::TupleFieldAccess *field_access) {
 void AstPrinter::visit(nth::FunctionDef *functionDef) {
   ast_output << "funcdef(name(";
   functionDef->getName()->accept(*this);
-  ast_output << "), arglist(";
+  ast_output << "),arglist(";
   auto values = functionDef->getArguments();
-  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ArgList::value_type value) {
+  join_values(values.begin(), values.end(), ",", ast_output, [this](nth::ArgList::value_type value) {
     value->accept(*this);
   });
-  ast_output << "), returning(";
+  ast_output << "),returning(";
   functionDef->getReturnType()->accept(*this);
-  ast_output << "), ";
+  ast_output << "),";
   functionDef->getBlock()->accept(*this);
   ast_output << ")";
 }
@@ -232,12 +232,12 @@ void AstPrinter::visit(nth::FunctionDef *functionDef) {
 void AstPrinter::visit(nth::LambdaDef *lambdaDef) {
   ast_output << "lambda(arglist(";
   auto values = lambdaDef->getArguments();
-  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ArgList::value_type value) {
+  join_values(values.begin(), values.end(), ",", ast_output, [this](nth::ArgList::value_type value) {
     value->accept(*this);
   });
-  ast_output << "), returning(";
+  ast_output << "),returning(";
   lambdaDef->getReturnType()->accept(*this);
-  ast_output << "), ";
+  ast_output << "),";
   lambdaDef->getBody()->accept(*this);
   ast_output << ")";
 }
@@ -245,9 +245,9 @@ void AstPrinter::visit(nth::LambdaDef *lambdaDef) {
 void AstPrinter::visit(nth::FunctionCall *functionCall) {
   ast_output << "call(";
   functionCall->getName()->accept(*this);
-  ast_output << ", arguments(";
+  ast_output << ",arguments(";
   auto values = functionCall->getArguments();
-  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::ExpressionList::value_type value) {
+  join_values(values.begin(), values.end(), ",", ast_output, [this](nth::ExpressionList::value_type value) {
     value->accept(*this);
   });
   ast_output << "))";
@@ -256,9 +256,9 @@ void AstPrinter::visit(nth::FunctionCall *functionCall) {
 void AstPrinter::visit(nth::VariableDef *variableDef) {
   ast_output << "variabledef(name(";
   variableDef->getName()->accept(*this);
-  ast_output << "), ";
+  ast_output << "),";
   variableDef->getVarType()->accept(*this);
-  ast_output << ", ";
+  ast_output << ",";
   variableDef->getValue()->accept(*this);
   ast_output << ")";
 }
@@ -266,7 +266,7 @@ void AstPrinter::visit(nth::VariableDef *variableDef) {
 void AstPrinter::visit(nth::Argument *argument) {
   ast_output << "argument(";
   argument->getName()->accept(*this);
-  ast_output << ", ";
+  ast_output << ",";
   argument->getType()->accept(*this);
   ast_output << ")";
 }
@@ -274,9 +274,9 @@ void AstPrinter::visit(nth::Argument *argument) {
 void AstPrinter::visit(nth::IfElse *ifElse) {
   ast_output << "ifelse(";
   ifElse->getCond()->accept(*this);
-  ast_output << ", ";
+  ast_output << ",";
   ifElse->getIfBlock()->accept(*this);
-  ast_output << ", ";
+  ast_output << ",";
   ifElse->getElseBlock()->accept(*this);
   ast_output << ")";
 }
@@ -290,9 +290,9 @@ void AstPrinter::visit(nth::SimpleType *type) {
 void AstPrinter::visit(nth::TemplatedType *type) {
   ast_output << "templated_type(";
   type->getName()->accept(*this);
-  ast_output << ", ";
+  ast_output << ",";
   auto values = type->getSubtypes();
-  join_values(values.begin(), values.end(), ", ", ast_output, [this](nth::TypeList::value_type value) {
+  join_values(values.begin(), values.end(), ",", ast_output, [this](nth::TypeList::value_type value) {
     value->accept(*this);
   });
 

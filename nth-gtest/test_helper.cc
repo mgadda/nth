@@ -38,3 +38,19 @@ std::string stripMargin(std::string str) {
   std::regex margin("^\\s+|(.*)\n");
   return std::regex_replace(str, margin, "$1\n");
 };
+
+std::string trimSpaces(const char *s) {
+  std::regex left_space("\\(\\s");
+  std::regex right_space("\\s\\)");
+  std::regex comma_space(",\\s");
+  return std::regex_replace(
+    std::regex_replace(
+      std::regex_replace(s, left_space, "(").c_str(),
+      right_space,
+      ")"
+    ).c_str(),
+    comma_space,
+    ","
+  );
+}
+

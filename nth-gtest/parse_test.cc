@@ -28,37 +28,34 @@ TEST_F(ParseTest, ParseSomeInts) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(4, d.result->getNodes().size());
 
-  d.result->accept(printer);
-
-  EXPECT_STREQ("block(integer(10), integer(20), integer(30), integer(40))", printer.getOutput().c_str());
+  EXPECT_AST(
+    block(
+      integer(10),
+      integer(20),
+      integer(30),
+      integer(40)));
 }
 
 TEST_F(ParseTest, ParseHex) {
   d.parseString("0xbaddcafe");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(integer(3135097598))", printer.getOutput().c_str());
+  EXPECT_AST(block(integer(3135097598)));
 }
 
 TEST_F(ParseTest, ParseBinary) {
   d.parseString("0b101010");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(integer(42))", printer.getOutput().c_str());
+  EXPECT_AST(block(integer(42)));
 }
 
 TEST_F(ParseTest, ParseOctal) {
   d.parseString("010");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(integer(8))", printer.getOutput().c_str());
+  EXPECT_AST(block(integer(8)));
 }
 
 TEST_F(ParseTest, ParseSomeFloats) {
   int status = d.parseString("10.2340982\n2.234e-3");
   EXPECT_EQ(0, status);
   EXPECT_EQ(2, d.result->getNodes().size());
-
-  d.result->accept(printer);
-
-  EXPECT_STREQ("block(float(10.2340982), float(0.002234))", printer.getOutput().c_str());
+  EXPECT_AST(block(float(10.2340982), float(0.002234)));
 }
 
 TEST_F(ParseTest, ParseSomeStrings) {
@@ -69,7 +66,7 @@ TEST_F(ParseTest, ParseSomeStrings) {
 
   d.result->accept(printer);
 
-  std::string expectedValue = "block(string(Hello,\\n\\\"World\\\"!), string(World: Hello!))";
+  std::string expectedValue = "block(string(Hello,\\n\\\"World\\\"!),string(World: Hello!))";
   EXPECT_STREQ(expectedValue.c_str(), printer.getOutput().c_str());
 }
 
@@ -84,9 +81,7 @@ TEST_F(ParseTest, ParseSomeBools) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(2, d.result->getNodes().size());
 
-  d.result->accept(printer);
-
-  EXPECT_STREQ("block(boolean(true), boolean(false))", printer.getOutput().c_str());
+  EXPECT_AST(block(boolean(true), boolean(false)));
 }
 
 TEST_F(ParseTest, ParseIdentifier) {
@@ -94,9 +89,7 @@ TEST_F(ParseTest, ParseIdentifier) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->accept(printer);
-
-  EXPECT_STREQ("block(ident(a))", printer.getOutput().c_str());
+  EXPECT_AST(block(ident(a)));
 };
 
 TEST_F(ParseTest, ParseArray) {
@@ -104,9 +97,7 @@ TEST_F(ParseTest, ParseArray) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->getNodes()[0]->accept(printer);
-
-  EXPECT_STREQ("array(integer(1), integer(2), integer(3))", printer.getOutput().c_str());
+  EXPECT_AST(block(array(integer(1), integer(2), integer(3))));
 }
 
 TEST_F(ParseTest, ParseEmptyArray) {
@@ -114,9 +105,7 @@ TEST_F(ParseTest, ParseEmptyArray) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->getNodes()[0]->accept(printer);
-
-  EXPECT_STREQ("array()", printer.getOutput().c_str());
+  EXPECT_AST(block(array()));
 }
 
 TEST_F(ParseTest, ParseMap) {
@@ -124,16 +113,12 @@ TEST_F(ParseTest, ParseMap) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->getNodes()[0]->accept(printer);
-
-  EXPECT_STREQ("map(string(foo): float(10.342), string(bar): float(12.34))", printer.getOutput().c_str());
+  EXPECT_AST(block(map(string(foo): float(10.342), string(bar): float(12.34))));
 }
 
 TEST_F(ParseTest, ParseMapSubscript) {
   d.parseString("h[\"key1\"]");
-  d.result->accept(printer);
-
-  EXPECT_STREQ("block(subscript(ident(h), string(key1)))", printer.getOutput().c_str());
+  EXPECT_AST(block(subscript(ident(h), string(key1))));
 }
 
 TEST_F(ParseTest, ParseEmptyMap) {
@@ -141,9 +126,7 @@ TEST_F(ParseTest, ParseEmptyMap) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->getNodes()[0]->accept(printer);
-
-  EXPECT_STREQ("map()", printer.getOutput().c_str());
+  EXPECT_AST(block(map()));
 }
 
 TEST_F(ParseTest, ParseAdd) {
@@ -151,9 +134,13 @@ TEST_F(ParseTest, ParseAdd) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->getNodes()[0]->accept(printer);
-
-  EXPECT_STREQ("add(add(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
+  EXPECT_AST(
+    block(
+      add(
+        add(
+          integer(1), 
+          integer(2)), 
+        integer(3))));
 }
 
 TEST_F(ParseTest, ParseSubtract) {
@@ -161,9 +148,7 @@ TEST_F(ParseTest, ParseSubtract) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->getNodes()[0]->accept(printer);
-
-  EXPECT_STREQ("subtract(subtract(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
+  EXPECT_AST(block(subtract(subtract(integer(1), integer(2)), integer(3))));
 }
 
 TEST_F(ParseTest, ParseMultiply) {
@@ -171,9 +156,7 @@ TEST_F(ParseTest, ParseMultiply) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->getNodes()[0]->accept(printer);
-
-  EXPECT_STREQ("multiply(multiply(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
+  EXPECT_AST(block(multiply(multiply(integer(1), integer(2)), integer(3))));
 }
 
 TEST_F(ParseTest, ParseDivide) {
@@ -181,9 +164,7 @@ TEST_F(ParseTest, ParseDivide) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->getNodes()[0]->accept(printer);
-
-  EXPECT_STREQ("divide(divide(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
+  EXPECT_AST(block(divide(divide(integer(1), integer(2)), integer(3))));
 }
 
 TEST_F(ParseTest, ParseExponentiate) {
@@ -191,9 +172,7 @@ TEST_F(ParseTest, ParseExponentiate) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->getNodes()[0]->accept(printer);
-
-  EXPECT_STREQ("exp(exp(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
+  EXPECT_AST(block(exp(exp(integer(1), integer(2)), integer(3))));
 }
 
 TEST_F(ParseTest, ParseModulo) {
@@ -201,189 +180,225 @@ TEST_F(ParseTest, ParseModulo) {
   EXPECT_EQ(0, status);
   EXPECT_EQ(1, d.result->getNodes().size());
 
-  d.result->getNodes()[0]->accept(printer);
-
-  EXPECT_STREQ("mod(mod(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
+  EXPECT_AST(block(mod(mod(integer(1), integer(2)), integer(3))));
 }
 
 TEST_F(ParseTest, AstPrinter) {
   d.parseString("1 + 2 + 3");
-  d.result->getNodes()[0]->accept(printer);
-  EXPECT_STREQ("add(add(integer(1), integer(2)), integer(3))", printer.getOutput().c_str());
+  EXPECT_AST(block(add(add(integer(1), integer(2)), integer(3))));
 }
 
 TEST_F(ParseTest, ParseBitShiftLeft) {
   d.parseString("0xff00 << 2");
-  d.result->getNodes()[0]->accept(printer);
-  EXPECT_STREQ("bitshiftleft(integer(65280), integer(2))", printer.getOutput().c_str());
+  EXPECT_AST(block(bitshiftleft(integer(65280), integer(2))));
 }
 
 TEST_F(ParseTest, ParseBitShiftRight) {
   d.parseString("0xbadf00d >> 3");
-  d.result->getNodes()[0]->accept(printer);
-  EXPECT_STREQ("bitshiftright(integer(195948557), integer(3))", printer.getOutput().c_str());
+  EXPECT_AST(block(bitshiftright(integer(195948557), integer(3))));
 }
 
 TEST_F(ParseTest, ParseBitwiseOr) {
   d.parseString("0xf0 | 0x0f");
-  d.result->getNodes()[0]->accept(printer);
-  EXPECT_STREQ("bitwiseor(integer(240), integer(15))", printer.getOutput().c_str());
+  EXPECT_AST(block(bitwiseor(integer(240), integer(15))));
 }
 
 TEST_F(ParseTest, ParseBitwiseAnd) {
   d.parseString("0x3e & 0xff");
-  d.result->getNodes()[0]->accept(printer);
-  EXPECT_STREQ("bitwiseand(integer(62), integer(255))", printer.getOutput().c_str());
+  EXPECT_AST(block(bitwiseand(integer(62), integer(255))));
 }
 
 TEST_F(ParseTest, ParseBitwiseNot) {
   d.parseString("~0b101010");
-  d.result->getNodes()[0]->accept(printer);
-  EXPECT_STREQ("bitwisenot(integer(42))", printer.getOutput().c_str());
+  EXPECT_AST(block(bitwisenot(integer(42))));
 }
 
 TEST_F(ParseTest, ParseLogicalOr) {
   d.parseString("truth || fiction");
-  d.result->getNodes()[0]->accept(printer);
-  EXPECT_STREQ("logicalor(ident(truth), ident(fiction))", printer.getOutput().c_str());
+  EXPECT_AST(block(logicalor(ident(truth), ident(fiction))));
 }
 
 TEST_F(ParseTest, ParseLogicalAnd) {
   d.parseString("is_valid && is_defined");
-  d.result->getNodes()[0]->accept(printer);
-  EXPECT_STREQ("logicaland(ident(is_valid), ident(is_defined))", printer.getOutput().c_str());
+  EXPECT_AST(block(logicaland(ident(is_valid), ident(is_defined))));
 }
 
 TEST_F(ParseTest, ParseLogicalNot) {
   d.parseString("!is_defined");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(logicalnot(ident(is_defined)))", printer.getOutput().c_str());
+  EXPECT_AST(block(logicalnot(ident(is_defined))));
 }
 
 TEST_F(ParseTest, ParseExclusiveRange) {
   d.parseString("1..10");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(range(integer(1), integer(10), exclusive))", printer.getOutput().c_str());
+  EXPECT_AST(block(range(integer(1), integer(10), exclusive)));
 }
 
 TEST_F(ParseTest, ParseInclusiveRange) {
   d.parseString("-3...3");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(range(integer(-3), integer(3), inclusive))", printer.getOutput().c_str());
+  EXPECT_AST(block(range(integer(-3), integer(3), inclusive)));
 }
 
 TEST_F(ParseTest, ParseTuple) {
   d.parseString("(\"name\", 3, foo)");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(tuple(string(name), integer(3), ident(foo)))", printer.getOutput().c_str());
+  EXPECT_AST(block(tuple(string(name), integer(3), ident(foo))));
 }
 
 TEST_F(ParseTest, ParseEmptyTuple) {
   d.parseString("()");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(tuple())", printer.getOutput().c_str());
+  EXPECT_AST(block(tuple()));
 }
 
 TEST_F(ParseTest, ParseTupleFieldAccess) {
   d.parseString("(\"name\", 3).1");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(tuplefieldaccess(tuple(string(name), integer(3)), integer(1)))", printer.getOutput().c_str());
+  EXPECT_AST(block(tuplefieldaccess(tuple(string(name), integer(3)), integer(1))));
 }
 
 TEST_F(ParseTest, ParseEquality) {
   d.parseString("min_val == 2.3252");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(equality(ident(min_val), float(2.3252)))", printer.getOutput().c_str());
+  EXPECT_AST(block(equality(ident(min_val), float(2.3252))));
 }
 
 TEST_F(ParseTest, ParseInequality) {
   d.parseString("cond != true");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(inequality(ident(cond), boolean(true)))", printer.getOutput().c_str());
+  EXPECT_AST(block(inequality(ident(cond), boolean(true))));
 }
 
 TEST_F(ParseTest, ParseLessThan) {
   d.parseString("1.00005 < 1.0001");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(lessthan(float(1.00005), float(1.0001)))", printer.getOutput().c_str());
+  EXPECT_AST(block(lessthan(float(1.00005), float(1.0001))));
 }
 
 TEST_F(ParseTest, ParseGreaterThan) {
   d.parseString("4.3 > 3.2");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(greaterthan(float(4.3), float(3.2)))", printer.getOutput().c_str());
+  EXPECT_AST(block(greaterthan(float(4.3), float(3.2))));
 }
 
 TEST_F(ParseTest, ParseLessThanOrEqualTo) {
   d.parseString("3 <= 4");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(lessthanorequalto(integer(3), integer(4)))", printer.getOutput().c_str());
+  EXPECT_AST(block(lessthanorequalto(integer(3), integer(4))));
 }
 
 TEST_F(ParseTest, ParseGreaterThanOrEqualTo) {
   d.parseString("6 >= 4");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(greaterthanorequalto(integer(6), integer(4)))", printer.getOutput().c_str());
+  EXPECT_AST(block(greaterthanorequalto(integer(6), integer(4))));
 }
 
 TEST_F(ParseTest, ParseParenthesis) {
   d.parseString("3 * (4 + 5)");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(multiply(integer(3), add(integer(4), integer(5))))", printer.getOutput().c_str());
+  EXPECT_AST(block(multiply(integer(3), add(integer(4), integer(5)))));
 }
 
 TEST_F(ParseTest, ParseFunctionDefinition) {
-  d.parseString("def add(a: Integer, b: (String, Integer)): Integer {\n\
-                   a + b.1\n\
-                 }");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(funcdef(name(ident(add)), arglist(argument(ident(a), simple_type(ident(Integer))), argument(ident(b), templated_type(ident(Tuple2), simple_type(ident(String)), simple_type(ident(Integer))))), returning(simple_type(ident(Integer))), block(add(ident(a), tuplefieldaccess(ident(b), integer(1))))))", printer.getOutput().c_str());
+  d.parseString(
+    "def add(a: Integer, b: (String, Integer)): Integer {\n\
+       a + b.1\n\
+    }");
+
+  EXPECT_AST(
+    block(
+      funcdef(
+        name(ident(add)),
+        arglist(
+          argument(ident(a), simple_type(ident(Integer))),
+          argument(
+            ident(b),
+            templated_type(
+              ident(Tuple2),
+              simple_type(ident(String)),
+              simple_type(ident(Integer))))),
+        returning(simple_type(ident(Integer))),
+        block(add(ident(a), tuplefieldaccess(ident(b), integer(1)))))));
 }
 
 TEST_F(ParseTest, ParseFunctionDefWithoutArguments) {
   d.parseString("def getName(): String { \"Matt\" }");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(funcdef(name(ident(getName)), arglist(), returning(simple_type(ident(String))), block(string(Matt))))", printer.getOutput().c_str());
+
+  EXPECT_AST(
+    block(
+      funcdef(
+        name(ident(getName)),
+        arglist(),
+        returning(simple_type(ident(String))),
+        block(string(Matt)))));
 }
 
 TEST_F(ParseTest, ParseVariableDef) {
  d.parseString("val a: Boolean = true");
- d.result->accept(printer);
- EXPECT_STREQ("block(variabledef(name(ident(a)), simple_type(ident(Boolean)), boolean(true)))", printer.getOutput().c_str());
+ EXPECT_AST(block(variabledef(name(ident(a)), simple_type(ident(Boolean)), boolean(true))));
 }
 
 TEST_F(ParseTest, ParseFunctionCall) {
   d.parseString("foo(10, 3 + 5)");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(call(ident(foo), arguments(integer(10), add(integer(3), integer(5)))))", printer.getOutput().c_str());
+  EXPECT_AST(block(call(ident(foo), arguments(integer(10), add(integer(3), integer(5))))));
 }
 
 TEST_F(ParseTest, ParseFunctionCallWithoutArguments) {
   d.parseString("argless()");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(call(ident(argless), arguments()))", printer.getOutput().c_str());
+  EXPECT_AST(block(call(ident(argless), arguments())));
 }
 
 TEST_F(ParseTest, ParseIfElse) {
   d.parseString("if (done) { doSomething() } else { doSomethingElse() }");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(ifelse(ident(done), block(call(ident(doSomething), arguments())), block(call(ident(doSomethingElse), arguments()))))", printer.getOutput().c_str());
+
+  EXPECT_AST(
+    block(
+      ifelse(
+        ident(done),
+        block(call(ident(doSomething), arguments())),
+        block(call(ident(doSomethingElse), arguments())))));
 }
 
 TEST_F(ParseTest, ParseLambdaDef) {
   d.parseString("(a: Int): Int => a * 2");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(lambda(arglist(argument(ident(a), simple_type(ident(Int)))), returning(simple_type(ident(Int))), multiply(ident(a), integer(2))))", printer.getOutput().c_str());
+  EXPECT_AST(
+    block(
+      lambda(
+        arglist(argument(ident(a), simple_type(ident(Int)))),
+        returning(simple_type(ident(Int))),
+        multiply(ident(a), integer(2)))));
 }
 
 TEST_F(ParseTest, ParseLambdaAsReturnType) {
   d.parseString("def makeAdder(a: Int): (Int) => Int { (x: Int): Int => x * a }");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(funcdef(name(ident(makeAdder)), arglist(argument(ident(a), simple_type(ident(Int)))), returning(templated_type(ident(Function1), simple_type(ident(Int)), simple_type(ident(Int)))), block(lambda(arglist(argument(ident(x), simple_type(ident(Int)))), returning(simple_type(ident(Int))), multiply(ident(x), ident(a))))))", printer.getOutput().c_str());
+
+  EXPECT_AST(
+    block(
+      funcdef(
+        name(ident(makeAdder)),
+        arglist(argument(ident(a), simple_type(ident(Int)))),
+        returning(
+          templated_type(
+            ident(Function1),
+            simple_type(ident(Int)),
+            simple_type(ident(Int)))),
+        block(
+          lambda(
+            arglist(
+              argument(
+                ident(x),
+                simple_type(ident(Int)))),
+            returning(simple_type(ident(Int))),
+            multiply(ident(x), ident(a)))))));
 }
 
 TEST_F(ParseTest, ParseLambdaAsArgument) {
   d.parseString("def doWork(callbackFun: () => Int): Int { callbackFun() }");
-  d.result->accept(printer);
-  EXPECT_STREQ("block(funcdef(name(ident(doWork)), arglist(argument(ident(callbackFun), templated_type(ident(Function0), simple_type(ident(Int))))), returning(simple_type(ident(Int))), block(call(ident(callbackFun), arguments()))))", printer.getOutput().c_str());
+
+  EXPECT_AST(
+    block(
+      funcdef(
+        name(ident(doWork)),
+        arglist(
+          argument(
+            ident(callbackFun),
+            templated_type(
+              ident(Function0),
+              simple_type(ident(Int))))),
+        returning(simple_type(ident(Int))),
+        block(
+          call(
+            ident(callbackFun),
+               arguments()))))
+  );
+
 }
