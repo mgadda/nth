@@ -6,9 +6,9 @@
 #include <vector>
 #include <map>
 
-#include "ast_visitor.h"
+#include "ast_printer.h"
 
-class AstDotPrinter : public nth::Visitor {
+class AstDotPrinter : public AstPrinter {
 public:
   AstDotPrinter();
 

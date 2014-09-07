@@ -10,6 +10,9 @@
 		7D1C33E319B3C625007BEAAF /* type.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D1C33E119B3C625007BEAAF /* type.cc */; };
 		7D1C33E419B3C625007BEAAF /* type.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D1C33E119B3C625007BEAAF /* type.cc */; };
 		7D1C33E519B3C625007BEAAF /* type.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D1C33E119B3C625007BEAAF /* type.cc */; };
+		7D1C33ED19BD18D3007BEAAF /* ast_string_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D1C33EB19BD18D3007BEAAF /* ast_string_printer.cc */; };
+		7D1C33EE19BD18D3007BEAAF /* ast_string_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D1C33EB19BD18D3007BEAAF /* ast_string_printer.cc */; };
+		7D1C33EF19BD18D3007BEAAF /* ast_string_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D1C33EB19BD18D3007BEAAF /* ast_string_printer.cc */; };
 		7D33BE5F19731F5C006F3769 /* parse_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D33BE5D19731F5C006F3769 /* parse_test.cc */; };
 		7D33BE641973209E006F3769 /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
 		7D33BE651973209E006F3769 /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
@@ -31,7 +34,6 @@
 		7D6E3F651943D5C1008D5BBD /* ast.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F631943D5C1008D5BBD /* ast.cc */; };
 		7D7F4A81199B024700A0DC87 /* driver_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A7F199B024700A0DC87 /* driver_test.cc */; };
 		7D7F4A84199B15AD00A0DC87 /* test_helper_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A82199B15AD00A0DC87 /* test_helper_test.cc */; };
-		7D7F4A87199D1AAA00A0DC87 /* ast_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A85199D1AAA00A0DC87 /* ast_printer.cc */; };
 		7D7F4A8B199D1D8C00A0DC87 /* ast_dot_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */; };
 		7D7F4A8C199D9B1C00A0DC87 /* ast_dot_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */; };
 		7D7F4A8D199D9B1E00A0DC87 /* ast_dot_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */; };
@@ -181,6 +183,9 @@
 /* Begin PBXFileReference section */
 		7D1C33E119B3C625007BEAAF /* type.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = type.cc; sourceTree = "<group>"; };
 		7D1C33E219B3C625007BEAAF /* type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = type.h; sourceTree = "<group>"; };
+		7D1C33E719BCF8BF007BEAAF /* ast_printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ast_printer.h; sourceTree = "<group>"; };
+		7D1C33EB19BD18D3007BEAAF /* ast_string_printer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ast_string_printer.cc; sourceTree = "<group>"; };
+		7D1C33EC19BD18D3007BEAAF /* ast_string_printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ast_string_printer.h; sourceTree = "<group>"; };
 		7D33BE5D19731F5C006F3769 /* parse_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parse_test.cc; sourceTree = "<group>"; };
 		7D33BE6819732162006F3769 /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		7D33BE6F1973237B006F3769 /* test_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test_helper.h; sourceTree = "<group>"; };
@@ -197,8 +202,6 @@
 		7D6E3F6619440F00008D5BBD /* parse.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; lineEnding = 0; path = parse.y; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		7D7F4A7F199B024700A0DC87 /* driver_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver_test.cc; sourceTree = "<group>"; };
 		7D7F4A82199B15AD00A0DC87 /* test_helper_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test_helper_test.cc; sourceTree = "<group>"; };
-		7D7F4A85199D1AAA00A0DC87 /* ast_printer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ast_printer.cc; sourceTree = "<group>"; };
-		7D7F4A86199D1AAA00A0DC87 /* ast_printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ast_printer.h; sourceTree = "<group>"; };
 		7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ast_dot_printer.cc; path = nth/ast_dot_printer.cc; sourceTree = SOURCE_ROOT; };
 		7D7F4A8A199D1D8C00A0DC87 /* ast_dot_printer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ast_dot_printer.h; path = nth/ast_dot_printer.h; sourceTree = SOURCE_ROOT; };
 		7D8CC7DE195BD4900009B20C /* driver.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver.cc; sourceTree = "<group>"; };
@@ -278,8 +281,11 @@
 				7D6E3F631943D5C1008D5BBD /* ast.cc */,
 				7D6E3F641943D5C1008D5BBD /* ast.h */,
 				7DF8F216198EA164002F06B4 /* ast_visitor.h */,
+				7D1C33E719BCF8BF007BEAAF /* ast_printer.h */,
 				7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */,
 				7D7F4A8A199D1D8C00A0DC87 /* ast_dot_printer.h */,
+				7D1C33EB19BD18D3007BEAAF /* ast_string_printer.cc */,
+				7D1C33EC19BD18D3007BEAAF /* ast_string_printer.h */,
 			);
 			path = nth;
 			sourceTree = "<group>";
@@ -307,8 +313,6 @@
 				7D33BE6819732162006F3769 /* main.cc */,
 				7D33BE6F1973237B006F3769 /* test_helper.h */,
 				7D33BE701973237B006F3769 /* test_helper.cc */,
-				7D7F4A85199D1AAA00A0DC87 /* ast_printer.cc */,
-				7D7F4A86199D1AAA00A0DC87 /* ast_printer.h */,
 				7D7F4A7F199B024700A0DC87 /* driver_test.cc */,
 				7D7F4A82199B15AD00A0DC87 /* test_helper_test.cc */,
 			);
@@ -469,6 +473,7 @@
 				7D8CC7E9195C6EB40009B20C /* parse.y in Sources */,
 				7D6E3F651943D5C1008D5BBD /* ast.cc in Sources */,
 				7D8CC7E0195BD4900009B20C /* driver.cc in Sources */,
+				7D1C33ED19BD18D3007BEAAF /* ast_string_printer.cc in Sources */,
 				7D1C33E319B3C625007BEAAF /* type.cc in Sources */,
 				7D7F4A8C199D9B1C00A0DC87 /* ast_dot_printer.cc in Sources */,
 				7D6E3F551940C2B4008D5BBD /* main.cc in Sources */,
@@ -484,12 +489,12 @@
 				7D7F4A8B199D1D8C00A0DC87 /* ast_dot_printer.cc in Sources */,
 				7D33BE641973209E006F3769 /* driver.cc in Sources */,
 				7D33BE651973209E006F3769 /* parse.y in Sources */,
-				7D7F4A87199D1AAA00A0DC87 /* ast_printer.cc in Sources */,
 				7D33BE711973237B006F3769 /* test_helper.cc in Sources */,
 				7D33BE661973209E006F3769 /* scan.l in Sources */,
 				7D7F4A81199B024700A0DC87 /* driver_test.cc in Sources */,
 				7D7F4A84199B15AD00A0DC87 /* test_helper_test.cc in Sources */,
 				7D1C33E519B3C625007BEAAF /* type.cc in Sources */,
+				7D1C33EF19BD18D3007BEAAF /* ast_string_printer.cc in Sources */,
 				7D33BE671973209E006F3769 /* ast.cc in Sources */,
 				7D33BE5F19731F5C006F3769 /* parse_test.cc in Sources */,
 			);
@@ -502,6 +507,7 @@
 				7D660D61195FBFA8008E0D21 /* main.cc in Sources */,
 				7D660D60195FBF9D008E0D21 /* driver.cc in Sources */,
 				7D660D5C195FBDE0008E0D21 /* parse.y in Sources */,
+				7D1C33EE19BD18D3007BEAAF /* ast_string_printer.cc in Sources */,
 				7D1C33E419B3C625007BEAAF /* type.cc in Sources */,
 				7D7F4A8D199D9B1E00A0DC87 /* ast_dot_printer.cc in Sources */,
 				7D660D5F195FBF79008E0D21 /* scan.l in Sources */,

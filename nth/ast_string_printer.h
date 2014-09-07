@@ -1,15 +1,13 @@
-
-#ifndef __nth__ast_printer__
-#define __nth__ast_printer__
+#ifndef __nth__ast_string_printer__
+#define __nth__ast_string_printer__
 
 #include <string>
 #include <sstream>
+#include "ast_printer.h"
 
-#include "ast_visitor.h"
-
-class AstPrinter : public nth::Visitor {
+class AstStringPrinter : public AstPrinter {
 public:
-  AstPrinter(bool pretty_print=false) : pretty_print(pretty_print) {}
+  AstStringPrinter(bool pretty_print=false) : pretty_print(pretty_print) {}
 
   void visit(nth::Block *block);
   void visit(nth::String *string);
@@ -62,4 +60,4 @@ protected:
 template <class InputIterator, class Function>
 void join_values(InputIterator first, InputIterator last, std::string c, std::stringstream &ss, Function f);
 
-#endif /* defined(__nth__ast_printer__) */
+#endif /* defined(__nth__ast_string_printer__) */

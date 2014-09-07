@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 #include "test_helper.h"
-#include "ast_printer.h"
+#include "ast_string_printer.h"
 #include "driver.h"
 
 class ParseTest : public ::testing::Test {
  protected:
   nth::Driver d;
-  AstPrinter printer;
+  AstStringPrinter printer;
   virtual void SetUp() {}
 };
 
