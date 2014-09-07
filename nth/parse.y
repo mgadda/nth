@@ -181,7 +181,7 @@ range: INT ".." INT   { $$ = new nth::Range(new nth::Integer($1), new nth::Integ
 
   /* Tuple */
 tuple: "(" exprlist ")" { $$ = new nth::Tuple(*$2); }
-     | "(" ")"          { $$ = new nth::Tuple(); }
+     ;
 
   /* end literals */
 

@@ -374,7 +374,6 @@ class Range : public Expression {
 
 class Tuple : public Expression {
  public:
-  Tuple() {}
   Tuple(ExpressionList &values) : values(values) {}
   ExpressionList &getExpressions();
 
