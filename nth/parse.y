@@ -153,7 +153,6 @@ array: "[" exprlist "]" { $$ = new nth::Array(*$2); }
 
 exprlist: expr               { $$ = new nth::ExpressionList(1, $1); }
         | exprlist "," expr  { std::swap($$, $1); $$->push_back($3); }
-        | /* empty list */   { $$ = new nth::ExpressionList(); }
         ;
 
 
@@ -250,7 +249,8 @@ arglist: arg               { $$ = new nth::ArgList(1, $1); }
 arg: IDENT ":" type { $$ = new nth::Argument(new nth::Identifier($1), $3); }
    ;
 
-func_call: IDENT "(" exprlist ")"  { $$ = new nth::FunctionCall(new nth::Identifier($1), *$3); }
+func_call: expr "(" exprlist ")"  { $$ = new nth::FunctionCall($1, *$3); }
+         | expr "(" ")"           { $$ = new nth::FunctionCall($1, *(new nth::ExpressionList)); }
          ;
 
   /* Variables */

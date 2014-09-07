@@ -259,8 +259,8 @@ void AstDotPrinter::visit(nth::LambdaDef *lambdaDef) {
 
 void AstDotPrinter::visit(nth::FunctionCall *functionCall) {
   nodes[functionCall] = "call";
-  edges.push_back(std::make_pair(functionCall, functionCall->getName()));
-  functionCall->getName()->accept(*this);
+  edges.push_back(std::make_pair(functionCall, functionCall->getCallable()));
+  functionCall->getCallable()->accept(*this);
 
   for (auto value : functionCall->getArguments()) {
     edges.push_back(std::make_pair(functionCall, value));

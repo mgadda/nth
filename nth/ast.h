@@ -478,15 +478,15 @@ class LambdaDef : public Expression {
 
 class FunctionCall : public Expression {
  public:
-  FunctionCall(Identifier *name, ExpressionList &arguments)
-  : name(name), arguments(arguments) {}
+  FunctionCall(Expression *callable, ExpressionList &arguments)
+  : callable(callable), arguments(arguments) {}
 
   void accept(Visitor &v) { v.visit(this); }
 
-  Identifier *getName() { return name; }
+  Expression *getCallable() { return callable; }
   ExpressionList &getArguments() { return arguments; }
  protected:
-  Identifier *name;
+  Expression *callable;
   ExpressionList arguments;
 };
 
