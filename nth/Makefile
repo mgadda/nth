@@ -14,6 +14,7 @@ libnth.a: libnth.a(scan.o parse.o driver.o ast.o type.o ast_dot_printer.o)
 
 parse.html: parse.o
 	xsltproc `bison --print-datadir`/xslt/xml2xhtml.xsl parse.xml > parse.html
+	open parse.html
 
 parse.png: parse.dot
 	dot -Tpng -oparse.png
