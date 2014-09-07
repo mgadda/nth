@@ -138,8 +138,8 @@ TEST_F(ParseTest, ParseAdd) {
     block(
       add(
         add(
-          integer(1), 
-          integer(2)), 
+          integer(1),
+          integer(2)),
         integer(3))));
 }
 
@@ -395,5 +395,18 @@ TEST_F(ParseTest, ParseLambdaAsArgument) {
             ident(callbackFun),
                arguments()))))
   );
+}
+
+TEST_F(ParseTest, ParseFunctionDefWithTypeParameters) {
+ d.parseString("def drop1[T](list: List[T]): List[T] { list.tail } ");
+
+ EXPECT_AST(
+   block(
+     funcdef(
+       name(ident(drop1)),
+       arglist(
+         argument(ident(list), templated_type(ident(List), simple_type(ident(T))))),
+       returning(templated_type(ident(List), simple_type(ident(T)))),
+             block(fieldaccess(ident(list), ident(tail))))));
 
 }
