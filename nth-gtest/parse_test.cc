@@ -243,14 +243,9 @@ TEST_F(ParseTest, ParseTuple) {
   EXPECT_AST(block(tuple(string(name), integer(3), ident(foo))));
 }
 
-TEST_F(ParseTest, ParseEmptyTuple) {
-  d.parseString("()");
-  EXPECT_AST(block(tuple()));
-}
-
 TEST_F(ParseTest, ParseTupleFieldAccess) {
   d.parseString("(\"name\", 3).1");
-  EXPECT_AST(block(tuplefieldaccess(tuple(string(name), integer(3)), integer(1))));
+  EXPECT_AST(block(fieldaccess(tuple(string(name), integer(3)), integer(1))));
 }
 
 TEST_F(ParseTest, ParseEquality) {
@@ -307,7 +302,7 @@ TEST_F(ParseTest, ParseFunctionDefinition) {
               simple_type(ident(String)),
               simple_type(ident(Integer))))),
         returning(simple_type(ident(Integer))),
-        block(add(ident(a), tuplefieldaccess(ident(b), integer(1)))))));
+        block(add(ident(a), fieldaccess(ident(b), integer(1)))))));
 }
 
 TEST_F(ParseTest, ParseFunctionDefWithoutArguments) {

@@ -41,7 +41,7 @@ public:
   void visit(nth::Tuple *tuple);
   void visit(nth::Comparison *comparison);
   void visit(nth::Subscript *subscript);
-  void visit(nth::TupleFieldAccess *field_access);
+  void visit(nth::FieldAccess *field_access);
   void visit(nth::FunctionDef *functionDef);
   void visit(nth::LambdaDef *lambdaDef);
   void visit(nth::FunctionCall *functionCall);

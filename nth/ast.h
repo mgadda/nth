@@ -418,14 +418,13 @@ class Subscript : public BinaryOperation {
   void accept(Visitor &v);
 };
 
-class TupleFieldAccess : public BinaryOperation {
+class FieldAccess : public BinaryOperation {
  public:
-  TupleFieldAccess(Expression *tupleExpr, Integer *fieldIndex)
-  : BinaryOperation(ExpressionPtr(tupleExpr), ExpressionPtr(fieldIndex)) {}
+  FieldAccess(Expression *object, Expression *field)
+  : BinaryOperation(ExpressionPtr(object), ExpressionPtr(field)) {}
 
   void accept(Visitor &v);
 };
-
 
 class Argument : public ASTNode {
  public:

@@ -210,8 +210,8 @@ void AstPrinter::visit(nth::Subscript *subscript) {
   ast_output << "subscript";
 }
 
-void AstPrinter::visit(nth::TupleFieldAccess *field_access) {
-  ast_output << "tuplefieldaccess";
+void AstPrinter::visit(nth::FieldAccess *field_access) {
+  ast_output << "fieldaccess";
 }
 
 void AstPrinter::visit(nth::FunctionDef *functionDef) {

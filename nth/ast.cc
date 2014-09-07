@@ -108,7 +108,7 @@ void Subscript::accept(Visitor &v) {
   BinaryOperation::accept(v);
 }
 
-void TupleFieldAccess::accept(Visitor &v) {
+void FieldAccess::accept(Visitor &v) {
   v.visit(this);
   BinaryOperation::accept(v);
 }

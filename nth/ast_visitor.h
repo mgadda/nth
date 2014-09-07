@@ -42,7 +42,7 @@ class Range;
 class Tuple;
 class Comparison;
 class Subscript;
-class TupleFieldAccess;
+class FieldAccess;
 class FunctionDef;
 class LambdaDef;
 class FunctionCall;
@@ -84,7 +84,7 @@ public:
   virtual void visit(Tuple *tuple)=0;
   virtual void visit(Comparison *comparison)=0;
   virtual void visit(Subscript *subscript)=0;
-  virtual void visit(TupleFieldAccess *field_access)=0;
+  virtual void visit(FieldAccess *field_access)=0;
   virtual void visit(FunctionDef *functionDef)=0;
   virtual void visit(LambdaDef *lambdaDef)=0;
   virtual void visit(FunctionCall *functionCall)=0;

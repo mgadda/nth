@@ -216,7 +216,8 @@ void AstDotPrinter::visit(nth::Subscript *subscript) {
   nodes[subscript] = "subscript";
 
 }
-void AstDotPrinter::visit(nth::TupleFieldAccess *field_access) {
+
+void AstDotPrinter::visit(nth::FieldAccess *field_access) {
   nodes[field_access] = "field_access";
 }
 
