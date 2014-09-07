@@ -16,6 +16,9 @@
 
 #include "ast.h"
 #include "ast_dot_printer.h"
+#include "ast_string_printer.h"
+
+void writeOutput(nth::Driver &driver, AstPrinter &printer, std::string filename);
 
 int main(int argc, const char * argv[])
 {
@@ -32,8 +35,9 @@ int main(int argc, const char * argv[])
     return -1;
   }
   
-  bool should_dump_parse_tree = false;
-  
+  bool should_dump_parse_tree_dot = false;
+  bool should_dump_parse_tree_string = false;
+
   nth::Driver driver;
   for (int i=1; i<argc; ++i) {
     std::cout << argv[i] << '\n';
@@ -41,30 +45,45 @@ int main(int argc, const char * argv[])
       driver.should_trace_parsing = true;
     } else if (argv[i] == std::string("--debug-scan")) {
       driver.should_trace_scanning = true;
-    } else if (argv[i] == std::string("--debug-parse-tree")) {
-      should_dump_parse_tree = true;
+    } else if (argv[i] == std::string("--parse-tree=dot")) {
+      should_dump_parse_tree_dot = true;
+    } else if (argv[i] == std::string("--parse-tree=string")) {
+      should_dump_parse_tree_string = true;
     } else {
       int ret = driver.parse(argv[i]);
-      
-      if (should_dump_parse_tree) {
-        AstDotPrinter printer;
-        driver.result->accept(printer);
-        std::string inputfilename = std::string(argv[i]);
-        if (inputfilename.empty() || inputfilename == "-") {
-          inputfilename = "a.out";
+
+      std::string inputfilename = std::string(argv[i]);
+      std::string outputfilename;
+      if (inputfilename.empty() || inputfilename == "-") {
+        inputfilename = "a.out";
+      }
+
+      if (should_dump_parse_tree_dot || should_dump_parse_tree_string) {
+        if (should_dump_parse_tree_dot) {
+          outputfilename = inputfilename + ".dot";
+          AstDotPrinter p;
+          writeOutput(driver, p, outputfilename);
         }
-        std::string dotfilename = inputfilename + ".dot";
-        FILE *dotfile;
-        if (!(dotfile = fopen(dotfilename.c_str(), "w"))) {
-          std::cerr << "cannot open " << dotfilename << ": " << strerror(errno);
-          exit(EXIT_FAILURE);
+
+        if (should_dump_parse_tree_string) {
+          AstStringPrinter p;
+          outputfilename = inputfilename + ".txt";
+          writeOutput(driver, p, outputfilename);
         }
-      
-        fprintf(dotfile, "%s", printer.getOutput().c_str());
-        
       }
       return ret;
     }
   }
   return -1;
+}
+
+void writeOutput(nth::Driver &driver, AstPrinter &printer, std::string filename) {
+  driver.result->accept(printer);
+  FILE *file;
+  if (!(file = fopen(filename.c_str(), "w"))) {
+    std::cerr << "cannot open " << filename << ": " << strerror(errno);
+    exit(EXIT_FAILURE);
+  }
+
+  fprintf(file, "%s", printer.getOutput().c_str());
 }
