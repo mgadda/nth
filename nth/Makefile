@@ -16,8 +16,9 @@ parse.html: parse.o
 	xsltproc `bison --print-datadir`/xslt/xml2xhtml.xsl parse.xml > parse.html
 	open parse.html
 
-parse.png: parse.dot
-	dot -Tpng -oparse.png
+parse.png: parse.o
+	dot parse.dot -Tpng -oparse.png
+	open parse.png
 
 test: $(EXECUTABLE)
 	./$(EXECUTABLE) ../nth.nth # --debug-scan --debug-parse ../nth.nth
