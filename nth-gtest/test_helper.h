@@ -30,6 +30,7 @@ bool compare(U expected, const T &actual) {
 
 std::string trimSpaces(const char *s);
 
-#define EXPECT_AST(ast) d.result->accept(printer);\
+#define EXPECT_AST(ast) if(!d.result) FAIL();\
+  d.result->accept(printer);\
   EXPECT_STREQ(trimSpaces(#ast).c_str(), printer.getOutput().c_str())
 
