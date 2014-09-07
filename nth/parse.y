@@ -90,13 +90,13 @@
 %type <nth::ExpressionMap*> key_val_list;
 %type <std::pair<nth::String*, nth::Expression*>> key_value;
 %type <nth::String*> key;
-%type <nth::FunctionDef*> func_def;
 %type <nth::BinaryOperation*> math_op bitwise_op boolean_op comparison_op subscript field_access;
+%type <nth::FunctionDef*> func_def func_def_with_type_param func_def_without_type_param;
 %type <nth::LambdaDef*> lambda;
 %type <nth::FunctionCall*> func_call;
 %type <nth::VariableDef*> val_def;
 %type <nth::ArgList*> arglist;
-%type <nth::TypeList*> typelist;
+%type <nth::TypeList*> typelist type_parameter;
 %type <nth::Type*> type;
 %type <nth::Argument*> arg;
 %type <nth::IfElse*> if_else;
@@ -230,13 +230,28 @@ field_access: expr "." expr { $$ = new nth::FieldAccess($1, $3); }
   /* Functions */
 block: "{" statements "}"  { std::swap($$, $2); }
 
-func_def: DEF IDENT "(" arglist ")" ":" type block {
+func_def: func_def_without_type_param { std::swap($$, $1); }
+        | func_def_with_type_param    { std::swap($$, $1); }
+        ;
+
+func_def_with_type_param: DEF IDENT type_parameter "(" arglist ")" ":" type block {
             $$ = new nth::FunctionDef(
               new nth::Identifier($2),
-              *$4, $7, $8
+              *$5, $8, $9, *$3
             );
           }
         ;
+
+func_def_without_type_param: DEF IDENT "(" arglist ")" ":" type block {
+            $$ = new nth::FunctionDef(
+              new nth::Identifier($2),
+              *$4, $7, $8, *(new nth::TypeList)
+            );
+          }
+        ;
+
+type_parameter: "[" typelist "]"  { std::swap($$, $2); }
+              ;
 
 lambda: "(" arglist ")" ":" type "=>" expr { $$ = new nth::LambdaDef(*$2, $5, $7); }
       ;

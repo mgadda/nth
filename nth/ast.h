@@ -442,8 +442,8 @@ class Argument : public ASTNode {
 
 class FunctionDef : public ASTNode {
  public:
-  FunctionDef(Identifier *name, ArgList &argList, Type *returnType, Block *block)
-    : name(name), argList(argList), returnType(returnType), block(block) {}
+  FunctionDef(Identifier *name, ArgList &argList, Type *returnType, Block *block, TypeList &typeParameters)
+    : name(name), argList(argList), returnType(returnType), block(block), typeParameters(typeParameters) {}
 
   void accept(Visitor &v) { v.visit(this); }
 
@@ -457,6 +457,7 @@ class FunctionDef : public ASTNode {
   ArgList         argList;
   Type            *returnType;
   Block           *block;
+  TypeList        typeParameters;
 };
 
 class LambdaDef : public Expression {
