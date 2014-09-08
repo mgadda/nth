@@ -51,6 +51,7 @@ public:
 
   void visit(nth::SimpleType *type);
   void visit(nth::TemplatedType *type);
+  void visit(nth::TypeAliasDef *typeAliasDef);
 
   std::string getOutput();
 protected:

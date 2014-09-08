@@ -295,8 +295,15 @@ void AstStringPrinter::visit(nth::TemplatedType *type) {
   join_values(values.begin(), values.end(), ",", ast_output, [this](nth::TypeList::value_type value) {
     value->accept(*this);
   });
-  
+
   ast_output << ")";
 }
 
+void AstStringPrinter::visit(nth::TypeAliasDef *typeAliasDef) {
+  ast_output << "type_alias(";
+  typeAliasDef->getLType()->accept(*this);
+  ast_output << ",";
+  typeAliasDef->getRType()->accept(*this);
+  ast_output << ")";
+}
 

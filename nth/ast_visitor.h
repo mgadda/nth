@@ -52,6 +52,7 @@ class IfElse;
 
 class SimpleType;
 class TemplatedType;
+class TypeAliasDef;
 
 class Visitor {
 public:
@@ -94,6 +95,7 @@ public:
 
   virtual void visit(SimpleType *type)=0;
   virtual void visit(TemplatedType *type)=0;
+  virtual void visit(TypeAliasDef *typeAliasDef)=0;
 };
 
 class Visitable {

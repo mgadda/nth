@@ -526,5 +526,18 @@ class IfElse : public Expression {
   Block *elseBlock;
 };
 
+class TypeAliasDef : public ASTNode {
+ public:
+  TypeAliasDef(Type *lType, Type *rType)
+  : lType(lType), rType(rType) {}
+
+  void accept(Visitor &v) { v.visit(this); }
+
+  Type *getLType() { return lType; }
+  Type *getRType() { return rType; }
+
+ protected:
+  Type *lType, *rType;
+};
 }
 #endif /* defined(__nth__ast__) */

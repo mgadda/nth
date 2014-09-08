@@ -58,7 +58,7 @@
   ;
 
 %token <nth::Comparison::Type> CMP
-%token AND "&&" OR "||" NOT "!" IF ELSE DEF VAL CLASS
+%token AND "&&" OR "||" NOT "!" IF ELSE DEF VAL CLASS TYPE
 %token TRUE FALSE
 %token <double> FLOAT
 %token <long> INT
@@ -100,6 +100,7 @@
 %type <nth::Type*> type;
 %type <nth::Argument*> arg;
 %type <nth::IfElse*> if_else;
+%type <nth::TypeAliasDef*> type_alias_def;
 
  // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
@@ -116,9 +117,10 @@ statements: statement             { $$ = new nth::Block($1); }
           | statements statement  { std::swap($$, $1); $$->insertAfter($2); }
           ;
 
-statement: expr      { nth::ASTNode* node = $1; std::swap($$, node); }
-         | val_def   { nth::ASTNode* node = $1; std::swap($$, node); }
-         | func_def  { nth::ASTNode* node = $1; std::swap($$, node); }
+statement: expr           { nth::ASTNode* node = $1; std::swap($$, node); }
+         | val_def        { nth::ASTNode* node = $1; std::swap($$, node); }
+         | func_def       { nth::ASTNode* node = $1; std::swap($$, node); }
+         | type_alias_def { nth::ASTNode* node = $1; std::swap($$, node); }
          ;
 
 expr: literal   { std::swap($$, $1); }
@@ -251,6 +253,9 @@ func_def_without_type_param: DEF IDENT "(" arglist ")" ":" type block {
         ;
 
 type_parameter: "[" typelist "]"  { std::swap($$, $2); }
+              ;
+
+type_alias_def: TYPE IDENT "=" type { $$ = new nth::TypeAliasDef(new nth::SimpleType(new nth::Identifier($2)), $4); }
               ;
 
 lambda: "(" arglist ")" ":" type "=>" expr { $$ = new nth::LambdaDef(*$2, $5, $7); }

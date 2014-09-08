@@ -408,5 +408,15 @@ TEST_F(ParseTest, ParseFunctionDefWithTypeParameters) {
          argument(ident(list), templated_type(ident(List), simple_type(ident(T))))),
        returning(templated_type(ident(List), simple_type(ident(T)))),
              block(fieldaccess(ident(list), ident(tail))))));
+}
 
+TEST_F(ParseTest, ParseTypeAliasDefStatements) {
+  d.parseString("type ExpressionList = List[Expression]");
+
+  EXPECT_AST(
+    block(type_alias(
+      simple_type(ident(ExpressionList)),
+      templated_type(
+        ident(List),
+        simple_type(ident(Expression))))));
 }

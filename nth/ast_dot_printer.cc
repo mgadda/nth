@@ -323,3 +323,15 @@ void AstDotPrinter::visit(nth::TemplatedType *type) {
   }
 }
 
+void AstDotPrinter::visit(nth::TypeAliasDef *typeAliasDef) {
+  nodes[typeAliasDef] = "type_alias_def";
+
+  edges.push_back(std::make_pair(typeAliasDef, typeAliasDef->getLType()));
+  typeAliasDef->getLType()->accept(*this);
+
+  edges.push_back(std::make_pair(typeAliasDef, typeAliasDef->getRType()));
+  typeAliasDef->getRType()->accept(*this);
+
+}
+
+
