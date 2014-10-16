@@ -39,7 +39,17 @@
 		7D7F4A8D199D9B1E00A0DC87 /* ast_dot_printer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */; };
 		7D8CC7E0195BD4900009B20C /* driver.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D8CC7DE195BD4900009B20C /* driver.cc */; };
 		7D8CC7E9195C6EB40009B20C /* parse.y in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E3F6619440F00008D5BBD /* parse.y */; };
+		7DA5A19319CF798A00EB2D68 /* scope_checker_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7DA5A19219CF798A00EB2D68 /* scope_checker_test.cc */; };
+		7DA82B0619DE5BC0002E4766 /* ast_visitor.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7DA82B0519DE5BC0002E4766 /* ast_visitor.cc */; };
+		7DA82B0719DE5BC0002E4766 /* ast_visitor.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7DA82B0519DE5BC0002E4766 /* ast_visitor.cc */; };
 		7DC44E7C1960D71500DEB624 /* nth.nth in Resources */ = {isa = PBXBuildFile; fileRef = 7DC44E7B1960D71500DEB624 /* nth.nth */; };
+		7DD86CA919C20952008C04EF /* symbol_table.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7DD86CA719C20952008C04EF /* symbol_table.cc */; };
+		7DD86CAA19C20952008C04EF /* symbol_table.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7DD86CA719C20952008C04EF /* symbol_table.cc */; };
+		7DD86CAB19C20952008C04EF /* symbol_table.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7DD86CA719C20952008C04EF /* symbol_table.cc */; };
+		7DD86CAE19C20964008C04EF /* scope_checker.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7DD86CAC19C20964008C04EF /* scope_checker.cc */; };
+		7DD86CAF19C20964008C04EF /* scope_checker.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7DD86CAC19C20964008C04EF /* scope_checker.cc */; };
+		7DD86CB019C20964008C04EF /* scope_checker.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7DD86CAC19C20964008C04EF /* scope_checker.cc */; };
+		7DD86CB519C20C87008C04EF /* symbol_table_test.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7DD86CB119C20C87008C04EF /* symbol_table_test.cc */; };
 		7DF889A1195F9ECD00B7208A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF889A0195F9ECD00B7208A /* XCTest.framework */; };
 		7DF889A7195F9ECD00B7208A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DF889A5195F9ECD00B7208A /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
@@ -207,7 +217,14 @@
 		7D8CC7DE195BD4900009B20C /* driver.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = driver.cc; sourceTree = "<group>"; };
 		7D8CC7DF195BD4900009B20C /* driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = driver.h; sourceTree = "<group>"; };
 		7DA4983D19730C1D0056BB77 /* nth-gtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "nth-gtest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DA5A19219CF798A00EB2D68 /* scope_checker_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scope_checker_test.cc; sourceTree = "<group>"; };
+		7DA82B0519DE5BC0002E4766 /* ast_visitor.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ast_visitor.cc; sourceTree = "<group>"; };
 		7DC44E7B1960D71500DEB624 /* nth.nth */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nth.nth; sourceTree = "<group>"; };
+		7DD86CA719C20952008C04EF /* symbol_table.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = symbol_table.cc; sourceTree = "<group>"; };
+		7DD86CA819C20952008C04EF /* symbol_table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = symbol_table.h; sourceTree = "<group>"; };
+		7DD86CAC19C20964008C04EF /* scope_checker.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scope_checker.cc; sourceTree = "<group>"; };
+		7DD86CAD19C20964008C04EF /* scope_checker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scope_checker.h; sourceTree = "<group>"; };
+		7DD86CB119C20C87008C04EF /* symbol_table_test.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = symbol_table_test.cc; sourceTree = "<group>"; };
 		7DF8899E195F9ECD00B7208A /* nth-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "nth-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DF889A0195F9ECD00B7208A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		7DF889A4195F9ECD00B7208A /* nth-tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nth-tests-Info.plist"; sourceTree = "<group>"; };
@@ -280,12 +297,17 @@
 				7D6E3F5F1940C5D0008D5BBD /* scan.l */,
 				7D6E3F631943D5C1008D5BBD /* ast.cc */,
 				7D6E3F641943D5C1008D5BBD /* ast.h */,
+				7DD86CAC19C20964008C04EF /* scope_checker.cc */,
+				7DD86CAD19C20964008C04EF /* scope_checker.h */,
+				7DD86CA719C20952008C04EF /* symbol_table.cc */,
+				7DD86CA819C20952008C04EF /* symbol_table.h */,
 				7DF8F216198EA164002F06B4 /* ast_visitor.h */,
 				7D1C33E719BCF8BF007BEAAF /* ast_printer.h */,
 				7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */,
 				7D7F4A8A199D1D8C00A0DC87 /* ast_dot_printer.h */,
 				7D1C33EB19BD18D3007BEAAF /* ast_string_printer.cc */,
 				7D1C33EC19BD18D3007BEAAF /* ast_string_printer.h */,
+				7DA82B0519DE5BC0002E4766 /* ast_visitor.cc */,
 			);
 			path = nth;
 			sourceTree = "<group>";
@@ -301,7 +323,8 @@
 			isa = PBXGroup;
 			children = (
 				7D33BE5D19731F5C006F3769 /* parse_test.cc */,
-				7D7F4A7F199B024700A0DC87 /* driver_test.cc */,
+				7DD86CB119C20C87008C04EF /* symbol_table_test.cc */,
+				7DA5A19219CF798A00EB2D68 /* scope_checker_test.cc */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -426,7 +449,7 @@
 		7D6E3F491940C2B3008D5BBD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Matt Gadda";
 				TargetAttributes = {
 					7DF8899D195F9ECD00B7208A = {
@@ -470,8 +493,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DD86CA919C20952008C04EF /* symbol_table.cc in Sources */,
 				7D8CC7E9195C6EB40009B20C /* parse.y in Sources */,
+				7DD86CAE19C20964008C04EF /* scope_checker.cc in Sources */,
 				7D6E3F651943D5C1008D5BBD /* ast.cc in Sources */,
+				7DA82B0619DE5BC0002E4766 /* ast_visitor.cc in Sources */,
 				7D8CC7E0195BD4900009B20C /* driver.cc in Sources */,
 				7D1C33ED19BD18D3007BEAAF /* ast_string_printer.cc in Sources */,
 				7D1C33E319B3C625007BEAAF /* type.cc in Sources */,
@@ -486,16 +512,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D33BE6A19732162006F3769 /* main.cc in Sources */,
+				7DA82B0719DE5BC0002E4766 /* ast_visitor.cc in Sources */,
 				7D7F4A8B199D1D8C00A0DC87 /* ast_dot_printer.cc in Sources */,
 				7D33BE641973209E006F3769 /* driver.cc in Sources */,
 				7D33BE651973209E006F3769 /* parse.y in Sources */,
 				7D33BE711973237B006F3769 /* test_helper.cc in Sources */,
 				7D33BE661973209E006F3769 /* scan.l in Sources */,
+				7DA5A19319CF798A00EB2D68 /* scope_checker_test.cc in Sources */,
 				7D7F4A81199B024700A0DC87 /* driver_test.cc in Sources */,
 				7D7F4A84199B15AD00A0DC87 /* test_helper_test.cc in Sources */,
+				7DD86CB519C20C87008C04EF /* symbol_table_test.cc in Sources */,
 				7D1C33E519B3C625007BEAAF /* type.cc in Sources */,
 				7D1C33EF19BD18D3007BEAAF /* ast_string_printer.cc in Sources */,
+				7DD86CB019C20964008C04EF /* scope_checker.cc in Sources */,
 				7D33BE671973209E006F3769 /* ast.cc in Sources */,
+				7DD86CAB19C20952008C04EF /* symbol_table.cc in Sources */,
 				7D33BE5F19731F5C006F3769 /* parse_test.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -504,7 +535,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DD86CAA19C20952008C04EF /* symbol_table.cc in Sources */,
 				7D660D61195FBFA8008E0D21 /* main.cc in Sources */,
+				7DD86CAF19C20964008C04EF /* scope_checker.cc in Sources */,
 				7D660D60195FBF9D008E0D21 /* driver.cc in Sources */,
 				7D660D5C195FBDE0008E0D21 /* parse.y in Sources */,
 				7D1C33EE19BD18D3007BEAAF /* ast_string_printer.cc in Sources */,
@@ -683,6 +716,7 @@
 		7DF889AD195F9ECD00B7208A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
@@ -702,6 +736,7 @@
 		7DF889AE195F9ECD00B7208A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",

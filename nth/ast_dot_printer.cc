@@ -221,6 +221,10 @@ void AstDotPrinter::visit(nth::FieldAccess *field_access) {
   nodes[field_access] = "field_access";
 }
 
+void AstDotPrinter::visit(nth::TupleFieldAccess *tuple_field_access) {
+  nodes[tuple_field_access] = "tuple_field_access";
+}
+
 void AstDotPrinter::visit(nth::FunctionDef *functionDef) {
   nodes[functionDef] = "function_def";
 
@@ -304,15 +308,34 @@ void AstDotPrinter::visit(nth::IfElse *ifElse) {
   ifElse->getElseBlock()->accept(*this);
 }
 
-void AstDotPrinter::visit(nth::SimpleType *type) {
-  nodes[type] = "simple_type";
+void AstDotPrinter::visit(nth::SimpleTypeRef *type) {
+  nodes[type] = "simple_typeref";
 
   edges.push_back(std::make_pair(type, type->getName()));
   type->getName()->accept(*this);
 }
 
-void AstDotPrinter::visit(nth::TemplatedType *type) {
-  nodes[type] = "templated_type";
+void AstDotPrinter::visit(nth::TemplatedTypeRef *type) {
+  nodes[type] = "templated_typeref";
+
+  edges.push_back(std::make_pair(type, type->getName()));
+  type->getName()->accept(*this);
+
+  for (auto value : type->getSubtypes()) {
+    edges.push_back(std::make_pair(type, value));
+    value->accept(*this);
+  }
+}
+
+void AstDotPrinter::visit(nth::SimpleTypeDef *type) {
+  nodes[type] = "simple_typedef";
+
+  edges.push_back(std::make_pair(type, type->getName()));
+  type->getName()->accept(*this);
+}
+
+void AstDotPrinter::visit(nth::TemplatedTypeDef *type) {
+  nodes[type] = "templated_typedef";
 
   edges.push_back(std::make_pair(type, type->getName()));
   type->getName()->accept(*this);

@@ -39,6 +39,7 @@ public:
   void visit(nth::Comparison *comparison);
   void visit(nth::Subscript *subscript);
   void visit(nth::FieldAccess *field_access);
+  void visit(nth::TupleFieldAccess *field_access);
   void visit(nth::FunctionDef *functionDef);
   void visit(nth::LambdaDef *lambdaDef);
   void visit(nth::FunctionCall *functionCall);
@@ -46,8 +47,10 @@ public:
   void visit(nth::Argument *argument);
   void visit(nth::IfElse *ifElse);
 
-  void visit(nth::SimpleType *type);
-  void visit(nth::TemplatedType *type);
+  void visit(nth::SimpleTypeRef *type);
+  void visit(nth::SimpleTypeDef *type);
+  void visit(nth::TemplatedTypeRef *type);
+  void visit(nth::TemplatedTypeDef *type);
   void visit(nth::TypeAliasDef *typeAliasDef);
 
   std::string getOutput();

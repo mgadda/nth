@@ -10,7 +10,7 @@ YFLAGS=-fcaret -d --report=all -x -g
 $(EXECUTABLE): libnth.a main.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-libnth.a: libnth.a(scan.o parse.o driver.o ast.o type.o ast_string_printer.o ast_dot_printer.o)
+libnth.a: libnth.a(scan.o parse.o driver.o ast.o type.o scope_checker.o symbol_table.o ast_visitor.o ast_string_printer.o ast_dot_printer.o)
 
 parse.html: parse.o
 	xsltproc `bison --print-datadir`/xslt/xml2xhtml.xsl parse.xml > parse.html

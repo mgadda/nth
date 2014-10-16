@@ -214,9 +214,23 @@ void AstStringPrinter::visit(nth::FieldAccess *field_access) {
   ast_output << "fieldaccess";
 }
 
+void AstStringPrinter::visit(nth::TupleFieldAccess *tuple_field_access) {
+  ast_output << "tuplefieldaccess";
+}
+
 void AstStringPrinter::visit(nth::FunctionDef *functionDef) {
   ast_output << "funcdef(name(";
   functionDef->getName()->accept(*this);
+
+  if (!functionDef->getTypeParameters().empty()) {
+    ast_output << "),typeparamlist(";
+    auto values = functionDef->getTypeParameters();
+
+    join_values(values.begin(), values.end(), ",", ast_output, [this](nth::TypeList::value_type value) {
+      value->accept(*this);
+    });
+  }
+
   ast_output << "),arglist(";
   auto values = functionDef->getArguments();
   join_values(values.begin(), values.end(), ",", ast_output, [this](nth::ArgList::value_type value) {
@@ -281,14 +295,14 @@ void AstStringPrinter::visit(nth::IfElse *ifElse) {
   ast_output << ")";
 }
 
-void AstStringPrinter::visit(nth::SimpleType *type) {
-  ast_output << "simple_type(";
+void AstStringPrinter::visit(nth::SimpleTypeRef *type) {
+  ast_output << "simple_typeref(";
   type->getName()->accept(*this);
   ast_output << ")";
 }
 
-void AstStringPrinter::visit(nth::TemplatedType *type) {
-  ast_output << "templated_type(";
+void AstStringPrinter::visit(nth::TemplatedTypeRef *type) {
+  ast_output << "templated_typeref(";
   type->getName()->accept(*this);
   ast_output << ",";
   auto values = type->getSubtypes();
@@ -298,6 +312,25 @@ void AstStringPrinter::visit(nth::TemplatedType *type) {
 
   ast_output << ")";
 }
+
+void AstStringPrinter::visit(nth::SimpleTypeDef *type) {
+  ast_output << "simple_typedef(";
+  type->getName()->accept(*this);
+  ast_output << ")";
+}
+
+void AstStringPrinter::visit(nth::TemplatedTypeDef *type) {
+  ast_output << "templated_typedef(";
+  type->getName()->accept(*this);
+  ast_output << ",";
+  auto values = type->getSubtypes();
+  join_values(values.begin(), values.end(), ",", ast_output, [this](nth::TypeList::value_type value) {
+    value->accept(*this);
+  });
+
+  ast_output << ")";
+}
+
 
 void AstStringPrinter::visit(nth::TypeAliasDef *typeAliasDef) {
   ast_output << "type_alias(";
