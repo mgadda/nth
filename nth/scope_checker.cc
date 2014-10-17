@@ -106,9 +106,9 @@ void ScopeChecker::visit(nth::FieldAccess *field_access) {}
 void ScopeChecker::visit(nth::TupleFieldAccess *tuple_field_access) {}
 void ScopeChecker::visit(nth::FunctionDef *functionDef) {
   symbols.addSymbol(functionDef->getName());
-  symbols.pushFrame();
+  symbols.pushScope();
   Visitor::visit(functionDef);
-  symbols.popFrame();
+  symbols.popScope();
 }
 void ScopeChecker::visit(nth::LambdaDef *lambdaDef) {}
 void ScopeChecker::visit(nth::FunctionCall *functionCall) {}

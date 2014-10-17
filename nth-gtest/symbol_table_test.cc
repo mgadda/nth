@@ -15,16 +15,9 @@ protected:
   virtual void SetUp() {}
 };
 
-TEST_F(SymbolTableTest, AddsFirstFrameIfMissing) {
+TEST_F(SymbolTableTest, AddsFirstScopeIfMissing) {
   st.addSymbol(new nth::Identifier("foo"));
-  EXPECT_EQ(1, st.getFramesizes().size());
-}
-
-TEST_F(SymbolTableTest, IncrementsFramesize) {
-  st.addSymbol(new nth::Identifier("foo"));
-  st.addSymbol(new nth::Identifier("bar"));
-  EXPECT_EQ(1, st.getFramesizes().size());
-  EXPECT_EQ(2, st.getFramesizes().top());
+  EXPECT_EQ(1, st.getScopes().size());
 }
 
 TEST_F(SymbolTableTest, FindsNearestSymbol) {
@@ -40,31 +33,31 @@ TEST_F(SymbolTableTest, findSymbolReturnsNullIfNotFound) {
   EXPECT_EQ(nullptr, not_found);
 }
 
-TEST_F(SymbolTableTest, popFrameRemovesCorrectSymbols) {
+TEST_F(SymbolTableTest, popScopeRemovesCorrectSymbols) {
   st.addSymbol(new nth::Identifier("foo"));
   st.addSymbol(new nth::Identifier("bar"));
-  st.pushFrame();
+  st.pushScope();
   st.addSymbol(new nth::Identifier("baz"));
-  st.popFrame();
+  st.popScope();
 
   auto symbols = st.getSymbols();
-  auto framesizes = st.getFramesizes();
+  auto scopes = st.getScopes();
   EXPECT_EQ(2, symbols.size());
-  EXPECT_EQ(1, framesizes.size());
-  EXPECT_EQ(2, framesizes.top());
+  EXPECT_EQ(1, scopes.size());
+  EXPECT_EQ(2, scopes.back().size());
   EXPECT_STREQ("foo", *symbols[0]);
   EXPECT_STREQ("bar", *symbols[1]);
 }
 
-TEST_F(SymbolTableTest, pushFrame) {
+TEST_F(SymbolTableTest, pushScope) {
   st.addSymbol(new nth::Identifier("foo"));
-  st.pushFrame();
-  EXPECT_EQ(2, st.getFramesizes().size());
-  EXPECT_EQ(0, st.getFramesizes().top());
+  st.pushScope();
+  EXPECT_EQ(2, st.getScopes().size());
+  EXPECT_EQ(0, st.getScopes().back().size());
 }
 
 TEST_F(SymbolTableTest, throwsErrorOnEmptyStack) {
-  EXPECT_THROW(st.popFrame(), std::runtime_error);
+  EXPECT_THROW(st.popScope(), std::runtime_error);
 }
 
 // TODO:

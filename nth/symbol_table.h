@@ -7,40 +7,39 @@
 
 namespace nth {
 
-class Symbol;
-class Identifier;
+  class Symbol;
+  class Identifier;
 
-class SymbolTable {
-public:
-  void pushFrame();
-  void popFrame();
+  class SymbolTable {
+  public:
+    typedef std::deque<nth::Symbol*> Scope;
 
-  Symbol *findSymbol(Identifier *ident);
-  void addSymbol(Identifier *ident);
+    void pushScope();
+    void popScope();
 
-  // Check if symbol is defined in current frame only
-  bool checkSymbol(Identifier *ident);
+    Symbol *findSymbol(Identifier *ident);
+    void addSymbol(Identifier *ident);
 
-  std::deque<nth::Symbol*> &getSymbols() { return symbols; }
-  std::stack<int> &getFramesizes() { return framesizes; }
-protected:
-  void incrementFramesize();
+    // Check if symbol is defined in current frame only
+    bool checkSymbol(Identifier *ident);
 
-  std::deque<Symbol*> symbols;
-  std::stack<int> framesizes;
-};
+    std::deque<nth::Symbol*> getSymbols();
+    std::deque<Scope> &getScopes();
+  protected:
+    std::deque<Scope> scopes;
+  };
 
-class Symbol {
-public:
-  Symbol(Identifier *ident);
-  bool operator==(Identifier *ident);
-  bool operator==(std::string str);
-  operator std::string() const { return name; }
-  operator const char *() const { return name.c_str(); }
-protected:
-  std::string name;
-};
-
+  class Symbol {
+  public:
+    Symbol(Identifier *ident);
+    bool operator==(Identifier *ident);
+    bool operator==(std::string str);
+    operator std::string() const { return name; }
+    operator const char *() const { return name.c_str(); }
+  protected:
+    std::string name;
+  };
+  
 }
 
 #endif
