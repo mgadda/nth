@@ -5,53 +5,55 @@
 #include <sstream>
 #include "ast_printer.h"
 
+namespace nth {
+
 class AstStringPrinter : public AstPrinter {
 public:
   AstStringPrinter(bool pretty_print=false) : pretty_print(pretty_print) {}
 
-  void visit(nth::Block *block);
-  void visit(nth::String *string);
-  void visit(nth::Integer *integer);
-  void visit(nth::Float *flt);
-  void visit(nth::True *tru);
-  void visit(nth::False *flse);
-  void visit(nth::Identifier *ident);
-  void visit(nth::Array *array);
-  void visit(nth::Map *map);
-  void visit(nth::BinaryOperation *bin_op);
-  void visit(nth::UnaryOperation *un_op);
-  void visit(nth::Add *add);
-  void visit(nth::Subtract *subtract);
-  void visit(nth::Multiply *multiply);
-  void visit(nth::Divide *divide);
-  void visit(nth::Exponentiate *exp);
-  void visit(nth::Modulo *modulo);
-  void visit(nth::BitShiftLeft *shift_left);
-  void visit(nth::BitShiftRight *shift_right);
-  void visit(nth::BitwiseOr *bitwise_or);
-  void visit(nth::BitwiseAnd *bitwise_and);
-  void visit(nth::BitwiseNot *bitwise_not);
-  void visit(nth::LogicalOr *logical_or);
-  void visit(nth::LogicalAnd *logical_and);
-  void visit(nth::LogicalNot *logical_not);
-  void visit(nth::Range *range);
-  void visit(nth::Tuple *tuple);
-  void visit(nth::Comparison *comparison);
-  void visit(nth::Subscript *subscript);
-  void visit(nth::FieldAccess *field_access);
-  void visit(nth::TupleFieldAccess *field_access);
-  void visit(nth::FunctionDef *functionDef);
-  void visit(nth::LambdaDef *lambdaDef);
-  void visit(nth::FunctionCall *functionCall);
-  void visit(nth::VariableDef *variableDef);
-  void visit(nth::Argument *argument);
-  void visit(nth::IfElse *ifElse);
+  void visit(Block *block);
+  void visit(String *string);
+  void visit(Integer *integer);
+  void visit(Float *flt);
+  void visit(True *tru);
+  void visit(False *flse);
+  void visit(Identifier *ident);
+  void visit(Array *array);
+  void visit(Map *map);
+  void visit(BinaryOperation *bin_op);
+  void visit(UnaryOperation *un_op);
+  void visit(Add *add);
+  void visit(Subtract *subtract);
+  void visit(Multiply *multiply);
+  void visit(Divide *divide);
+  void visit(Exponentiate *exp);
+  void visit(Modulo *modulo);
+  void visit(BitShiftLeft *shift_left);
+  void visit(BitShiftRight *shift_right);
+  void visit(BitwiseOr *bitwise_or);
+  void visit(BitwiseAnd *bitwise_and);
+  void visit(BitwiseNot *bitwise_not);
+  void visit(LogicalOr *logical_or);
+  void visit(LogicalAnd *logical_and);
+  void visit(LogicalNot *logical_not);
+  void visit(Range *range);
+  void visit(Tuple *tuple);
+  void visit(Comparison *comparison);
+  void visit(Subscript *subscript);
+  void visit(FieldAccess *field_access);
+  void visit(TupleFieldAccess *field_access);
+  void visit(FunctionDef *functionDef);
+  void visit(LambdaDef *lambdaDef);
+  void visit(FunctionCall *functionCall);
+  void visit(VariableDef *variableDef);
+  void visit(Argument *argument);
+  void visit(IfElse *ifElse);
 
-  void visit(nth::SimpleTypeRef *type);
-  void visit(nth::SimpleTypeDef *type);
-  void visit(nth::TemplatedTypeRef *type);
-  void visit(nth::TemplatedTypeDef *type);
-  void visit(nth::TypeAliasDef *typeAliasDef);
+  void visit(SimpleTypeRef *type);
+  void visit(SimpleTypeDef *type);
+  void visit(TemplatedTypeRef *type);
+  void visit(TemplatedTypeDef *type);
+  void visit(TypeAliasDef *typeAliasDef);
 
   std::string getOutput();
 protected:
@@ -64,4 +66,5 @@ protected:
 template <class InputIterator, class Function>
 void join_values(InputIterator first, InputIterator last, std::string c, std::stringstream &ss, Function f);
 
+}
 #endif /* defined(__nth__ast_string_printer__) */

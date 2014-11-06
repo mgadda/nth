@@ -6,7 +6,7 @@
 class ParseTest : public ::testing::Test {
  protected:
   nth::Driver d;
-  AstStringPrinter printer;
+  nth::AstStringPrinter printer;
   virtual void SetUp() {}
 };
 

@@ -18,7 +18,7 @@
 #include "ast_dot_printer.h"
 #include "ast_string_printer.h"
 
-void writeOutput(nth::Driver &driver, AstPrinter &printer, std::string filename);
+void writeOutput(nth::Driver &driver, nth::AstPrinter &printer, std::string filename);
 
 int main(int argc, const char * argv[])
 {
@@ -61,12 +61,12 @@ int main(int argc, const char * argv[])
       if (should_dump_parse_tree_dot || should_dump_parse_tree_string) {
         if (should_dump_parse_tree_dot) {
           outputfilename = inputfilename + ".dot";
-          AstDotPrinter p;
+          nth::AstDotPrinter p;
           writeOutput(driver, p, outputfilename);
         }
 
         if (should_dump_parse_tree_string) {
-          AstStringPrinter p;
+          nth::AstStringPrinter p;
           outputfilename = inputfilename + ".txt";
           writeOutput(driver, p, outputfilename);
         }
@@ -77,7 +77,7 @@ int main(int argc, const char * argv[])
   return -1;
 }
 
-void writeOutput(nth::Driver &driver, AstPrinter &printer, std::string filename) {
+void writeOutput(nth::Driver &driver, nth::AstPrinter &printer, std::string filename) {
   driver.result->accept(printer);
   FILE *file;
   if (!(file = fopen(filename.c_str(), "w"))) {
