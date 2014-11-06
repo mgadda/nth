@@ -22,7 +22,7 @@ namespace nth {
 class Type;
 class TypeDef;
 class TypeRef;
-class Symbol;
+class SymbolTable;
 
 // Anything at all, really
 class ASTNode : public Visitable {
@@ -33,12 +33,18 @@ class ASTNode : public Visitable {
 
   yy::location &getLocation() { return loc; }
 
-  void setSymbol(Symbol *symbol) { symbol = symbol; }
-  Symbol *getSymbol() { return symbol; }
+  void setSymbolTable(SymbolTable *symbolTable) { _symbolTable = symbolTable; }
+  SymbolTable *getSymbolTable() { return _symbolTable; }
  protected:
   yy::location loc; // where we encounter this node while parsing
-  Symbol *symbol; // used during scope checking to retain info between passes
+  SymbolTable *_symbolTable; // used during scope checking to retain info between passes
 };
+
+class DummyNode : public nth::ASTNode {
+  virtual ~DummyNode() {}
+  void accept(nth::Visitor &v) { v.visit(this); }
+};
+
 
 // Anything that has a value
 class Expression : public ASTNode {
@@ -47,11 +53,11 @@ class Expression : public ASTNode {
   Expression(yy::location &l) : ASTNode(l) {}
   virtual ~Expression() {}
 
-  void setType(Type *type) { type = type; }
-  Type *getType() { return type; }
+  void setType(Type *type) { _type = type; }
+  Type *getType() { return _type; }
 
  protected:
-  Type *type;
+  Type *_type;
 };
 
 typedef std::vector<ASTNode*> NodeList;
@@ -449,6 +455,9 @@ class FieldAccess : public BinaryOperation {
   FieldAccess(Expression *object, Identifier *field)
   : BinaryOperation(ExpressionPtr(object), ExpressionPtr(field)) {}
 
+  Identifier &getField() {
+    return dynamic_cast<Identifier&>(*BinaryOperation::getRightValue()); }
+
   void accept(Visitor &v);
 };
 
@@ -457,6 +466,7 @@ public:
   TupleFieldAccess(Expression *object, Integer *index)
   : BinaryOperation(ExpressionPtr(object), ExpressionPtr(index)) {}
 
+  Integer &getIndex() { return dynamic_cast<Integer&>(*BinaryOperation::getRightValue()); }
   void accept(Visitor &v);
 };
 

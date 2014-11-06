@@ -2,6 +2,7 @@
 #define __nth__scope_checker__
 
 #include <stack>
+#include <functional>
 #include "ast_visitor.h"
 #include "symbol_table.h"
 
@@ -61,29 +62,61 @@ namespace nth {
 // without knowledge of what was added in the body
 typedef std::list<nth::Identifier*> IdentifierList;
 
-class ScopeChecker : public Visitor {
+class ASTNode;
+  
+class ScopeChecker {
  public:
-  void visit(nth::Identifier *ident);
-  void visit(nth::FieldAccess *field_access);
-  void visit(nth::TupleFieldAccess *tuple_field_access);
-  void visit(nth::FunctionDef *functionDef);
-  void visit(nth::LambdaDef *lambdaDef);
-  void visit(nth::FunctionCall *functionCall);
-  void visit(nth::VariableDef *variableDef);
-  void visit(nth::Argument *argument);
-  void visit(nth::IfElse *ifElse);
-
-  void visit(nth::SimpleTypeRef *type);
-  void visit(nth::SimpleTypeDef *type);
-  void visit(nth::TemplatedTypeRef *type);
-  void visit(nth::TemplatedTypeDef *type);
-  void visit(nth::TypeAliasDef *typeAliasDef);
+  ScopeChecker();
+  bool run(ASTNode *node);
 
   bool isValid();
   IdentifierList &getUnknownIdentifiers();
  protected:
-  SymbolTable symbols;
+  void withNewScope(ASTNode *node, std::function<void(SymbolTable&)> scopedFun);
+  void withScope(nth::ASTNode *node, std::function<void(SymbolTable&)>scopedFun);
+  std::stack<SymbolTable*> symbolTables;
   IdentifierList unknownIdentifiers;
+
+  // Returns table attached to node, or top of stack
+  SymbolTable &getSymbolTable(nth::ASTNode *node);
+
+  // Responsible for building preliminary symbol tables, attaching them when
+  // appropriate to ASTNodes. The tables contain symbols defined are those
+  // which are not required to be declaraed before usage.
+  class ScopePrimer : public Visitor {
+   public:
+    ScopePrimer(ScopeChecker &checker);
+
+    void visit(nth::Block *block);
+    void visit(nth::FunctionDef *functionDef);
+    void visit(nth::LambdaDef *lambdaDef);
+    void visit(nth::TypeAliasDef *typeAliasDef);
+   protected:
+    ScopeChecker &scopeChecker;
+  };
+
+  //
+  class DeclareBeforeUse : public Visitor {
+   public:
+    DeclareBeforeUse(ScopeChecker &checker);
+
+    void visit(nth::Block *block);
+    void visit(nth::Identifier *ident);
+    void visit(nth::FieldAccess *field_access);
+    void visit(nth::FunctionDef *functionDef);
+    void visit(nth::LambdaDef *lambdaDef);
+    void visit(nth::VariableDef *variableDef);
+    void visit(nth::Argument *argument);
+
+    void visit(nth::SimpleTypeRef *type);
+    void visit(nth::SimpleTypeDef *type);
+    void visit(nth::TemplatedTypeRef *type);
+    void visit(nth::TemplatedTypeDef *type);
+
+   protected:
+    ScopeChecker &scopeChecker;
+
+  };
 };
 
 }

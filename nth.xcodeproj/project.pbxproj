@@ -302,12 +302,12 @@
 				7DD86CA719C20952008C04EF /* symbol_table.cc */,
 				7DD86CA819C20952008C04EF /* symbol_table.h */,
 				7DF8F216198EA164002F06B4 /* ast_visitor.h */,
+				7DA82B0519DE5BC0002E4766 /* ast_visitor.cc */,
 				7D1C33E719BCF8BF007BEAAF /* ast_printer.h */,
 				7D7F4A89199D1D8C00A0DC87 /* ast_dot_printer.cc */,
 				7D7F4A8A199D1D8C00A0DC87 /* ast_dot_printer.h */,
 				7D1C33EB19BD18D3007BEAAF /* ast_string_printer.cc */,
 				7D1C33EC19BD18D3007BEAAF /* ast_string_printer.h */,
-				7DA82B0519DE5BC0002E4766 /* ast_visitor.cc */,
 			);
 			path = nth;
 			sourceTree = "<group>";

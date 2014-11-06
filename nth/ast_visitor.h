@@ -6,13 +6,12 @@
 //  Copyright (c) 2014 Matt Gadda. All rights reserved.
 //
 
-#include "ast.h"
-
 #ifndef nth_ast_visitor_h
 #define nth_ast_visitor_h
 
 namespace nth {
 
+class DummyNode;
 class Block;
 class String;
 class Integer;
@@ -59,6 +58,8 @@ class TypeAliasDef;
 
 class Visitor {
 public:
+  virtual void visit(DummyNode *dummy);
+
   virtual void visit(Block *block);
   virtual void visit(String *string);
   virtual void visit(Integer *integer);
@@ -102,6 +103,8 @@ public:
   virtual void visit(TemplatedTypeRef *type);
   virtual void visit(TemplatedTypeDef *type);
   virtual void visit(TypeAliasDef *typeAliasDef);
+ protected:
+  void visit_binary_operation(BinaryOperation *bin_op);
 };
 
 class Visitable {

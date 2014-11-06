@@ -20,7 +20,7 @@ class Type : public ASTNode {
 
 // These classes may not actually need to inherit Type
 // For the purposes of representing /what/ was parsed
-// everything is either a definitino or a reference
+// everything is either a definition or a reference
 // and there may (or may not) be an occasion where we 
 // care to differentiate.
 class TypeRef : public Type {

@@ -5,53 +5,85 @@
 
 using namespace nth;
 
-Symbol *SymbolTable::findSymbol(Identifier *ident) {
-  for (auto it=scopes.rbegin(); it != scopes.rend(); ++it) {
-    auto scope = *it;
-    for (auto symbolit = scope.rbegin(); symbolit != scope.rend(); ++symbolit) {
-      if(**symbolit == ident) return *symbolit;
-    }
+SymbolTable::SymbolTable() {}
+SymbolTable::SymbolTable(SymbolTable *parent) : parent(parent) {}
+
+SymbolTable *SymbolTable::beget() {
+  return new SymbolTable(this);
+}
+
+Symbol *SymbolTable::findLocalSymbol(Identifier *ident) {
+  for (auto it=scope.rbegin(); it != scope.rend(); ++it) {
+    if(**it == ident) return *it;
   }
   return nullptr;
 }
 
-bool SymbolTable::checkSymbol(Identifier *ident) {
-  if (scopes.empty()) {
-    pushScope();
+Symbol *SymbolTable::findSymbol(Identifier *ident) {
+  if (Symbol *symbol = findLocalSymbol(ident)) {
+    return symbol;
+  } else if (parent != nullptr) {
+    return parent->findSymbol(ident);
+  } else {
+    return nullptr;
   }
 
-  Scope current = scopes.back();
+//  for (auto it=scopes.rbegin(); it != scopes.rend(); ++it) {
+//    auto scope = *it;
+//    for (auto symbolit = scope.rbegin(); symbolit != scope.rend(); ++symbolit) {
+//      if(**symbolit == ident) return *symbolit;
+//    }
+//  }
+//  return nullptr;
+}
 
-  for (auto it=current.rbegin(); it != current.rbegin(); ++it) {
-    if(**it == ident) return true;
+bool SymbolTable::checkSymbol(Identifier *ident) {
+  if (findLocalSymbol(ident) != nullptr) {
+    return true;
   }
   return false;
 }
 
-void SymbolTable::pushScope() {
-  scopes.push_back(Scope());
-}
-
-void SymbolTable::popScope() {
-  if (scopes.empty()) throw std::runtime_error("symbol table is already empty");
-  scopes.pop_back();
-}
-
 void SymbolTable::addSymbol(Identifier *ident) {
-  if (scopes.empty()) {
-    pushScope();
-  }
-
+  // if symbol has already been defined, raise error
   if (checkSymbol(ident)) {
     // TODO: handle this error correctly
-    throw std::runtime_error("symbol is already defined in this scope");
+    throw std::runtime_error(ident->getValue() + " is already defined in this scope");
   }
-  //incrementscopesize();
 
-
-  scopes.back().push_back(new Symbol(ident));
-  ident->setSymbol(scopes.back().back());
+  scope.push_back(new Symbol(ident));
 }
+
+
+std::deque<nth::Symbol*> SymbolTable::getSymbols() {
+  std::deque<nth::Symbol*> symbols;
+
+  for (auto symbolit = scope.begin(); symbolit != scope.end(); ++symbolit) {
+    symbols.push_back(*symbolit);
+  }
+
+  if (parent) {
+    auto parentSymbols = parent->getSymbols();
+
+    symbols.insert(symbols.begin(), parentSymbols.begin(), parentSymbols.end());
+  }
+
+  return symbols;
+}
+
+std::list<SymbolTable*> SymbolTable::getScopes() {
+  std::list<SymbolTable*> scopes(1, this);
+  if (parent) {
+    auto parentScopes = parent->getScopes();
+    scopes.insert(scopes.begin(), parentScopes.begin(), parentScopes.end());
+  }
+
+  return scopes;
+}
+
+// -------------------------
+// Symbol method definitions
+// -------------------------
 
 Symbol::Symbol(Identifier *ident) : name(ident->getValue()) {}
 
@@ -62,19 +94,3 @@ bool Symbol::operator==(Identifier *ident) {
 bool Symbol::operator==(std::string str) {
   return name == str;
 }
-
-std::deque<nth::Symbol*> SymbolTable::getSymbols() {
-  std::deque<nth::Symbol*> symbols;
-  for (auto it=scopes.begin(); it != scopes.end(); ++it) {
-    auto scope = *it;
-    for (auto symbolit = scope.begin(); symbolit != scope.end(); ++symbolit) {
-      symbols.push_back(*symbolit);
-    }
-  }
-  return symbols;
-}
-
-std::deque<SymbolTable::Scope> &SymbolTable::getScopes() {
-  return scopes;
-}
-

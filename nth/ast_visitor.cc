@@ -15,6 +15,8 @@ using namespace nth;
 // so that concrete classes only have to implement the parts
 // they care about
 
+void Visitor::visit(DummyNode *dummy) {}
+
 void Visitor::visit(Block *block) {
   for (auto node : block->getNodes()) {
     node->accept(*this);
@@ -41,28 +43,33 @@ void Visitor::visit(Map *map) {
   }
 }
 
-void Visitor::visit(BinaryOperation *bin_op) {
-  bin_op->getLeftValue()->accept(*this);
-  bin_op->getRightValue()->accept(*this);
-}
+// This method intentionally left unimplemented so that inheriting classes
+// are free to decide whether or not to traverse left and right (and in which
+// order)
+void Visitor::visit(BinaryOperation *bin_op) {}
 
 void Visitor::visit(UnaryOperation *un_op) {
   un_op->getValue()->accept(*this);
 }
 
+void Visitor::visit_binary_operation(BinaryOperation *bin_op) {
+    bin_op->getLeftValue()->accept(*this);
+    bin_op->getRightValue()->accept(*this);
+}
+
 // Binary operations:
-void Visitor::visit(Add *add) {}
-void Visitor::visit(Subtract *subtract) {}
-void Visitor::visit(Multiply *multiply) {}
-void Visitor::visit(Divide *divide) {}
-void Visitor::visit(Exponentiate *exp) {}
-void Visitor::visit(Modulo *modulo) {}
-void Visitor::visit(BitShiftLeft *shift_left) {}
-void Visitor::visit(BitShiftRight *shift_right) {}
-void Visitor::visit(BitwiseOr *bitwise_or) {}
-void Visitor::visit(BitwiseAnd *bitwise_and) {}
-void Visitor::visit(LogicalOr *logical_or) {}
-void Visitor::visit(LogicalAnd *logical_and) {}
+void Visitor::visit(Add *add) { visit_binary_operation(add); }
+void Visitor::visit(Subtract *subtract) { visit_binary_operation(subtract); }
+void Visitor::visit(Multiply *multiply) { visit_binary_operation(multiply); }
+void Visitor::visit(Divide *divide) { visit_binary_operation(divide); }
+void Visitor::visit(Exponentiate *exp) { visit_binary_operation(exp); }
+void Visitor::visit(Modulo *modulo) { visit_binary_operation(modulo); }
+void Visitor::visit(BitShiftLeft *shift_left) { visit_binary_operation(shift_left); }
+void Visitor::visit(BitShiftRight *shift_right) { visit_binary_operation(shift_right); }
+void Visitor::visit(BitwiseOr *bitwise_or) { visit_binary_operation(bitwise_or); }
+void Visitor::visit(BitwiseAnd *bitwise_and) { visit_binary_operation(bitwise_and); }
+void Visitor::visit(LogicalOr *logical_or) { visit_binary_operation(logical_or); }
+void Visitor::visit(LogicalAnd *logical_and) { visit_binary_operation(logical_and); }
 
 // Unary operations:
 void Visitor::visit(BitwiseNot *bitwise_not) {}
@@ -80,10 +87,10 @@ void Visitor::visit(Tuple *tuple) {
 }
 
 // Binary operations:
-void Visitor::visit(Comparison *comparison) {}
-void Visitor::visit(Subscript *subscript) {}
-void Visitor::visit(FieldAccess *field_access) {}
-void Visitor::visit(TupleFieldAccess *tuple_field_access) {}
+void Visitor::visit(Comparison *comparison) { visit_binary_operation(comparison); }
+void Visitor::visit(Subscript *subscript) { visit_binary_operation(subscript); }
+void Visitor::visit(FieldAccess *field_access) { visit_binary_operation(field_access); }
+void Visitor::visit(TupleFieldAccess *tuple_field_access) { visit_binary_operation(tuple_field_access); }
 
 void Visitor::visit(FunctionDef *functionDef) {
   functionDef->getName()->accept(*this);

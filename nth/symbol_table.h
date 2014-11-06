@@ -2,8 +2,8 @@
 #define __nth__symbol_table__
 
 #include <deque>
-#include <stack>
 #include <string>
+#include <list>
 
 namespace nth {
 
@@ -12,21 +12,26 @@ namespace nth {
 
   class SymbolTable {
   public:
-    typedef std::deque<nth::Symbol*> Scope;
+    SymbolTable();
+    SymbolTable(SymbolTable *parent);
+    // Return new child table
+    SymbolTable *beget();
 
-    void pushScope();
-    void popScope();
-
+    // Search this scope and parents for this identifier
     Symbol *findSymbol(Identifier *ident);
     void addSymbol(Identifier *ident);
 
-    // Check if symbol is defined in current frame only
+    // Check if Identifier is defined in current frame only
     bool checkSymbol(Identifier *ident);
 
     std::deque<nth::Symbol*> getSymbols();
-    std::deque<Scope> &getScopes();
+    std::list<SymbolTable *> getScopes();
   protected:
-    std::deque<Scope> scopes;
+    std::deque<nth::Symbol*> scope;
+
+    Symbol *findLocalSymbol(Identifier *ident);
+    SymbolTable *parent;
+
   };
 
   class Symbol {
