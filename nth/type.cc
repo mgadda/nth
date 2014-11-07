@@ -2,7 +2,7 @@
 
 using namespace nth;
 
-TypeList FunctionType::concat_ctr_args(TypeList argList, Type *returnType) {
+TypeRefList FunctionType::concat_ctr_args(TypeRefList argList, TypeRef *returnType) {
   argList.push_back(returnType);
   return argList;
 }

@@ -96,13 +96,13 @@
 %type <nth::FunctionCall*> func_call;
 %type <nth::VariableDef*> val_def;
 %type <nth::ArgList*> arglist;
-%type <nth::TypeList*> typelist type_parameter;
-%type <nth::Type*> type;
+%type <nth::TypeRefList*> typeref_list
+%type <nth::TypeList*> type_param type_param_list;
+%type <nth::TypeRef*> typeref
+%type <nth::TypeDef*> typedef;
 %type <nth::Argument*> arg;
 %type <nth::IfElse*> if_else;
 %type <nth::TypeAliasDef*> type_alias_def;
-
- // %type <std::unique_ptr<nth::BinaryOperation> > binary_operation;
 
 %start file
 
@@ -223,7 +223,8 @@ unary_op: "!" expr %prec NOT      { $$ = new nth::LogicalNot(nth::ExpressionPtr(
 subscript: expr "[" expr "]" { $$ = new nth::Subscript($1, $3); }
          ;
 
-field_access: expr "." expr { $$ = new nth::FieldAccess($1, $3); }
+field_access: expr "." IDENT { $$ = new nth::FieldAccess($1, new nth::Identifier($IDENT, @IDENT)); }
+            | expr "." INT   { $$ = new nth::TupleFieldAccess($1, new nth::Integer($INT)); }
             ;
 
 
@@ -236,7 +237,7 @@ func_def: func_def_without_type_param { std::swap($$, $1); }
         | func_def_with_type_param    { std::swap($$, $1); }
         ;
 
-func_def_with_type_param: DEF IDENT type_parameter "(" arglist ")" ":" type block {
+func_def_with_type_param: DEF IDENT type_param "(" arglist ")" ":" typeref block {
             $$ = new nth::FunctionDef(
               new nth::Identifier($2),
               *$5, $8, $9, *$3
@@ -244,7 +245,7 @@ func_def_with_type_param: DEF IDENT type_parameter "(" arglist ")" ":" type bloc
           }
         ;
 
-func_def_without_type_param: DEF IDENT "(" arglist ")" ":" type block {
+func_def_without_type_param: DEF IDENT "(" arglist ")" ":" typeref block {
             $$ = new nth::FunctionDef(
               new nth::Identifier($2),
               *$4, $7, $8, *(new nth::TypeList)
@@ -252,13 +253,13 @@ func_def_without_type_param: DEF IDENT "(" arglist ")" ":" type block {
           }
         ;
 
-type_parameter: "[" typelist "]"  { std::swap($$, $2); }
+type_param: "[" type_param_list "]"  { std::swap($$, $2); }
               ;
 
-type_alias_def: TYPE IDENT "=" type { $$ = new nth::TypeAliasDef(new nth::SimpleType(new nth::Identifier($2)), $4); }
+type_alias_def: TYPE IDENT "=" typeref { $$ = new nth::TypeAliasDef(new nth::SimpleTypeDef(new nth::Identifier($2)), $4); }
               ;
 
-lambda: "(" arglist ")" ":" type "=>" expr { $$ = new nth::LambdaDef(*$2, $5, $7); }
+lambda: "(" arglist ")" ":" typeref "=>" expr { $$ = new nth::LambdaDef(*$2, $5, $7); }
       ;
 
 arglist: arg               { $$ = new nth::ArgList(1, $1); }
@@ -266,7 +267,7 @@ arglist: arg               { $$ = new nth::ArgList(1, $1); }
        | /* no arguments */{ $$ = new nth::ArgList(); }
        ;
 
-arg: IDENT ":" type { $$ = new nth::Argument(new nth::Identifier($1), $3); }
+arg: IDENT ":" typeref { $$ = new nth::Argument(new nth::Identifier($1), $3); }
    ;
 
 func_call: expr "(" exprlist ")"  { $$ = new nth::FunctionCall($1, *$3); }
@@ -274,7 +275,7 @@ func_call: expr "(" exprlist ")"  { $$ = new nth::FunctionCall($1, *$3); }
          ;
 
   /* Variables */
-val_def: VAL IDENT ":" type "=" expr {
+val_def: VAL IDENT ":" typeref "=" expr {
            $$ = new nth::VariableDef(new nth::Identifier($2), $4, $6);
          }
        ;
@@ -287,16 +288,24 @@ if_else: IF "(" expr ")" block             { $$ = new nth::IfElse($3, $5, nullpt
 
   /* Types */
 
-typelist: type               { $$ = new nth::TypeList(1, $1); }
-        | type "," typelist  { std::swap($$, $3); $$->push_front($1); }
-        ;
+typeref_list: typeref                  { $$ = new nth::TypeRefList(1, $1); }
+           | typeref "," typeref_list  { std::swap($$, $3); $$->push_front($1); }
+           ;
 
-type: IDENT                       { $$ = new nth::SimpleType(new nth::Identifier($1)); }
-    | IDENT "[" typelist "]"      { $$ = new nth::TemplatedType(new nth::Identifier($1), *$3); }
-    | "(" typelist ")"            { $$ = new nth::TupleType(*$2); } /* TODO: replace N with length of typelist */
-    | "(" typelist ")" "=>" type  { $$ = new nth::FunctionType(*$2, $5); } /* TODO: look up type instance by string */
-    | "(" ")" "=>" type           { $$ = new nth::FunctionType(*(new nth::TypeList()), $4); }
-    ;
+typeref: IDENT                          { $$ = new nth::SimpleTypeRef(new nth::Identifier($IDENT, @IDENT)); }
+       | IDENT "[" typeref_list "]"      { $$ = new nth::TemplatedTypeRef(new nth::Identifier($1), *$3); }
+       | "(" typeref_list ")"            { $$ = new nth::TupleType(*$2); } /* TODO: replace N with length of typeref_list */
+       | "(" typeref_list ")" "=>" typeref  { $$ = new nth::FunctionType(*$2, $5); } /* TODO: look up typeref instance by string */
+       | "(" ")" "=>" typeref              { $$ = new nth::FunctionType(*(new nth::TypeRefList()), $4); }
+       ;
+
+type_param_list: typedef                    { $$ = new nth::TypeList(1, $1); }
+               | typedef "," type_param_list  { std::swap($$, $3); $$->push_front($1); }
+               ;
+
+typedef: IDENT  { $$ = new nth::SimpleTypeDef(new nth::Identifier($1)); }
+       ;
+       
 %%
 
 void yy::parser::error(const location_type& l, const std::string& m) {

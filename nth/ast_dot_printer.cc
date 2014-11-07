@@ -8,6 +8,16 @@
 
 #include "ast_dot_printer.h"
 #include "type.h"
+#include "ast.h"
+
+namespace nth {
+
+DummyNode *AstDotPrinter::makeDummy(std::string name, ASTNode *parent) {
+  DummyNode *dummy = new DummyNode();
+  edges.push_back(std::make_pair(parent, dummy));
+  nodes[dummy] = name;
+  return dummy;
+}
 
 AstDotPrinter::AstDotPrinter() {
 }
@@ -34,7 +44,7 @@ std::string AstDotPrinter::getOutput() {
   return ast_output.str();
 }
 
-void AstDotPrinter::visit(nth::Block *block) {
+void AstDotPrinter::visit(Block *block) {
   nodes[block] = "block";
 
   for (auto child : block->getNodes()) {
@@ -45,31 +55,31 @@ void AstDotPrinter::visit(nth::Block *block) {
   }
 }
 
-void AstDotPrinter::visit(nth::String *string) {
+void AstDotPrinter::visit(String *string) {
   nodes[string] = string->getValue();
 }
 
-void AstDotPrinter::visit(nth::Integer *integer) {
+void AstDotPrinter::visit(Integer *integer) {
   nodes[integer] = std::to_string(integer->getValue());
 }
 
-void AstDotPrinter::visit(nth::Float *flt) {
+void AstDotPrinter::visit(Float *flt) {
   nodes[flt] = std::to_string(flt->getValue());
 }
 
-void AstDotPrinter::visit(nth::True *tru) {
+void AstDotPrinter::visit(True *tru) {
   nodes[tru] = "true";
 }
 
-void AstDotPrinter::visit(nth::False *flse) {
+void AstDotPrinter::visit(False *flse) {
   nodes[flse] = "false";
 }
 
-void AstDotPrinter::visit(nth::Identifier *ident) {
+void AstDotPrinter::visit(Identifier *ident) {
   nodes[ident] = ident->getValue();
 }
 
-void AstDotPrinter::visit(nth::Array *array) {
+void AstDotPrinter::visit(Array *array) {
   nodes[array] = "array";
 
   for (auto child : array->getValues()) {
@@ -80,7 +90,7 @@ void AstDotPrinter::visit(nth::Array *array) {
   }
 }
 
-void AstDotPrinter::visit(nth::Map *map) {
+void AstDotPrinter::visit(Map *map) {
   nodes[map] = "map";
 
   for (auto child : map->getValues()) {
@@ -91,9 +101,9 @@ void AstDotPrinter::visit(nth::Map *map) {
   }
 }
 
-void AstDotPrinter::visit(nth::BinaryOperation *bin_op) {
-  nth::ExpressionPtr &left = bin_op->getLeftValue();
-  nth::ExpressionPtr &right = bin_op->getRightValue();
+void AstDotPrinter::visit(BinaryOperation *bin_op) {
+  ExpressionPtr &left = bin_op->getLeftValue();
+  ExpressionPtr &right = bin_op->getRightValue();
 
   edges.push_back(std::make_pair(bin_op, right.get()));
   edges.push_back(std::make_pair(bin_op, left.get()));
@@ -102,71 +112,71 @@ void AstDotPrinter::visit(nth::BinaryOperation *bin_op) {
   right->accept(*this);
 }
 
-void AstDotPrinter::visit(nth::UnaryOperation *un_op) {
-  nth::ExpressionPtr &value = un_op->getValue();
+void AstDotPrinter::visit(UnaryOperation *un_op) {
+  ExpressionPtr &value = un_op->getValue();
 
   edges.push_back(std::make_pair(un_op, value.get()));
 
   value->accept(*this);
 }
 
-void AstDotPrinter::visit(nth::Add *add) {
+void AstDotPrinter::visit(Add *add) {
   nodes[add] = "+";
 }
 
-void AstDotPrinter::visit(nth::Subtract *subtract) {
+void AstDotPrinter::visit(Subtract *subtract) {
   nodes[subtract] = "-";
 }
 
-void AstDotPrinter::visit(nth::Multiply *multiply) {
+void AstDotPrinter::visit(Multiply *multiply) {
   nodes[multiply] = "*";
 }
 
-void AstDotPrinter::visit(nth::Divide *divide) {
+void AstDotPrinter::visit(Divide *divide) {
   nodes[divide] = "/";
 }
 
-void AstDotPrinter::visit(nth::Exponentiate *exp) {
+void AstDotPrinter::visit(Exponentiate *exp) {
   nodes[exp] = "^";
 }
 
-void AstDotPrinter::visit(nth::Modulo *modulo) {
+void AstDotPrinter::visit(Modulo *modulo) {
   nodes[modulo] = "%";
 }
 
-void AstDotPrinter::visit(nth::BitShiftLeft *shift_left) {
+void AstDotPrinter::visit(BitShiftLeft *shift_left) {
   nodes[shift_left] = "<<";
 }
 
-void AstDotPrinter::visit(nth::BitShiftRight *shift_right) {
+void AstDotPrinter::visit(BitShiftRight *shift_right) {
   nodes[shift_right] = ">>";
 }
 
-void AstDotPrinter::visit(nth::BitwiseOr *bitwise_or) {
+void AstDotPrinter::visit(BitwiseOr *bitwise_or) {
   nodes[bitwise_or] = "|";
 }
 
-void AstDotPrinter::visit(nth::BitwiseAnd *bitwise_and) {
+void AstDotPrinter::visit(BitwiseAnd *bitwise_and) {
   nodes[bitwise_and] = "&";
 }
 
-void AstDotPrinter::visit(nth::BitwiseNot *bitwise_not) {
+void AstDotPrinter::visit(BitwiseNot *bitwise_not) {
   nodes[bitwise_not] = "~";
 }
 
-void AstDotPrinter::visit(nth::LogicalOr *logical_or) {
+void AstDotPrinter::visit(LogicalOr *logical_or) {
   nodes[logical_or] = "||";
 }
 
-void AstDotPrinter::visit(nth::LogicalAnd *logical_and) {
+void AstDotPrinter::visit(LogicalAnd *logical_and) {
   nodes[logical_and] = "&&";
 }
 
-void AstDotPrinter::visit(nth::LogicalNot *logical_not) {
+void AstDotPrinter::visit(LogicalNot *logical_not) {
   nodes[logical_not] = "!";
 }
 
-void AstDotPrinter::visit(nth::Range *range) {
+void AstDotPrinter::visit(Range *range) {
   nodes[range] = "range";
 
   edges.push_back(std::make_pair(range, range->getStart()));
@@ -176,7 +186,7 @@ void AstDotPrinter::visit(nth::Range *range) {
   range->getEnd()->accept(*this);
 }
 
-void AstDotPrinter::visit(nth::Tuple *tuple) {
+void AstDotPrinter::visit(Tuple *tuple) {
   nodes[tuple] = "tuple";
 
   for (auto value : tuple->getValues()) {
@@ -185,26 +195,26 @@ void AstDotPrinter::visit(nth::Tuple *tuple) {
   }
 }
 
-void AstDotPrinter::visit(nth::Comparison *comparison) {
+void AstDotPrinter::visit(Comparison *comparison) {
   std::string type;
 
   switch (comparison->getType()) {
-    case nth::Comparison::Type::Equality:
+    case Comparison::Type::Equality:
       type = "==";
       break;
-    case nth::Comparison::Type::Inequality:
+    case Comparison::Type::Inequality:
       type = "!=";
       break;
-    case nth::Comparison::Type::LessThan:
+    case Comparison::Type::LessThan:
       type = "<";
       break;
-    case nth::Comparison::Type::GreaterThan:
+    case Comparison::Type::GreaterThan:
       type = ">";
       break;
-    case nth::Comparison::Type::LessThanOrEqualTo:
+    case Comparison::Type::LessThanOrEqualTo:
       type = "<=";
       break;
-    case nth::Comparison::Type::GreaterThanOrEqualTo:
+    case Comparison::Type::GreaterThanOrEqualTo:
       type = ">=";
       break;
   }
@@ -212,24 +222,36 @@ void AstDotPrinter::visit(nth::Comparison *comparison) {
   nodes[comparison] = type;
 }
 
-void AstDotPrinter::visit(nth::Subscript *subscript) {
+void AstDotPrinter::visit(Subscript *subscript) {
   nodes[subscript] = "subscript";
 
 }
 
-void AstDotPrinter::visit(nth::FieldAccess *field_access) {
+void AstDotPrinter::visit(FieldAccess *field_access) {
   nodes[field_access] = "field_access";
 }
 
-void AstDotPrinter::visit(nth::FunctionDef *functionDef) {
+void AstDotPrinter::visit(TupleFieldAccess *tuple_field_access) {
+  nodes[tuple_field_access] = "tuple_field_access";
+}
+
+void AstDotPrinter::visit(FunctionDef *functionDef) {
   nodes[functionDef] = "function_def";
 
   edges.push_back(std::make_pair(functionDef, functionDef->getName()));
   functionDef->getName()->accept(*this);
 
+  // type parameter list
+  DummyNode *dummy = makeDummy("type_list", functionDef);
+  for (auto value : functionDef->getTypeParameters()) {
+    edges.push_back(std::make_pair(dummy, value));
+    value->accept(*this);
+  }
+
   // arguments
+  dummy = makeDummy("arguments", functionDef);
   for (auto value : functionDef->getArguments()) {
-    edges.push_back(std::make_pair(functionDef, value));
+    edges.push_back(std::make_pair(dummy, value));
     value->accept(*this);
   }
 
@@ -241,7 +263,7 @@ void AstDotPrinter::visit(nth::FunctionDef *functionDef) {
 
 }
 
-void AstDotPrinter::visit(nth::LambdaDef *lambdaDef) {
+void AstDotPrinter::visit(LambdaDef *lambdaDef) {
   nodes[lambdaDef] = "lambda_def";
 
   for (auto value : lambdaDef->getArguments()) {
@@ -257,7 +279,7 @@ void AstDotPrinter::visit(nth::LambdaDef *lambdaDef) {
 
 }
 
-void AstDotPrinter::visit(nth::FunctionCall *functionCall) {
+void AstDotPrinter::visit(FunctionCall *functionCall) {
   nodes[functionCall] = "call";
   edges.push_back(std::make_pair(functionCall, functionCall->getCallable()));
   functionCall->getCallable()->accept(*this);
@@ -268,7 +290,7 @@ void AstDotPrinter::visit(nth::FunctionCall *functionCall) {
   }
 }
 
-void AstDotPrinter::visit(nth::VariableDef *variableDef) {
+void AstDotPrinter::visit(VariableDef *variableDef) {
   nodes[variableDef] = "val_def";
 
   edges.push_back(std::make_pair(variableDef, variableDef->getName()));
@@ -281,7 +303,7 @@ void AstDotPrinter::visit(nth::VariableDef *variableDef) {
   variableDef->getValue()->accept(*this);
 }
 
-void AstDotPrinter::visit(nth::Argument *argument) {
+void AstDotPrinter::visit(Argument *argument) {
   nodes[argument] = "argument_def";
 
   edges.push_back(std::make_pair(argument, argument->getName()));
@@ -291,7 +313,7 @@ void AstDotPrinter::visit(nth::Argument *argument) {
   argument->getType()->accept(*this);
 }
 
-void AstDotPrinter::visit(nth::IfElse *ifElse) {
+void AstDotPrinter::visit(IfElse *ifElse) {
   nodes[ifElse] = "ifelse";
 
   edges.push_back(std::make_pair(ifElse, ifElse->getCond()));
@@ -304,15 +326,15 @@ void AstDotPrinter::visit(nth::IfElse *ifElse) {
   ifElse->getElseBlock()->accept(*this);
 }
 
-void AstDotPrinter::visit(nth::SimpleType *type) {
-  nodes[type] = "simple_type";
+void AstDotPrinter::visit(SimpleTypeRef *type) {
+  nodes[type] = "simple_typeref";
 
   edges.push_back(std::make_pair(type, type->getName()));
   type->getName()->accept(*this);
 }
 
-void AstDotPrinter::visit(nth::TemplatedType *type) {
-  nodes[type] = "templated_type";
+void AstDotPrinter::visit(TemplatedTypeRef *type) {
+  nodes[type] = "templated_typeref";
 
   edges.push_back(std::make_pair(type, type->getName()));
   type->getName()->accept(*this);
@@ -323,7 +345,26 @@ void AstDotPrinter::visit(nth::TemplatedType *type) {
   }
 }
 
-void AstDotPrinter::visit(nth::TypeAliasDef *typeAliasDef) {
+void AstDotPrinter::visit(SimpleTypeDef *type) {
+  nodes[type] = "simple_typedef";
+
+  edges.push_back(std::make_pair(type, type->getName()));
+  type->getName()->accept(*this);
+}
+
+void AstDotPrinter::visit(TemplatedTypeDef *type) {
+  nodes[type] = "templated_typedef";
+
+  edges.push_back(std::make_pair(type, type->getName()));
+  type->getName()->accept(*this);
+
+  for (auto value : type->getSubtypes()) {
+    edges.push_back(std::make_pair(type, value));
+    value->accept(*this);
+  }
+}
+
+void AstDotPrinter::visit(TypeAliasDef *typeAliasDef) {
   nodes[typeAliasDef] = "type_alias_def";
 
   edges.push_back(std::make_pair(typeAliasDef, typeAliasDef->getLType()));
@@ -334,4 +375,4 @@ void AstDotPrinter::visit(nth::TypeAliasDef *typeAliasDef) {
 
 }
 
-
+}

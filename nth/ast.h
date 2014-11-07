@@ -14,22 +14,50 @@
 #include <list>
 #include <memory>
 
+#include "location.hh"
 #include "ast_visitor.h"
 
 namespace nth {
 
 class Type;
+class TypeDef;
+class TypeRef;
+class SymbolTable;
 
-// Anything at all
+// Anything at all, really
 class ASTNode : public Visitable {
  public:
+  ASTNode() {}
+  ASTNode(yy::location &l) : loc(l) {}
   virtual ~ASTNode() {}
+
+  yy::location &getLocation() { return loc; }
+
+  void setSymbolTable(SymbolTable *symbolTable) { _symbolTable = symbolTable; }
+  SymbolTable *getSymbolTable() { return _symbolTable; }
+ protected:
+  yy::location loc; // where we encounter this node while parsing
+  SymbolTable *_symbolTable; // used during scope checking to retain info between passes
 };
+
+class DummyNode : public nth::ASTNode {
+  virtual ~DummyNode() {}
+  void accept(nth::Visitor &v) { v.visit(this); }
+};
+
 
 // Anything that has a value
 class Expression : public ASTNode {
  public:
+  Expression() {}
+  Expression(yy::location &l) : ASTNode(l) {}
   virtual ~Expression() {}
+
+  void setType(Type *type) { _type = type; }
+  Type *getType() { return _type; }
+
+ protected:
+  Type *_type;
 };
 
 typedef std::vector<ASTNode*> NodeList;
@@ -39,6 +67,7 @@ typedef std::vector<KeyValuePair> ExpressionMap;
 typedef std::unique_ptr<Expression> ExpressionPtr;
 typedef std::list<Argument*> ArgList;
 typedef std::list<Type*> TypeList;
+typedef std::list<TypeRef*> TypeRefList;
 
 class Block : public Expression {
  public:
@@ -56,7 +85,7 @@ class Block : public Expression {
 
 class Integer : public Expression {
  public:
-  Integer(long value): value(value) {}
+  Integer(long value): Expression(), value(value) {}
   Integer(Integer &&other) : value(other.value) {}
   virtual ~Integer() {}
 
@@ -140,6 +169,8 @@ class Identifier : public Expression {
  public:
   Identifier(std::string value) : value(value) {}
   Identifier(Identifier &&other) : value(other.value) {}
+  Identifier(std::string value, yy::location &loc)
+   : Expression(loc), value(value) {}
 
   static Identifier *forTemplatedType(std::string name, int subtypeCount);
 
@@ -150,10 +181,11 @@ class Identifier : public Expression {
   bool operator==(const Identifier &i) const { return value == i.value; }
   bool operator==(const char *c) const { return value == c; }
   operator const char*() const { return value.c_str(); }
-
+  
   std::string getValue() { return value; }
  protected:
   std::string value;
+
 };
 
 class Array : public Expression {
@@ -420,63 +452,80 @@ class Subscript : public BinaryOperation {
 
 class FieldAccess : public BinaryOperation {
  public:
-  FieldAccess(Expression *object, Expression *field)
+  FieldAccess(Expression *object, Identifier *field)
   : BinaryOperation(ExpressionPtr(object), ExpressionPtr(field)) {}
+
+  Identifier &getField() {
+    return dynamic_cast<Identifier&>(*BinaryOperation::getRightValue()); }
 
   void accept(Visitor &v);
 };
 
+class TupleFieldAccess : public BinaryOperation {
+public:
+  TupleFieldAccess(Expression *object, Integer *index)
+  : BinaryOperation(ExpressionPtr(object), ExpressionPtr(index)) {}
+
+  Integer &getIndex() { return dynamic_cast<Integer&>(*BinaryOperation::getRightValue()); }
+  void accept(Visitor &v);
+};
+
+
 class Argument : public ASTNode {
  public:
-  Argument(Identifier *name, Type *type) : name(name), type(type) {}
+  Argument(Identifier *name, TypeRef *type) : name(name), type(type) {}
 
   void accept(Visitor &v) { v.visit(this); }
 
   Identifier *getName() { return name; }
-  Type *getType() { return type; }
+  TypeRef *getType() { return type; }
 
  protected:
   Identifier *name;
-  Type *type;
+  TypeRef *type;
 };
 
+// def makeTea(): Tea { ... }
 class FunctionDef : public ASTNode {
  public:
-  FunctionDef(Identifier *name, ArgList &argList, Type *returnType, Block *block, TypeList &typeParameters)
+  FunctionDef(Identifier *name, ArgList &argList, TypeRef *returnType, Block *block, TypeList &typeParameters)
     : name(name), argList(argList), returnType(returnType), block(block), typeParameters(typeParameters) {}
 
   void accept(Visitor &v) { v.visit(this); }
 
   Identifier *getName() { return name; }
+  TypeList &getTypeParameters() { return typeParameters; }
   ArgList &getArguments() { return argList; }
-  Type *getReturnType() { return returnType; }
+  TypeRef *getReturnType() { return returnType; }
   Block *getBlock() { return block; }
 
  protected:
   Identifier      *name;
   ArgList         argList;
-  Type            *returnType;
+  TypeRef         *returnType;
   Block           *block;
   TypeList        typeParameters;
 };
 
+// { (x: Int, y: Int): Int => x + y } 
 class LambdaDef : public Expression {
  public:
-  LambdaDef(ArgList &argList, Type *returnType, Expression *body)
+  LambdaDef(ArgList &argList, TypeRef *returnType, Expression *body)
   : argList(argList), returnType(returnType), body(body) {}
 
   void accept(Visitor &v) { v.visit(this); }
 
   ArgList &getArguments() { return argList; }
-  Type *getReturnType() { return returnType; }
+  TypeRef *getReturnType() { return returnType; }
   Expression *getBody() { return body; }
 
  protected:
   ArgList         argList;
-  Type            *returnType;
+  TypeRef         *returnType;
   Expression      *body;
 };
 
+// makeTea()
 class FunctionCall : public Expression {
  public:
   FunctionCall(Expression *callable, ExpressionList &arguments)
@@ -491,24 +540,25 @@ class FunctionCall : public Expression {
   ExpressionList arguments;
 };
 
+// val a: Int = 10
 class VariableDef : public ASTNode {
  public:
-  VariableDef(Identifier *name, Type *varType, Expression *value)
+  VariableDef(Identifier *name, TypeRef *varType, Expression *value)
   : name(name), varType(varType), value(value) {}
 
   void accept(Visitor &v) { v.visit(this); }
 
   Identifier *getName() { return name; }
-  Type *getVarType() { return varType; }
+  TypeRef *getVarType() { return varType; }
   Expression *getValue() { return value; }
 
  protected:
   Identifier *name;
-  Type *varType;
+  TypeRef *varType;
   Expression *value;
 };
 
-
+// if (expr) { something } else { something_else }
 class IfElse : public Expression {
  public:
   IfElse(Expression *condExpr, Block *ifBlock, Block *elseBlock)
@@ -526,18 +576,21 @@ class IfElse : public Expression {
   Block *elseBlock;
 };
 
+// type IntList = Array[Int]
 class TypeAliasDef : public ASTNode {
  public:
-  TypeAliasDef(Type *lType, Type *rType)
+  TypeAliasDef(TypeDef *lType, TypeRef *rType)
   : lType(lType), rType(rType) {}
 
   void accept(Visitor &v) { v.visit(this); }
 
-  Type *getLType() { return lType; }
-  Type *getRType() { return rType; }
+  TypeDef *getLType() { return lType; }
+  TypeRef *getRType() { return rType; }
 
  protected:
-  Type *lType, *rType;
+  TypeDef *lType;
+  TypeRef *rType;
 };
+
 }
 #endif /* defined(__nth__ast__) */
