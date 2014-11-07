@@ -7,7 +7,15 @@ ScopeChecker::ScopeChecker() {
   symbolTables.push(new SymbolTable);
 }
 
+ScopeChecker::ScopeChecker(SymbolTable &table) {
+  symbolTables.push(&table);
+}
+
 bool ScopeChecker::run(ASTNode *node) {
+  if (!node) {
+    throw new std::runtime_error("unrecoverable error: parse tree was empty");
+  }
+
   ScopeChecker::ScopePrimer primer(*this);
   ScopeChecker::DeclareBeforeUse declareBeforeUse(*this);
   node->accept(primer);

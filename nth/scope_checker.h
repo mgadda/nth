@@ -67,6 +67,8 @@ class ASTNode;
 class ScopeChecker {
  public:
   ScopeChecker();
+  ScopeChecker(SymbolTable &table);
+
   bool run(ASTNode *node);
 
   bool isValid();

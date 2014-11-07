@@ -1,13 +1,19 @@
 #include <stdexcept>
+#include <initializer_list>
 
 #include "symbol_table.h"
 #include "ast.h"
 
 using namespace nth;
 
-SymbolTable::SymbolTable() {}
+SymbolTable::SymbolTable() : parent(nullptr) {}
 SymbolTable::SymbolTable(SymbolTable *parent) : parent(parent) {}
-
+SymbolTable::SymbolTable(std::initializer_list<Identifier*> identifierList)
+ : parent(nullptr) {
+   for (auto ident : identifierList) {
+     addSymbol(ident);
+   }
+}
 SymbolTable *SymbolTable::beget() {
   return new SymbolTable(this);
 }

@@ -14,6 +14,7 @@ namespace nth {
   public:
     SymbolTable();
     SymbolTable(SymbolTable *parent);
+    SymbolTable(std::initializer_list<Identifier*> identifierList);
     // Return new child table
     SymbolTable *beget();
 
