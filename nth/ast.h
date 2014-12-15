@@ -14,6 +14,8 @@
 #include <list>
 #include <memory>
 
+#include <iostream>
+
 #include "location.hh"
 #include "ast_visitor.h"
 
@@ -27,17 +29,24 @@ class SymbolTable;
 // Anything at all, really
 class ASTNode : public Visitable {
  public:
-  ASTNode() {}
-  ASTNode(yy::location &l) : loc(l) {}
+  ASTNode() : _symbolTable(nullptr), _parent(nullptr) {}
+  ASTNode(yy::location &l) : loc(l), _symbolTable(nullptr), _parent(nullptr) {}
   virtual ~ASTNode() {}
 
   yy::location &getLocation() { return loc; }
 
   void setSymbolTable(SymbolTable *symbolTable) { _symbolTable = symbolTable; }
   SymbolTable *getSymbolTable() { return _symbolTable; }
+
+  void setParent(ASTNode *node);
+  ASTNode *getParent() { return _parent; }
+
+  SymbolTable *getNearestSymbolTable();
+
  protected:
   yy::location loc; // where we encounter this node while parsing
   SymbolTable *_symbolTable; // used during scope checking to retain info between passes
+  ASTNode *_parent;
 };
 
 class DummyNode : public nth::ASTNode {
@@ -68,6 +77,7 @@ typedef std::unique_ptr<Expression> ExpressionPtr;
 typedef std::list<Argument*> ArgList;
 typedef std::list<Type*> TypeList;
 typedef std::list<TypeRef*> TypeRefList;
+typedef std::list<TypeDef*> TypeDefList;
 
 class Block : public Expression {
  public:
@@ -172,7 +182,7 @@ class Identifier : public Expression {
   Identifier(std::string value, yy::location &loc)
    : Expression(loc), value(value) {}
 
-  static Identifier *forTemplatedType(std::string name, int subtypeCount);
+  static Identifier *forTemplatedType(std::string name, size_t subtypeCount);
 
   // Visitable
   void accept(Visitor &v) { v.visit(this); }
@@ -191,7 +201,7 @@ class Identifier : public Expression {
 class Array : public Expression {
  public:
   Array() {}
-  Array(ExpressionList &exprlist) : values(exprlist) {}
+  Array(ExpressionList &exprlist);
   Array(Array &&other) : values(other.values) {}
 
   // Visitable
@@ -206,7 +216,7 @@ class Array : public Expression {
 class Map : public Expression {
  public:
   Map() {}
-  Map(ExpressionMap &exprmap) : values(exprmap) {}
+  Map(ExpressionMap &exprmap);
   Map(Map &&other) : values(other.values) {}
 
   // Visitable
@@ -221,7 +231,7 @@ class Map : public Expression {
 
 class UnaryOperation : public Expression {
  public:
-  UnaryOperation(ExpressionPtr value) : value(std::move(value)) {}
+  UnaryOperation(ExpressionPtr value);
   ExpressionPtr &getValue() { return value; }
 
   void accept(Visitor &v) { v.visit(this); }
@@ -232,9 +242,7 @@ class UnaryOperation : public Expression {
 
 class BinaryOperation : public Expression {
  public:
-  BinaryOperation(ExpressionPtr left,
-                  ExpressionPtr right)
-    : left(std::move(left)), right(std::move(right)) {}
+  BinaryOperation(ExpressionPtr left, ExpressionPtr right);
 
   ExpressionPtr &getLeftValue() { return left; }
   ExpressionPtr &getRightValue() { return right; }
@@ -388,10 +396,7 @@ class Range : public Expression {
  public:
   enum class Exclusivity { Exclusive, Inclusive };
 
-  Range(Integer *start, Integer *end, Exclusivity exclusivity) :
-    start(start),
-    end(end),
-    exclusivity(exclusivity) {}
+  Range(Integer *start, Integer *end, Exclusivity exclusivity);
 
   void accept(Visitor &v) { v.visit(this); }
 
@@ -406,7 +411,7 @@ class Range : public Expression {
 
 class Tuple : public Expression {
  public:
-  Tuple(ExpressionList &values) : values(values) {}
+  Tuple(ExpressionList &values);
   ExpressionList &getExpressions();
 
   // Visitable
@@ -473,7 +478,7 @@ public:
 
 class Argument : public ASTNode {
  public:
-  Argument(Identifier *name, TypeRef *type) : name(name), type(type) {}
+  Argument(Identifier *name, TypeRef *type);
 
   void accept(Visitor &v) { v.visit(this); }
 
@@ -488,13 +493,12 @@ class Argument : public ASTNode {
 // def makeTea(): Tea { ... }
 class FunctionDef : public ASTNode {
  public:
-  FunctionDef(Identifier *name, ArgList &argList, TypeRef *returnType, Block *block, TypeList &typeParameters)
-    : name(name), argList(argList), returnType(returnType), block(block), typeParameters(typeParameters) {}
+  FunctionDef(Identifier *name, ArgList &argList, TypeRef *returnType, Block *block, TypeDefList &typeParameters);
 
   void accept(Visitor &v) { v.visit(this); }
 
   Identifier *getName() { return name; }
-  TypeList &getTypeParameters() { return typeParameters; }
+  TypeDefList &getTypeParameters() { return typeParameters; }
   ArgList &getArguments() { return argList; }
   TypeRef *getReturnType() { return returnType; }
   Block *getBlock() { return block; }
@@ -504,14 +508,13 @@ class FunctionDef : public ASTNode {
   ArgList         argList;
   TypeRef         *returnType;
   Block           *block;
-  TypeList        typeParameters;
+  TypeDefList     typeParameters;
 };
 
 // { (x: Int, y: Int): Int => x + y } 
 class LambdaDef : public Expression {
  public:
-  LambdaDef(ArgList &argList, TypeRef *returnType, Expression *body)
-  : argList(argList), returnType(returnType), body(body) {}
+  LambdaDef(ArgList &argList, TypeRef *returnType, Expression *body);
 
   void accept(Visitor &v) { v.visit(this); }
 
@@ -528,8 +531,7 @@ class LambdaDef : public Expression {
 // makeTea()
 class FunctionCall : public Expression {
  public:
-  FunctionCall(Expression *callable, ExpressionList &arguments)
-  : callable(callable), arguments(arguments) {}
+  FunctionCall(Expression *callable, ExpressionList &arguments);
 
   void accept(Visitor &v) { v.visit(this); }
 
@@ -543,8 +545,7 @@ class FunctionCall : public Expression {
 // val a: Int = 10
 class VariableDef : public ASTNode {
  public:
-  VariableDef(Identifier *name, TypeRef *varType, Expression *value)
-  : name(name), varType(varType), value(value) {}
+  VariableDef(Identifier *name, TypeRef *varType, Expression *value);
 
   void accept(Visitor &v) { v.visit(this); }
 
@@ -561,8 +562,7 @@ class VariableDef : public ASTNode {
 // if (expr) { something } else { something_else }
 class IfElse : public Expression {
  public:
-  IfElse(Expression *condExpr, Block *ifBlock, Block *elseBlock)
-  : condExpr(condExpr), ifBlock(ifBlock), elseBlock(elseBlock) {}
+  IfElse(Expression *condExpr, Block *ifBlock, Block *elseBlock);
 
   void accept(Visitor &v) { v.visit(this); }
 
@@ -579,8 +579,7 @@ class IfElse : public Expression {
 // type IntList = Array[Int]
 class TypeAliasDef : public ASTNode {
  public:
-  TypeAliasDef(TypeDef *lType, TypeRef *rType)
-  : lType(lType), rType(rType) {}
+  TypeAliasDef(TypeDef *lType, TypeRef *rType);
 
   void accept(Visitor &v) { v.visit(this); }
 

@@ -20,8 +20,7 @@ TEST_F(SymbolTableTest, FindsNearestSymbol) {
   root.addSymbol(new nth::Identifier("foo"));
   nth::SymbolTable *table = root.beget();
   table->addSymbol(new nth::Identifier("foo"));
-  nth::Symbol *symbol = table->
-  findSymbol(new nth::Identifier("foo"));
+  nth::Symbol *symbol = table->findSymbol(new nth::Identifier("foo"));
   nth::Symbol *top = table->getSymbols().back();
   EXPECT_EQ(top, symbol);
 }

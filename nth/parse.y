@@ -1,6 +1,6 @@
 %code requires {
   #include "ast.h"
-  #include "type.h"
+  #include "type_literal.h"
 
   namespace nth {
     // Forward declaration because Driver
@@ -97,7 +97,7 @@
 %type <nth::VariableDef*> val_def;
 %type <nth::ArgList*> arglist;
 %type <nth::TypeRefList*> typeref_list
-%type <nth::TypeList*> type_param type_param_list;
+%type <nth::TypeDefList*> type_param type_param_list;
 %type <nth::TypeRef*> typeref
 %type <nth::TypeDef*> typedef;
 %type <nth::Argument*> arg;
@@ -248,7 +248,7 @@ func_def_with_type_param: DEF IDENT type_param "(" arglist ")" ":" typeref block
 func_def_without_type_param: DEF IDENT "(" arglist ")" ":" typeref block {
             $$ = new nth::FunctionDef(
               new nth::Identifier($2),
-              *$4, $7, $8, *(new nth::TypeList)
+              *$4, $7, $8, *(new nth::TypeDefList)
             );
           }
         ;
@@ -294,12 +294,12 @@ typeref_list: typeref                  { $$ = new nth::TypeRefList(1, $1); }
 
 typeref: IDENT                          { $$ = new nth::SimpleTypeRef(new nth::Identifier($IDENT, @IDENT)); }
        | IDENT "[" typeref_list "]"      { $$ = new nth::TemplatedTypeRef(new nth::Identifier($1), *$3); }
-       | "(" typeref_list ")"            { $$ = new nth::TupleType(*$2); } /* TODO: replace N with length of typeref_list */
-       | "(" typeref_list ")" "=>" typeref  { $$ = new nth::FunctionType(*$2, $5); } /* TODO: look up typeref instance by string */
-       | "(" ")" "=>" typeref              { $$ = new nth::FunctionType(*(new nth::TypeRefList()), $4); }
+       | "(" typeref_list ")"            { $$ = new nth::TupleTypeRef(*$2); } /* TODO: replace N with length of typeref_list */
+       | "(" typeref_list ")" "=>" typeref  { $$ = new nth::FunctionTypeRef(*$2, $5); } /* TODO: look up typeref instance by string */
+       | "(" ")" "=>" typeref              { $$ = new nth::FunctionTypeRef(*(new nth::TypeRefList()), $4); }
        ;
 
-type_param_list: typedef                    { $$ = new nth::TypeList(1, $1); }
+type_param_list: typedef                    { $$ = new nth::TypeDefList(1, $1); }
                | typedef "," type_param_list  { std::swap($$, $3); $$->push_front($1); }
                ;
 

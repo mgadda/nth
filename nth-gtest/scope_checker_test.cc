@@ -14,12 +14,6 @@ class ScopeCheckerTest : public ::testing::Test {
   virtual void SetUp() {}
 };
 
-void foo() {
-  nth::Identifier ident("Int");
-  nth::SymbolTable table( {&ident} );
-  nth::ScopeChecker checker( table );
-}
-
 TEST_F(ScopeCheckerTest, TestValidFunctionDef) {
   d.parseString("def appendUsToTs[T, U](a: T, b: U): T { a + b }");
   scopeChecker.run(d.result);

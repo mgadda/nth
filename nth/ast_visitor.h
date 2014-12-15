@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Matt Gadda. All rights reserved.
 //
 
+#include <functional>
+#include <list>
+
 #ifndef nth_ast_visitor_h
 #define nth_ast_visitor_h
 

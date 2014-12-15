@@ -7,7 +7,7 @@
 //
 
 #include "ast_visitor.h"
-#include "type.h"
+#include "type_literal.h"
 
 using namespace nth;
 

@@ -1,5 +1,5 @@
 #include "scope_checker.h"
-#include "type.h"
+#include "type_literal.h"
 
 using namespace nth;
 

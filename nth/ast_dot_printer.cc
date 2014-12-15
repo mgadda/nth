@@ -7,7 +7,7 @@
 //
 
 #include "ast_dot_printer.h"
-#include "type.h"
+#include "type_literal.h"
 #include "ast.h"
 
 namespace nth {

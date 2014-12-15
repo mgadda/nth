@@ -2,7 +2,7 @@
 #include <limits>
 
 #include "ast_string_printer.h"
-#include "type.h"
+#include "type_literal.h"
 
 namespace nth {
 
@@ -228,7 +228,7 @@ void AstStringPrinter::visit(FunctionDef *functionDef) {
     ast_output << "),typeparamlist(";
     auto values = functionDef->getTypeParameters();
 
-    join_values(values.begin(), values.end(), ",", ast_output, [this](TypeList::value_type value) {
+    join_values(values.begin(), values.end(), ",", ast_output, [this](TypeDefList::value_type value) {
       value->accept(*this);
     });
   }
@@ -308,7 +308,7 @@ void AstStringPrinter::visit(TemplatedTypeRef *type) {
   type->getName()->accept(*this);
   ast_output << ",";
   auto values = type->getSubtypes();
-  join_values(values.begin(), values.end(), ",", ast_output, [this](TypeList::value_type value) {
+  join_values(values.begin(), values.end(), ",", ast_output, [this](TypeRefList::value_type value) {
     value->accept(*this);
   });
 
@@ -326,7 +326,7 @@ void AstStringPrinter::visit(TemplatedTypeDef *type) {
   type->getName()->accept(*this);
   ast_output << ",";
   auto values = type->getSubtypes();
-  join_values(values.begin(), values.end(), ",", ast_output, [this](TypeList::value_type value) {
+  join_values(values.begin(), values.end(), ",", ast_output, [this](TypeDefList::value_type value) {
     value->accept(*this);
   });
 

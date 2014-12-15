@@ -33,14 +33,10 @@ Symbol *SymbolTable::findSymbol(Identifier *ident) {
   } else {
     return nullptr;
   }
+}
 
-//  for (auto it=scopes.rbegin(); it != scopes.rend(); ++it) {
-//    auto scope = *it;
-//    for (auto symbolit = scope.rbegin(); symbolit != scope.rend(); ++symbolit) {
-//      if(**symbolit == ident) return *symbolit;
-//    }
-//  }
-//  return nullptr;
+Symbol *SymbolTable::findSymbol(std::string name) {
+  return findSymbol(new Identifier(name));
 }
 
 bool SymbolTable::checkSymbol(Identifier *ident) {
@@ -50,14 +46,22 @@ bool SymbolTable::checkSymbol(Identifier *ident) {
   return false;
 }
 
-void SymbolTable::addSymbol(Identifier *ident) {
+Symbol &SymbolTable::addSymbol(Identifier *ident, Type &type) {
+  Symbol &symbol = addSymbol(ident);
+  symbol.setType(type);
+  return symbol;
+}
+
+Symbol &SymbolTable::addSymbol(Identifier *ident) {
   // if symbol has already been defined, raise error
   if (checkSymbol(ident)) {
     // TODO: handle this error correctly
     throw std::runtime_error(ident->getValue() + " is already defined in this scope");
   }
 
-  scope.push_back(new Symbol(ident));
+  Symbol *symbol = new Symbol(ident);
+  scope.push_back(symbol);
+  return *symbol;
 }
 
 
@@ -93,10 +97,24 @@ std::list<SymbolTable*> SymbolTable::getScopes() {
 
 Symbol::Symbol(Identifier *ident) : name(ident->getValue()) {}
 
+void Symbol::setType(Type &type) {
+  _type = &type;
+}
+
+Type *Symbol::getType() { return _type; }
+
+bool Symbol::operator==(Symbol &rhs) {
+  return this == &rhs;
+}
+
 bool Symbol::operator==(Identifier *ident) {
   return name == ident->getValue();
 }
 
 bool Symbol::operator==(std::string str) {
+  return name == str;
+}
+
+bool Symbol::operator==(const char *str) {
   return name == str;
 }
