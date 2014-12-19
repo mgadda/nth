@@ -81,6 +81,7 @@ LEADING_DIGIT [1-9]
 "def"     { return yy::parser::make_DEF(loc); }
 "val"     { return yy::parser::make_VAL(loc); }
 "class"   { return yy::parser::make_CLASS(loc); }
+"trait"   { return yy::parser::make_TRAIT(loc); }
 "type"    { return yy::parser::make_TYPE(loc); }
 
   /* literals */

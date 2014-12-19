@@ -58,7 +58,7 @@
   ;
 
 %token <nth::Comparison::Type> CMP
-%token AND "&&" OR "||" NOT "!" IF ELSE DEF VAL CLASS TYPE
+%token AND "&&" OR "||" NOT "!" IF ELSE DEF VAL CLASS TRAIT TYPE
 %token TRUE FALSE
 %token <double> FLOAT
 %token <long> INT
@@ -79,7 +79,7 @@
 %left "&&" "||"
 
 %type <nth::Block*> file;
-%type <nth::Block*> statements block;
+%type <nth::Block*> statements block optional_block;
 %type <nth::ASTNode*> statement;
 %type <nth::Expression*> expr literal compound_literal binary_op unary_op;
 %type <nth::ExpressionList*> exprlist;
@@ -95,14 +95,15 @@
 %type <nth::LambdaDef*> lambda;
 %type <nth::FunctionCall*> func_call;
 %type <nth::VariableDef*> val_def;
-%type <nth::ArgList*> arglist;
+%type <nth::ArgList*> arglist optional_ctor_args;
 %type <nth::TypeRefList*> typeref_list
-%type <nth::TypeDefList*> type_param type_param_list;
+%type <nth::TypeDefList*> optional_type_param type_param type_param_list;
 %type <nth::TypeRef*> typeref
 %type <nth::TypeDef*> typedef;
 %type <nth::Argument*> arg;
 %type <nth::IfElse*> if_else;
 %type <nth::TypeAliasDef*> type_alias_def;
+%type <nth::TraitDef*> trait_def;
 
 %start file
 
@@ -120,6 +121,7 @@ statements: statement             { $$ = new nth::Block($1); }
 statement: expr           { nth::ASTNode* node = $1; std::swap($$, node); }
          | val_def        { nth::ASTNode* node = $1; std::swap($$, node); }
          | func_def       { nth::ASTNode* node = $1; std::swap($$, node); }
+         | trait_def      { nth::ASTNode* node = $1; std::swap($$, node); }
          | type_alias_def { nth::ASTNode* node = $1; std::swap($$, node); }
          ;
 
@@ -254,6 +256,28 @@ func_def_without_type_param: DEF IDENT "(" arglist ")" ":" typeref block {
         ;
 
 type_param: "[" type_param_list "]"  { std::swap($$, $2); }
+          ;
+
+trait_def: TRAIT IDENT optional_type_param optional_ctor_args optional_block {
+              $$ = new nth::TraitDef(
+                new nth::Identifier($IDENT),
+                $optional_type_param,
+                $optional_ctor_args,
+                $optional_block
+              );
+            }
+         ;
+
+optional_type_param: /* this space intentional left blank */  { $$ = nullptr; }
+                   | type_param
+                   ;
+
+optional_ctor_args: /* this space intentional left blank */
+                  | "(" arglist ")"
+                  ;
+
+optional_block: /* this space intetionally left blank */
+              | block
               ;
 
 type_alias_def: TYPE IDENT "=" typeref { $$ = new nth::TypeAliasDef(new nth::SimpleTypeDef(new nth::Identifier($2)), $4); }
@@ -305,7 +329,7 @@ type_param_list: typedef                    { $$ = new nth::TypeDefList(1, $1); 
 
 typedef: IDENT  { $$ = new nth::SimpleTypeDef(new nth::Identifier($1)); }
        ;
-       
+
 %%
 
 void yy::parser::error(const location_type& l, const std::string& m) {

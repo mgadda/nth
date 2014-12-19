@@ -162,3 +162,20 @@ void Visitor::visit(TypeAliasDef *typeAliasDef) {
   typeAliasDef->getLType()->accept(*this);
   typeAliasDef->getRType()->accept(*this);
 }
+
+void Visitor::visit(TraitDef *traitDef) {
+  traitDef->getName()->accept(*this);
+  if (TypeDefList *typeParams = traitDef->getTypeParameters()) {
+    for (auto typeParam : *typeParams) {
+      typeParam->accept(*this);
+    }
+  }
+  if (ArgList *ctorArgs = traitDef->getCtorArgs()) {
+    for (auto arg : *ctorArgs) {
+      arg->accept(*this);
+    }
+  }
+  if (Block *block = traitDef->getBlock()) {
+    block->accept(*this);
+  }
+}

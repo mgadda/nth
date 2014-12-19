@@ -144,6 +144,16 @@ TypeAliasDef::TypeAliasDef(TypeDef *lType, TypeRef *rType)
   rType->setParent(this);
 }
 
+TraitDef::TraitDef(
+    Identifier *name,
+    TypeDefList *typeParameters,
+    ArgList *constructorArgs,
+    Block *block)
+: name(name),
+  typeParameters(typeParameters),
+  ctorArgs(constructorArgs),
+  block(block) {}
+
 void Add::accept(Visitor &v) {
   v.visit(this);
   BinaryOperation::accept(v);

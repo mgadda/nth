@@ -342,4 +342,35 @@ void AstStringPrinter::visit(TypeAliasDef *typeAliasDef) {
   ast_output << ")";
 }
 
+void AstStringPrinter::visit(TraitDef *traitDef) {
+  ast_output << "trait_def(name(";
+  traitDef->getName()->accept(*this);
+  ast_output << ")";
+
+  if (traitDef->getTypeParameters() && !traitDef->getTypeParameters()->empty()) {
+    ast_output << ",typeparamlist(";
+    auto values = *traitDef->getTypeParameters();
+
+    join_values(values.begin(), values.end(), ",", ast_output, [this](TypeDefList::value_type value) {
+      value->accept(*this);
+    });
+    ast_output << ")";
+  }
+
+  if (traitDef->getCtorArgs() && !traitDef->getCtorArgs()->empty()) {
+    ast_output << ",ctor_arglist(";
+    auto values = *traitDef->getCtorArgs();
+    join_values(values.begin(), values.end(), ",", ast_output, [this](ArgList::value_type value) {
+      value->accept(*this);
+    });
+    ast_output << ")";
+  }
+
+  if (traitDef->getBlock()) {
+    traitDef->getBlock()->accept(*this);
+  }
+
+  ast_output << ")";
+}
+
 }

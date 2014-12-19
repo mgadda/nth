@@ -591,5 +591,26 @@ class TypeAliasDef : public ASTNode {
   TypeRef *rType;
 };
 
+class TraitDef : public ASTNode {
+ public:
+  TraitDef(
+    Identifier *name,
+    TypeDefList *typeParameters,
+    ArgList *constructorArgs,
+    Block *block);
+
+  void accept(Visitor &v) { v.visit(this); }
+
+  Identifier *getName() { return name; }
+  TypeDefList *getTypeParameters() { return typeParameters; }
+  ArgList *getCtorArgs() { return ctorArgs; }
+  Block *getBlock() { return block; }
+ protected:
+  Identifier *name;
+  TypeDefList *typeParameters;
+  ArgList     *ctorArgs;
+  Block       *block;
+};
+
 }
 #endif /* defined(__nth__ast__) */

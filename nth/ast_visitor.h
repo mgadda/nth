@@ -58,6 +58,7 @@ class SimpleTypeDef;
 class TemplatedTypeRef;
 class TemplatedTypeDef;
 class TypeAliasDef;
+class TraitDef;
 
 class Visitor {
 public:
@@ -106,6 +107,8 @@ public:
   virtual void visit(TemplatedTypeRef *type);
   virtual void visit(TemplatedTypeDef *type);
   virtual void visit(TypeAliasDef *typeAliasDef);
+  virtual void visit(TraitDef *traitDef);
+
  protected:
   void visit_binary_operation(BinaryOperation *bin_op);
 };

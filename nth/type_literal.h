@@ -79,6 +79,8 @@ protected:
   TypeRefList subtypes;
 };
 
+// TODO: this may not really be in use
+// TODO: replace with nodes like trait, class, type alias def
 // For defining templated classes: class Foo[A, B]
 // Foo, A, and B are all being defined here
 class TemplatedTypeDef : public TypeDef {
@@ -117,7 +119,7 @@ public:
                      Identifier::forTemplatedType("Function", argTypes.size()),
                      FunctionTypeRef::concat_ctr_args(argTypes, returnType)
                      ) {}
-  
+
   static TypeRefList concat_ctr_args(TypeRefList argList, TypeRef *returnType);
 };
 

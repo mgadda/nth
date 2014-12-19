@@ -431,3 +431,27 @@ TEST_F(ParseTest, ParseTypeAliasDefStatements) {
         ident(List),
         simple_typeref(ident(Expression))))));
 }
+
+TEST_F(ParseTest, ParseTrait) {
+  d.parseString("trait Foo");
+  EXPECT_AST(
+    block(trait_def(name(ident(Foo)))));
+}
+
+/*
+
+ type parameters
+ no type parameters
+ 
+ no arg list
+ empty arg list
+ args
+ 
+ block
+ no block
+
+ 2 * 3 * 2 = 12 tests
+ 
+
+
+*/

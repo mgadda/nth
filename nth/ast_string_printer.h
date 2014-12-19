@@ -54,6 +54,7 @@ public:
   void visit(TemplatedTypeRef *type);
   void visit(TemplatedTypeDef *type);
   void visit(TypeAliasDef *typeAliasDef);
+  void visit(TraitDef *traitDef);
 
   std::string getOutput();
 protected:
