@@ -438,20 +438,54 @@ TEST_F(ParseTest, ParseTrait) {
     block(trait_def(name(ident(Foo)))));
 }
 
-/*
+TEST_F(ParseTest, ParseTraitWithArgs) {
+  d.parseString("trait Foo(i: Int)");
+  EXPECT_AST(
+    block(trait_def(
+      name(ident(Foo)),
+      ctor_arglist(
+        argument(ident(i), simple_typeref(ident(Int)))))));
+}
 
- type parameters
- no type parameters
- 
- no arg list
- empty arg list
- args
- 
- block
- no block
+TEST_F(ParseTest, ParseTraitWithEmptyArgs) {
+  d.parseString("trait Foo()");
+  EXPECT_AST(
+    block(trait_def(
+      name(ident(Foo)))));
+}
 
- 2 * 3 * 2 = 12 tests
- 
+TEST_F(ParseTest, ParseTraitWithTypeParams) {
+  d.parseString("trait Foo[A]");
+  EXPECT_AST(
+    block(trait_def(
+      name(ident(Foo)),
+      typeparamlist(
+        simple_typedef(ident(A))))));
+}
 
+TEST_F(ParseTest, ParseTraitWithBlock) {
+  d.parseString("trait Foo {\n  val bar: Int = 10\n}");
+  EXPECT_AST(
+    block(trait_def(
+      name(ident(Foo)),
+      block(
+        variabledef(
+          name(ident(bar)),
+          simple_typeref(ident(Int)),
+          integer(10))))));
+}
 
-*/
+TEST_F(ParseTest, ParseTraitWithTypeParamsArgsAndBlock) {
+  d.parseString("trait Foo[A](bar: A) {\n  val baz: Int = bar\n}");
+  EXPECT_AST(
+    block(trait_def(
+      name(ident(Foo)),
+      typeparamlist(simple_typedef(ident(A))),
+      ctor_arglist(
+        argument(ident(bar), simple_typeref(ident(A)))),
+      block(
+        variabledef(
+          name(ident(baz)),
+          simple_typeref(ident(Int)),
+          ident(bar))))));
+}
