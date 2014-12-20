@@ -82,10 +82,6 @@ Type *Type::findMethodReturnTypeForArgs(std::string methodSymbolName, std::list<
 
         if (*methodType->getName() == *expectedFunctionTypeName) {
 
-//          auto subtypes = methodType->getSubtypes();
-//          Type *returnType = subtypes.back();
-//          decltype(subtypes) methodArgTypes(subtypes.begin(), --subtypes.end());
-
           Type *returnType = methodType->getReturnType();
           TypeList methodArgTypes = methodType->getArgTypes();
           
