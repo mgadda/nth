@@ -269,15 +269,15 @@ trait_def: TRAIT IDENT optional_type_param optional_ctor_args optional_block {
          ;
 
 optional_type_param: /* this space intentional left blank */  { $$ = nullptr; }
-                   | type_param
+                   | type_param { $$ = $1; }
                    ;
 
-optional_ctor_args: /* this space intentional left blank */
-                  | "(" arglist ")"
+optional_ctor_args: /* this space intentional left blank */   { $$ = nullptr; }
+                  | "(" arglist ")"                           { std::swap($$, $2); }
                   ;
 
-optional_block: /* this space intetionally left blank */
-              | block
+optional_block: /* this space intetionally left blank */      { $$ = nullptr; }
+              | block { $$ = $1; }
               ;
 
 type_alias_def: TYPE IDENT "=" typeref { $$ = new nth::TypeAliasDef(new nth::SimpleTypeDef(new nth::Identifier($2)), $4); }

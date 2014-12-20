@@ -367,6 +367,7 @@ void AstStringPrinter::visit(TraitDef *traitDef) {
   }
 
   if (traitDef->getBlock()) {
+    ast_output << ",";
     traitDef->getBlock()->accept(*this);
   }
 
