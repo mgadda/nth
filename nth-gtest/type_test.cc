@@ -18,11 +18,11 @@
  */
 TEST(TypeTest, computeLUB_simple) {
   std::set<nth::Type*> types;
-  nth::Type *root = new nth::SimpleType(new nth::Identifier("Object"), nth::VariableSet(), nth::MethodSet(), nullptr);
+  nth::Type *root = new nth::SimpleType(new nth::Identifier("Object"), nth::VariableSet(), nth::MethodSet(), {});
 
-  types.insert(new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), root));
+  types.insert(new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), { root }));
 
-  types.insert(new nth::SimpleType(new nth::Identifier("Bar"), nth::VariableSet(), nth::MethodSet(), root));
+  types.insert(new nth::SimpleType(new nth::Identifier("Bar"), nth::VariableSet(), nth::MethodSet(), { root }));
 
   ASSERT_EQ(root, nth::Type::computeLUB(types));
 }
@@ -35,11 +35,11 @@ TEST(TypeTest, computeLUB_simple) {
  */
 TEST(TypeTest, computeLUB_offset) {
   std::set<nth::Type*> types;
-  nth::Type *root = new nth::SimpleType(new nth::Identifier("Object"), nth::VariableSet(), nth::MethodSet(), nullptr);
+  nth::Type *root = new nth::SimpleType(new nth::Identifier("Object"), nth::VariableSet(), nth::MethodSet(), {});
 
-  nth::SimpleType *fooType = new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), root);
-  nth::SimpleType *barType = new nth::SimpleType(new nth::Identifier("Bar"), nth::VariableSet(), nth::MethodSet(), root);
-  nth::SimpleType *bazType = new nth::SimpleType(new nth::Identifier("Baz"), nth::VariableSet(), nth::MethodSet(), barType);
+  nth::SimpleType *fooType = new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), { root });
+  nth::SimpleType *barType = new nth::SimpleType(new nth::Identifier("Bar"), nth::VariableSet(), nth::MethodSet(), { root });
+  nth::SimpleType *bazType = new nth::SimpleType(new nth::Identifier("Baz"), nth::VariableSet(), nth::MethodSet(), { barType });
 
   types.insert(bazType);
   types.insert(fooType);
@@ -47,6 +47,16 @@ TEST(TypeTest, computeLUB_offset) {
   ASSERT_EQ(root, nth::Type::computeLUB(types));
 }
 
+/*
+
+        /-- Foo--\
+ Object            Baz
+        \-- Bar--/-Qux
+LUB(Baz, Qux) = Bar? (or Object?)
+ */
+TEST(TypeTest, computeLUB_MultipleParents) {
+  FAIL();
+}
 /*
  Object <- LUB(Qux, Norf, Foo)
  |- Foo
@@ -57,13 +67,13 @@ TEST(TypeTest, computeLUB_offset) {
  */
 TEST(TypeTest, computeLUB_multi) {
   std::set<nth::Type*> types;
-  nth::Type *root = new nth::SimpleType(new nth::Identifier("Object"), nth::VariableSet(), nth::MethodSet(), nullptr);
+  nth::Type *root = new nth::SimpleType(new nth::Identifier("Object"), nth::VariableSet(), nth::MethodSet(), {});
 
-  nth::SimpleType *fooType = new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), root);
-  nth::SimpleType *barType = new nth::SimpleType(new nth::Identifier("Bar"), nth::VariableSet(), nth::MethodSet(), root);
-  nth::SimpleType *bazType = new nth::SimpleType(new nth::Identifier("Baz"), nth::VariableSet(), nth::MethodSet(), barType);
-  nth::SimpleType *quxType = new nth::SimpleType(new nth::Identifier("Qux"), nth::VariableSet(), nth::MethodSet(), barType);
-  nth::SimpleType *norfType = new nth::SimpleType(new nth::Identifier("Norf"), nth::VariableSet(), nth::MethodSet(), bazType);
+  nth::SimpleType *fooType = new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), { root });
+  nth::SimpleType *barType = new nth::SimpleType(new nth::Identifier("Bar"), nth::VariableSet(), nth::MethodSet(), { root });
+  nth::SimpleType *bazType = new nth::SimpleType(new nth::Identifier("Baz"), nth::VariableSet(), nth::MethodSet(), { barType });
+  nth::SimpleType *quxType = new nth::SimpleType(new nth::Identifier("Qux"), nth::VariableSet(), nth::MethodSet(), { barType });
+  nth::SimpleType *norfType = new nth::SimpleType(new nth::Identifier("Norf"), nth::VariableSet(), nth::MethodSet(), { bazType });
 
   types.insert(quxType);
   types.insert(norfType);
@@ -78,25 +88,33 @@ TEST(TypeTest, computeLUB_multi) {
  */
 TEST(TypeTest, computeLUB_dup) {
   std::set<nth::Type*> types;
-  nth::Type *root = new nth::SimpleType(new nth::Identifier("Object"), nth::VariableSet(), nth::MethodSet(), nullptr);
+  nth::Type *root = new nth::SimpleType(new nth::Identifier("Object"), nth::VariableSet(), nth::MethodSet(), {});
 
-  nth::SimpleType *fooType = new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), root);
+  nth::SimpleType *fooType = new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), { root });
 
   types.insert(fooType);
   types.insert(root);
   types.insert(fooType);
 
-  ASSERT_EQ(root, nth::Type::computeLUB(types));
+  ASSERT_EQ(root, nth::Type::computeLUB({ fooType, root, fooType }));
 }
 
 TEST(TypeTest, computeLUB_same) {
   std::set<nth::Type*> types;
-  nth::Type *root = new nth::SimpleType(new nth::Identifier("Object"), nth::VariableSet(), nth::MethodSet(), nullptr);
+  nth::Type *root = new nth::SimpleType(new nth::Identifier("Object"), nth::VariableSet(), nth::MethodSet(), {});
 
-  nth::SimpleType *fooType = new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), root);
+  nth::SimpleType *fooType = new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), { root });
 
   types.insert(fooType);
   types.insert(fooType);
 
   ASSERT_EQ(fooType, nth::Type::computeLUB(types));
+}
+
+TEST(TypeTest, compareGenericTypeAndItsDelegateType) {
+  // Foo and A should be equivalent if A -> Foo
+  // likewise, Foo and A should be equivalent if A -> B -> FOO
+  nth::Type *fooType = new nth::SimpleType(new nth::Identifier("Foo"), nth::VariableSet(), nth::MethodSet(), { nth::Type::objectType() });
+  nth::Type *genericType = new nth::GenericType(new nth::Identifier("A"), fooType);
+  EXPECT_EQ(true, *fooType == genericType);
 }

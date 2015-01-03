@@ -84,9 +84,9 @@ Tuple::Tuple(ExpressionList &values) : values(values) {
   }
 }
 
-Argument::Argument(Identifier *name, TypeRef *type) : name(name), type(type) {
+Argument::Argument(Identifier *name, TypeRef *typeRef) : _name(name), _typeRef(typeRef) {
   name->setParent(this);
-  type->setParent(this);
+  typeRef->setParent(this);
 }
 
 FunctionDef::FunctionDef(Identifier *name, ArgList &argList,
@@ -148,10 +148,12 @@ TraitDef::TraitDef(
     Identifier *name,
     TypeDefList *typeParameters,
     ArgList *constructorArgs,
+    TypeRefList parentTypeRefs,
     Block *block)
 : name(name),
   typeParameters(typeParameters),
   ctorArgs(constructorArgs),
+  parentTypeRefs(parentTypeRefs),
   block(block) {}
 
 void Add::accept(Visitor &v) {

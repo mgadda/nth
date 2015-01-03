@@ -283,7 +283,7 @@ void AstStringPrinter::visit(Argument *argument) {
   ast_output << "argument(";
   argument->getName()->accept(*this);
   ast_output << ",";
-  argument->getType()->accept(*this);
+  argument->getTypeRef()->accept(*this);
   ast_output << ")";
 }
 

@@ -64,6 +64,7 @@ class TypeChecker : public Visitor {
   virtual void visit(TemplatedTypeRef *type);
   virtual void visit(TemplatedTypeDef *type);
   virtual void visit(TypeAliasDef *typeAliasDef);
+  virtual void visit(TraitDef *traitDef);
 
  private:
   void setTypeForString(Expression *node, std::string typeName);

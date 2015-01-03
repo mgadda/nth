@@ -248,6 +248,17 @@ TEST_F(ParseTest, ParseTupleFieldAccess) {
   EXPECT_AST(block(tuplefieldaccess(tuple(string(name), integer(3)), integer(1))));
 }
 
+TEST_F(ParseTest, TestChainedFieldAccess) {
+  d.parseString("a.b().c");
+  EXPECT_AST(
+    block(
+      fieldaccess(
+        call(
+          fieldaccess(ident(a), ident(b)),
+          arguments()),
+        ident(c))));
+}
+
 TEST_F(ParseTest, ParseEquality) {
   d.parseString("min_val == 2.3252");
   EXPECT_AST(block(equality(ident(min_val), float(2.3252))));

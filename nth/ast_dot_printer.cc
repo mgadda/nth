@@ -309,8 +309,8 @@ void AstDotPrinter::visit(Argument *argument) {
   edges.push_back(std::make_pair(argument, argument->getName()));
   argument->getName()->accept(*this);
 
-  edges.push_back(std::make_pair(argument, argument->getType()));
-  argument->getType()->accept(*this);
+  edges.push_back(std::make_pair(argument, argument->getTypeRef()));
+  argument->getTypeRef()->accept(*this);
 }
 
 void AstDotPrinter::visit(IfElse *ifElse) {

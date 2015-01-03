@@ -96,6 +96,7 @@ std::list<SymbolTable*> SymbolTable::getScopes() {
 // -------------------------
 
 Symbol::Symbol(Identifier *ident) : name(ident->getValue()) {}
+Symbol::Symbol(Identifier *ident, Type &type) : name(ident->getValue()), _type(&type) {}
 
 void Symbol::setType(Type &type) {
   _type = &type;

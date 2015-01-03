@@ -127,7 +127,7 @@ void Visitor::visit(VariableDef *variableDef) {
 
 void Visitor::visit(Argument *argument) {
   argument->getName()->accept(*this);
-  argument->getType()->accept(*this);
+  argument->getTypeRef()->accept(*this);
 }
 
 void Visitor::visit(IfElse *ifElse) {
@@ -175,6 +175,9 @@ void Visitor::visit(TraitDef *traitDef) {
       arg->accept(*this);
     }
   }
+  for (auto parentTypeRef : traitDef->getParentTypeRefs()) {
+    parentTypeRef->accept(*this);
+  }  
   if (Block *block = traitDef->getBlock()) {
     block->accept(*this);
   }

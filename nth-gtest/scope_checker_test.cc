@@ -87,3 +87,68 @@ TEST_F(ScopeCheckerTest, TestOutOfOrderNestedValDecl) {
   scopeChecker.run(d.result);
   EXPECT_EQ(false, scopeChecker.isValid());
 }
+
+TEST_F(ScopeCheckerTest, TestTypeAlias) {
+  d.parseString("type Foo = Int\nval a: Foo = 10");
+  scopeChecker.run(d.result);
+  EXPECT_EQ(true, scopeChecker.isValid());
+}
+
+TEST_F(ScopeCheckerTest, TestTraitDef) {
+  d.parseString("trait Foo\nFoo.new()");
+  scopeChecker.run(d.result);
+  // NOTE: scope checking cannot catch identifier references in method calls,
+  // this is the responsibility of the type checker.
+  // thus, identifiers used in field access (as is the case with Foo.new())
+  // are unchecked during this pass.
+  EXPECT_EQ(true, scopeChecker.isValid());
+}
+
+TEST_F(ScopeCheckerTest, TestTraitDefUseBeforeDecl) {
+  d.parseString("Foo.new()\ntrait Foo");
+  scopeChecker.run(d.result);
+  EXPECT_EQ(true, scopeChecker.isValid());
+}
+
+TEST_F(ScopeCheckerTest, TestTraitSelfReference) {
+  d.parseString("trait Foo { val f: Foo = 10 }");
+  scopeChecker.run(d.result);
+  EXPECT_EQ(true, scopeChecker.isValid());
+}
+
+TEST_F(ScopeCheckerTest, TestTraitCtorOutOfOrderValRef) {
+  // This is valid because "a" is defined as both an instance
+  // variable on the trait and a regular variable in the constructor
+  // The former interpreation is given priority. However, "a" will not
+  // have a value if this were executed. It is nonetheless valid.
+  d.parseString("trait Foo { a\n val a: Int = 10 }");
+  scopeChecker.run(d.result);
+  EXPECT_EQ(true, scopeChecker.isValid());
+}
+
+TEST_F(ScopeCheckerTest, TestTraitCtorOutOfOrderMethodCall) {
+  d.parseString("trait Foo { a()\n def a(): Int { 10 } }");
+  scopeChecker.run(d.result);
+  EXPECT_EQ(true, scopeChecker.isValid());
+}
+
+TEST(ScopePrimerTest, TestValDefinedinTraitScopeNotBlockScope) {
+  FAIL();
+//  d.parseString("trait Foo { val a: Foo = 10");
+//  ScopePrimer primer;
+//  d.result->accept(primer);
+//  primer
+}
+
+TEST(ScopePrimerTest, TestDefDefinedInTraitScopeNotBlockScope) {
+  FAIL();
+}
+
+TEST_F(ScopeCheckerTest, TestTraitAddsCtorSymbol) {
+  d.parseString("trait Foo");
+  scopeChecker.run(d.result);
+  nth::SymbolTable *blockSymbolTable = d.result->getSymbolTable();
+  ASSERT_NE(nullptr, blockSymbolTable);
+  nth::Symbol *ctorSym = blockSymbolTable->findSymbol("foo_ctor");
+  EXPECT_NE(nullptr, ctorSym);
+}

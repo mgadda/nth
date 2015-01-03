@@ -30,8 +30,6 @@ Driver::Driver()
 Driver::~Driver() {}
 
 void Driver::scanBegin() {
-  yy_flex_debug = should_trace_scanning;
-
   if (file.empty() || file == "-") {
     yyin = stdin;
   } else if (!(yyin = fopen(file.c_str(), "r"))) {
@@ -52,6 +50,7 @@ int Driver::parse(const std::string& f) {
   scanBegin();
   yy::parser parser(*this);
   parser.set_debug_level(should_trace_parsing);
+  yy_flex_debug = should_trace_scanning;
   int ret = parser.parse();
   scanEnd();
 
@@ -63,6 +62,7 @@ int Driver::parseString(const std::string &s) {
 
   yy::parser parser(*this);
   parser.set_debug_level(should_trace_parsing);
+  yy_flex_debug = should_trace_scanning;
   int ret = parser.parse();
   yy_delete_buffer(bs);
 

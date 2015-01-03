@@ -20,7 +20,7 @@ bool ScopeChecker::run(ASTNode *node) {
   ScopeChecker::DeclareBeforeUse declareBeforeUse(*this);
   node->accept(primer);
   node->accept(declareBeforeUse);
-  return isValid(); // TODO: make this not a constant
+  return isValid();
 }
 
 bool ScopeChecker::isValid() {
@@ -94,6 +94,14 @@ void ScopeChecker::ScopePrimer::visit(nth::TypeAliasDef *typeAliasDef) {
 
   typeAliasDef->setSymbolTable(currentTable);
   typeAliasDef->getRType()->accept(*this);
+}
+
+void ScopeChecker::ScopePrimer::visit(nth::TraitDef *traitDef) {
+  scopeChecker.symbolTables.top()->addSymbol(traitDef->getName());
+
+  scopeChecker.withNewScope(traitDef, [&](SymbolTable &table) {
+    Visitor::visit(traitDef);
+  });
 }
 
 // ----------------------------------
@@ -172,7 +180,7 @@ void ScopeChecker::DeclareBeforeUse::visit(nth::VariableDef *variableDef) {
 
 void ScopeChecker::DeclareBeforeUse::visit(nth::Argument *argument) {
   scopeChecker.getSymbolTable(argument).addSymbol(argument->getName());
-  argument->getType()->accept(*this);
+  argument->getTypeRef()->accept(*this);
 }
 
 void ScopeChecker::DeclareBeforeUse::visit(nth::SimpleTypeRef *type) {
@@ -182,6 +190,8 @@ void ScopeChecker::DeclareBeforeUse::visit(nth::SimpleTypeRef *type) {
 }
 
 void ScopeChecker::DeclareBeforeUse::visit(nth::SimpleTypeDef *type) {
+  // TODO: this may not be necessary because Primer pass should have
+  // already defined symbols for all types within a scope
   scopeChecker.getSymbolTable(type).addSymbol(type->getName());
 }
 
@@ -203,5 +213,10 @@ void ScopeChecker::DeclareBeforeUse::visit(nth::TemplatedTypeDef *type) {
   }
 }
 
+void ScopeChecker::DeclareBeforeUse::visit(nth::TypeAliasDef *typeAliasDef) {
+  // do not traverse type definition because it's already been defined
+  // in previous pass
+  typeAliasDef->getRType()->accept(*this);
+}
 
 

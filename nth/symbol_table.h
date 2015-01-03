@@ -22,7 +22,7 @@ namespace nth {
     // Search this scope and parents for this identifier
     Symbol *findSymbol(Identifier *ident);
     Symbol *findSymbol(std::string name);
-    
+
     Symbol &addSymbol(Identifier *ident);
     Symbol &addSymbol(Identifier *ident, Type &type);
 
@@ -42,6 +42,7 @@ namespace nth {
   class Symbol {
   public:
     Symbol(Identifier *ident);
+    Symbol(Identifier *ident, Type &type);
     void setType(Type &type);
     Type *getType();
     bool operator==(Symbol &rhs);
@@ -54,7 +55,7 @@ namespace nth {
     std::string name;
     Type *_type;
   };
-  
+
 }
 
 #endif

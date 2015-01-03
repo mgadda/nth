@@ -22,6 +22,8 @@
 namespace nth {
 
 class Type;
+class ConcreteType;
+class GenericType;
 class TypeDef;
 class TypeRef;
 class SymbolTable;
@@ -76,6 +78,8 @@ typedef std::vector<KeyValuePair> ExpressionMap;
 typedef std::unique_ptr<Expression> ExpressionPtr;
 typedef std::list<Argument*> ArgList;
 typedef std::list<Type*> TypeList;
+typedef std::list<ConcreteType*> ConcreteTypeList;
+typedef std::list<GenericType*> GenericTypeList;
 typedef std::list<TypeRef*> TypeRefList;
 typedef std::list<TypeDef*> TypeDefList;
 
@@ -191,7 +195,7 @@ class Identifier : public Expression {
   bool operator==(const Identifier &i) const { return value == i.value; }
   bool operator==(const char *c) const { return value == c; }
   operator const char*() const { return value.c_str(); }
-  
+
   std::string getValue() { return value; }
  protected:
   std::string value;
@@ -478,16 +482,16 @@ public:
 
 class Argument : public ASTNode {
  public:
-  Argument(Identifier *name, TypeRef *type);
+  Argument(Identifier *name, TypeRef *typeRef);
 
   void accept(Visitor &v) { v.visit(this); }
 
-  Identifier *getName() { return name; }
-  TypeRef *getType() { return type; }
+  Identifier *getName() { return _name; }
+  TypeRef *getTypeRef() { return _typeRef; }
 
  protected:
-  Identifier *name;
-  TypeRef *type;
+  Identifier *_name;
+  TypeRef *_typeRef;
 };
 
 // def makeTea(): Tea { ... }
@@ -511,7 +515,7 @@ class FunctionDef : public ASTNode {
   TypeDefList     typeParameters;
 };
 
-// { (x: Int, y: Int): Int => x + y } 
+// { (x: Int, y: Int): Int => x + y }
 class LambdaDef : public Expression {
  public:
   LambdaDef(ArgList &argList, TypeRef *returnType, Expression *body);
@@ -597,6 +601,7 @@ class TraitDef : public ASTNode {
     Identifier *name,
     TypeDefList *typeParameters,
     ArgList *constructorArgs,
+    TypeRefList parentTypeRefs,
     Block *block);
 
   void accept(Visitor &v) { v.visit(this); }
@@ -604,11 +609,13 @@ class TraitDef : public ASTNode {
   Identifier *getName() { return name; }
   TypeDefList *getTypeParameters() { return typeParameters; }
   ArgList *getCtorArgs() { return ctorArgs; }
+  TypeRefList &getParentTypeRefs() { return parentTypeRefs; }
   Block *getBlock() { return block; }
  protected:
   Identifier *name;
   TypeDefList *typeParameters;
   ArgList     *ctorArgs;
+  TypeRefList parentTypeRefs;
   Block       *block;
 };
 

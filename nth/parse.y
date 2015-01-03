@@ -96,9 +96,9 @@
 %type <nth::FunctionCall*> func_call;
 %type <nth::VariableDef*> val_def;
 %type <nth::ArgList*> arglist optional_ctor_args;
-%type <nth::TypeRefList*> typeref_list
+%type <nth::TypeRefList*> typeref_list optional_parent_typeref_list;
 %type <nth::TypeDefList*> optional_type_param type_param type_param_list;
-%type <nth::TypeRef*> typeref
+%type <nth::TypeRef*> typeref;
 %type <nth::TypeDef*> typedef;
 %type <nth::Argument*> arg;
 %type <nth::IfElse*> if_else;
@@ -258,26 +258,30 @@ func_def_without_type_param: DEF IDENT "(" arglist ")" ":" typeref block {
 type_param: "[" type_param_list "]"  { std::swap($$, $2); }
           ;
 
-trait_def: TRAIT IDENT optional_type_param optional_ctor_args optional_block {
+trait_def: TRAIT IDENT optional_type_param optional_ctor_args optional_parent_typeref_list optional_block {
               $$ = new nth::TraitDef(
                 new nth::Identifier($IDENT),
                 $optional_type_param,
                 $optional_ctor_args,
+                *$optional_parent_typeref_list,
                 $optional_block
               );
             }
          ;
 
-optional_type_param: /* this space intentional left blank */  { $$ = nullptr; }
-                   | type_param { $$ = $1; }
+optional_type_param: /* nothing */ { $$ = nullptr; }
+                   | type_param    { $$ = $1; }
                    ;
 
-optional_ctor_args: /* this space intentional left blank */   { $$ = nullptr; }
-                  | "(" arglist ")"                           { std::swap($$, $2); }
+optional_ctor_args: /* nothing */   { $$ = nullptr; }
+                  | "(" arglist ")" { std::swap($$, $2); }
                   ;
 
-optional_block: /* this space intetionally left blank */      { $$ = nullptr; }
-              | block { $$ = $1; }
+optional_parent_typeref_list: /* nothing */     { $$ = new nth::TypeRefList(); }
+                            | ":" typeref_list
+
+optional_block: /* nothing */  { $$ = nullptr; }
+              | block          { $$ = $1; }
               ;
 
 type_alias_def: TYPE IDENT "=" typeref { $$ = new nth::TypeAliasDef(new nth::SimpleTypeDef(new nth::Identifier($2)), $4); }

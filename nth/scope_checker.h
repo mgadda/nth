@@ -55,15 +55,10 @@ from variable references?
 
 namespace nth {
 
-// A simple stack won't be enough
-// This is because val modifies the existing environment
-// Conclusion: push and pop frames so that, say, at the end
-// of the function of definition, an entire frame can be popped
-// without knowledge of what was added in the body
 typedef std::list<nth::Identifier*> IdentifierList;
 
 class ASTNode;
-  
+
 class ScopeChecker {
  public:
   ScopeChecker();
@@ -93,6 +88,8 @@ class ScopeChecker {
     void visit(nth::FunctionDef *functionDef);
     void visit(nth::LambdaDef *lambdaDef);
     void visit(nth::TypeAliasDef *typeAliasDef);
+    void visit(nth::TraitDef *traitDef);
+
    protected:
     ScopeChecker &scopeChecker;
   };
@@ -114,6 +111,8 @@ class ScopeChecker {
     void visit(nth::SimpleTypeDef *type);
     void visit(nth::TemplatedTypeRef *type);
     void visit(nth::TemplatedTypeDef *type);
+
+    void visit(nth::TypeAliasDef *typeAliasDef);
 
    protected:
     ScopeChecker &scopeChecker;

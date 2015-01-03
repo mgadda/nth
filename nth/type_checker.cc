@@ -10,6 +10,7 @@
 #include "type_checker.h"
 #include "ast.h"
 #include "type.h"
+#include "type_literal.h"
 #include "symbol_table.h"
 
 using namespace nth;
@@ -21,12 +22,17 @@ void TypeChecker::setTypeForString(Expression *node, std::string typeName) {
 }
 
 void TypeChecker::visit(Block *block) {
+  // TODO: behavior of block varies depending on whether
+  // a trait is being defined.
+  // if it's a trait block, top level vals and defs need to be saved/added
+  // to trait's type
+
   SymbolTable *table = block->getNearestSymbolTable();
   if (!table) throw "type checker: no symbol table found";
 
   Symbol *sym = table->findSymbol("Object");
   if (!sym) throw "type checker: no symbol named Object found";
-  
+
   Type *lastExprType = sym->getType();
 
   //Type *lastExprType = block->getNearestSymbolTable()->findSymbol("Object")->getType();
@@ -122,8 +128,8 @@ void TypeChecker::checkUnaryOp(UnaryOperation *un_op, std::string symbolName) {
       TemplatedType *methodType;
       if ((methodType = dynamic_cast<TemplatedType*>(method->getType()))) {
         if (*methodType->getName() == "Function0") {
-          if (methodType->getSubtypes().size() == 1) {
-            Type *returnType = methodType->getSubtypes().back();
+          if (methodType->getGenericTypes().size() == 1) {
+            Type *returnType = methodType->getGenericTypes().back();
             un_op->setType(returnType);
             return;
           }
@@ -203,7 +209,13 @@ void TypeChecker::visit(Comparison *comparison) {}
 void TypeChecker::visit(Subscript *subscript) {}
 void TypeChecker::visit(FieldAccess *field_access) {}
 void TypeChecker::visit(TupleFieldAccess *tuple_field_access) {}
-void TypeChecker::visit(FunctionDef *functionDef) {}
+void TypeChecker::visit(FunctionDef *functionDef) {
+  // TODO: handle templated functions and non-templated functions
+  // TODO: handle functions as methods vs free functions
+  // for this, we need some context about whether this is top level def
+  // inside a trait/class.
+  // alternatively, we could make a separate ASTNode type entirely
+}
 void TypeChecker::visit(LambdaDef *lambdaDef) {}
 void TypeChecker::visit(FunctionCall *functionCall) {
   Expression *callableExpr = functionCall->getCallable();
@@ -221,7 +233,7 @@ void TypeChecker::visit(FunctionCall *functionCall) {
 
   if ((callableFunctionType = dynamic_cast<TemplatedType*>(callableExprType))) {
     if (*callableFunctionType->getName() == *expectedFunctionTypeName) {
-      Type *returnType = callableFunctionType->getSubtypes().back();
+      Type *returnType = callableFunctionType->getGenericTypes().back();
       functionCall->setType(returnType);
     }
   }
@@ -260,3 +272,87 @@ void TypeChecker::visit(SimpleTypeDef *type) {}
 void TypeChecker::visit(TemplatedTypeRef *type) {}
 void TypeChecker::visit(TemplatedTypeDef *type) {}
 void TypeChecker::visit(TypeAliasDef *typeAliasDef) {}
+void TypeChecker::visit(TraitDef *traitDef) {
+  // Define new type in current scope
+  Symbol *traitSym = traitDef->getNearestSymbolTable()->findSymbol(traitDef->getName());
+  Type *traitType = nullptr;
+
+//  traitDef->getTypeParameters(); // null ? SimpleType : TemplatedType
+//  traitDef->getCtorArgs(); // arguments for method named "new" which must be added
+//  traitDef->getBlock(); // body of method to define as constructor
+
+
+  // ----------------------
+  // Variables
+  // ----------------------
+  VariableSet variables; // TODO: somehow, gather these from recursive descent of block
+
+  // ----------------------
+  // Methods
+  // ----------------------
+  MethodSet methods; // TODO: somehow, gather these from recursive descent of block
+
+
+  // ----------------------
+  // Parent types
+  // ----------------------
+  TypeList parentTypes;
+  for (auto typeRef : traitDef->getParentTypeRefs()) {
+    typeRef->accept(*this);
+
+    Type *parentType = traitDef->getNearestSymbolTable()->findSymbol(typeRef->getName())->getType();
+
+    parentTypes.push_back(parentType);
+  }
+
+  // ----------------------
+  // Type Parameters
+  // ----------------------
+  if (traitDef->getTypeParameters()->empty()) {
+    traitType = new SimpleType(traitDef->getName(), variables, methods, parentTypes);
+  } else {
+    GenericTypeList genericTypes;
+    for (auto typeParam : *traitDef->getTypeParameters()) {
+      typeParam->accept(*this);
+      // convert type def into generic type, which forwards to some other type
+      // later
+      genericTypes.push_back(new GenericType(typeParam->getName(), nullptr));
+    }
+    traitType = new TemplatedType(traitDef->getName(), variables, methods, parentTypes, genericTypes);
+  }
+
+  traitSym->setType(*traitType);
+
+  // ----------------------
+  // Constructor
+  // ----------------------
+  // Define constructor method type
+  TypeList argTypeList;
+  if (traitDef->getCtorArgs()) {
+    for (auto arg : *traitDef->getCtorArgs()) {
+      arg->accept(*this);
+      // Convert type ref to known type (a: Int) -> lookup "Int" symbol
+      // to get real type
+      Identifier *argTypeName = arg->getTypeRef()->getName();
+      Symbol *argTypeSym = arg->getNearestSymbolTable()->findSymbol(argTypeName);
+
+      argTypeList.push_back(argTypeSym->getType());
+    }
+  } // else no constructor args
+
+  FunctionType *ctorMethodType = new FunctionType(argTypeList, traitType);
+
+  //  Symbol *ctorSym = new Symbol(new Identifier(ctorSymbolName), ctorMethodType);
+  Symbol *ctorSym = traitDef->getNearestSymbolTable()->findSymbol(traitDef->getName()->getValue() + "_ctor");
+  ctorSym->setType(*ctorMethodType);
+
+
+
+  // vals and defs contained within block become methods and variables on this trait
+  // importantly, references to those variables and methods
+
+  // defs need altered signature, arguably altered type. they are methods
+  // and thus require access to the instance upon which they've been invoked
+  // still need to visit block for normal type checking
+  // Visitor::visit(traitDef);
+}

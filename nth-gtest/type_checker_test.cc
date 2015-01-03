@@ -20,7 +20,7 @@ class TypeCheckerTest : public ::testing::Test {
 
 nth::Type& buildClass(std::string name, nth::SymbolTable &table, nth::Type *parent=nullptr) {
   nth::Identifier *ident = new nth::Identifier(name);
-  nth::SimpleType *type = new nth::SimpleType(ident, nth::VariableSet(), nth::MethodSet(), parent);
+  nth::SimpleType *type = new nth::SimpleType(ident, nth::VariableSet(), nth::MethodSet(), { parent });
   table.addSymbol(ident).setType(*type);
   return *type;
 }
